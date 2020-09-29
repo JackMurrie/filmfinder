@@ -1,25 +1,49 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './css/App.css';
+import Home from './Home';
+import Login from './Login';
+import SignUp from './SignUp';
+import AccountConf from './AccountConf';
+import Movie from './Movie';
+import ForgotPass from './ForgotPass';
+import Verification from './verification';
+import ResetPassword from './ResetPassword';
+import NewPassConf from './NewPassConf';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+        <Switch>
+            <Route path="/Login">
+                <Login />
+            </Route>
+            <Route path="/Signup">
+                <SignUp />
+            </Route>
+            <Route path="/AccountConf">
+                <AccountConf />
+            </Route>
+            <Route path="/Movie">
+                <Movie />
+            </Route>
+            <Route path="/ForgotPass">
+                <ForgotPass />
+            </Route>
+            <Route path="/verification">
+                <Verification />
+            </Route>
+            <Route path="/ResetPassword">
+                <ResetPassword />
+            </Route>
+            <Route path="/NewPassConf">
+                <NewPassConf />
+            </Route>
+            <Route path="/">
+                <Home />
+            </Route>
+        </Switch>
+    </Router>
   );
 }
 
