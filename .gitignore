@@ -6,6 +6,10 @@
 /node_modules
 /.pnp
 .pnp.js
+@material-ui/core
+@material-ui/icons
+@material-ui/lab
+react-router-dom
 
 # testing
 /coverage
