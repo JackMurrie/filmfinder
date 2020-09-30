@@ -1,0 +1,9 @@
+Work Diary
+
+Week 1
+Decomposed the project brief to draft user stories.
+
+Week 2
+Worked with Hikari on finalising user stories, assigning priorities and uploading to Jira.
+
+Week 3
