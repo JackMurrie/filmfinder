@@ -12,6 +12,6 @@
     font-size: calc(6px + 2vmin);
 }
 
-.rating {
-    text-align: center;
+.right {
+    text-align: right;
 }

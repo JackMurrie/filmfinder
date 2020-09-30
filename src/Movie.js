@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
       fixedHeight: {
         height: 740,
       },
+      fixedHeightReviews: {
+        height: 500,
+      },
       reviewPlace: {
         flexGrow: 1,
       },
@@ -65,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Movie() {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const fixedHeightPaperReview = clsx(classes.paper, classes.fixedHeightReviews);
   
     return (
       <React.Fragment>
@@ -73,7 +77,7 @@ export default function Movie() {
             <div className="title">
                 <h1>The Lord of the Rings: The Fellowship of the Ring</h1>
             </div>
-            <Box className="rating" component="fieldset" mb={3} borderColor="transparent">
+            <Box className="title" component="fieldset" mb={3} borderColor="transparent">
                 <Rating name="rating" precision={0.5} value={0} size="large"/>
             </Box>
             
@@ -86,19 +90,36 @@ export default function Movie() {
                         </Paper>
                     </Grid>
                     {/* Information */}
-                    <Grid item xs={9} >
+                    <Grid item xs={8} >
                         <Paper className={fixedHeightPaper}>
-                            Movie Details
-                            <div className={classes.reviewPlace}></div>
-                            <ReviewButton />
+                            <h1> Movie Details </h1>
                         </Paper>
                     </Grid>
                     {/* Reviews */}
+                    <Container component="main" maxWidth="lg">
                     <Grid item xs={12}>
-                        <Paper className={classes.paper}>
-                            Reviews 
+                        <Paper className={fixedHeightPaperReview} variant="outlined">
+                            <h1> Reviews </h1>
+                            <div className="right">
+                                <ReviewButton />
+                            </div>
+                            <Grid container spacing={1}>
+                                <Review /> 
+                                <Review /> 
+                                <Review /> 
+                                <Review /> 
+                                <Review /> 
+                                <Review /> 
+                                <Review /> 
+                                <Review />
+                                <Review /> 
+                                <Review /> 
+                                <Review /> 
+                                <Review />
+                            </Grid>
                         </Paper>
                     </Grid>
+                    </Container>
                 </Grid>
             </Container>
 
@@ -200,3 +221,21 @@ function LargeMovieCard() {
       </div>
     );
   }
+
+  function Review() {
+    const classes = useStyles();
+
+    return (
+        <Grid item xs={12}>
+            <Paper className={classes.paper}>
+                This is a random review. Magical, astounding filmmaking. This could've turned out terribly, oh so terribly, but it didn't. It sure didn't. It's a near-perfect cinematic experience and adaptation, delicately told right from the opening exposition dump that haunts the very marrow of my bones. A world with so much beauty soon becomes tarnished by darkness. It only becomes clear around the 45 minute mark why Jackson was chosen for the project; his craft is sweeping and relentlessly classical. Only a splatter and adventure geek could evoke such crumbling destruction and still sell every mythical, at times overwrought, line of dialogue; he believes in it. The world was real to Tolkien, it was real to Jackson, and it's real to the audience. 
+                <div className="right">
+                <Button href="#" color="primary">
+                    User
+                </Button>
+                </div>
+            </Paper>
+        </Grid>
+
+    );
+}
