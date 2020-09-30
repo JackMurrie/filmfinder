@@ -9,6 +9,7 @@ import ForgotPass from './ForgotPass';
 import Verification from './verification';
 import ResetPassword from './ResetPassword';
 import NewPassConf from './NewPassConf';
+import Account from './Account';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 function App() {
@@ -38,6 +39,9 @@ function App() {
             </Route>
             <Route path="/NewPassConf">
                 <NewPassConf />
+            </Route>
+            <Route path="/Account">
+                <Account />
             </Route>
             <Route path="/">
                 <Home />

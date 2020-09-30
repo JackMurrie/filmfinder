@@ -6,9 +6,6 @@ import { getMovies } from './services/getMovies';
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
-import StarIcon from '@material-ui/icons/StarBorder';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { fade, makeStyles } from '@material-ui/core/styles';
@@ -43,6 +40,7 @@ export default function Home() {
             </div>
       {/* Display Movies */}
       <Container component="main" maxWidth="lg">
+
           <Async promiseFn={getMovies}>
             <Async.Loading>Loading...</Async.Loading>
             <Async.Fulfilled>

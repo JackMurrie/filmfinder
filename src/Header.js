@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -97,6 +99,9 @@ export default function Header() {
           <Button href="/SignUp" color="primary" variant="outlined" className={classes.link}>
             Sign Up
           </Button>
+            <IconButton aria-label="search" color="inherit" href="/Account">
+              <PersonPinIcon />
+            </IconButton>
         </Toolbar>
       </AppBar>
     );
