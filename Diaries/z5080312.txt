@@ -1,0 +1,58 @@
+
+
+Week 1
+
+Wednesday
+Meeting
+
+Initial meeting with group, short meeting to introduce each other, 
+Setting up another meeting @ next monday
+goals set for user stories and project objectives
+
+Thursday
+Spec Work
+
+Created project objectives and breakdown of the spec offline
+
+Sunday
+Spec Work
+
+Created user stories (specifically in the scope of the end-users) for the objectives immediately clear from the spec
+
+Week 2
+
+Monday
+Meeting
+
+Group meeting, 
+discussion on user stories, epics and objectives 
+new team members (looking for a 5th)
+Important role breakdown, front and back-end assignment groups
+Language choice (java backend, jscript frontend)
+
+Wednesday
+Meeting
+
+Group meeting
+Great discussion on this day, firstly
+We accepted a new (5th) group member
+Lots of discussion on the proposal
+General changes to team workflow
+Proposal discussion
+Out of the 100% mark of the proposal, our group members divided the tasks up into different sections for everyone to do
+I was tasked with the system architecture, and also some summarisation about user stories and project objectives 
+
+Sunday
+Proposal Work
+
+Worked on the system architecture, including a diagram and an overall summary
+Researched about the layers and actors
+Used memory of dominic’s system architecture diagram as reference
+
+Week 3
+
+Monday
+Meeting
+
+Meeting up with the talk about progress on the proposal
+Team members made a significant leap in progress on the storyboarding, and also on project management (user stories and sprint management)
