@@ -1,0 +1,13 @@
+Week 1:
+Was still looking for a group. Tried joining with Zechun in Hong Kong, and Alan's group in another lab, but there weren't enough people and our group was disbanded.
+
+Week 2:
+Was able to join a group in another lab w15A-lol_i_dunno. Paperwork still in progress. At our lab meeting, me and Jack were assigned to work in developing the Front-end together, while Hikari, Kristian, and Hai will work on the back-end components.  
+
+I started development of the storyboards and interface designs for the UI and Flow Diagram component of the report. I've done the basic interfaces for the site home, account creation and login, and forgot password sections. I'm continuing to work on the interface for the core functionality of the Film Finder, i.e. personalised recommendations and watchlist tracking, which I've decided to encapsulate in a 'user dashboard' page. This work will probably continue into the next week, as I try to finish the wireframes in time for our Sunday Week 3 deadline submission of the Project Proposal.
+
+I also started coding some drafts of the site home page with plain old HTML, CSS before we really dig into the front-end frameworks like React. Also did some basic stuff like setting up plug-ins like emmet and visual studio code while I'm working in Windows.
+
+Week 3:
+The paperwork has come through for my transfer to the W15A lab.
+
