@@ -1,0 +1,8 @@
+Week1
+Formed team, met tutor, chose project - film finder, assigned roles for backend and frontend. Researched into recommender systems. 
+
+Week2
+Two meetings. Discussed technology stack to be used - decided on reactJS for frontend. I will be mostly be working on frontend. Delegated tasks for the project proposal. I finished the background and started on the interface/flow diagrams for the proposal. 
+
+Week3
+Jira user stories completed by Hikari and Kristian, flowcharts done on miro by Quoc and a rough design by myself on draw.io, Hai finished with sys arch designs. I started on react pages and pushed to new branch example-frontend.
