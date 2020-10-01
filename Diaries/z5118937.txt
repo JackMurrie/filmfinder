@@ -1,0 +1,10 @@
+Work Diary
+
+Week 1
+Grouped formed. I was assigned to be the scrum master. We've decided to use Teams as the main platform for communication. I made Jira and Teams group. We decided to have userstories ready by next meeting.
+
+Week 2
+Quoc-An joined our team. Everyone had done their userstories, and we've decided to base mostly from Kristian's userstories proposal. Kristian and I finalised userstories and all were uploaded to Jira. Next meeting we will decide on user story points and aim to get proposal drafts done.
+
+Week 3
+Most of Front-end flowchart was completed by Jack and Quoc-An. We've decided on userstory points. I will be adding screenshots of Jira back-logs and we will be assigning first set of tasks for the first sprint.
