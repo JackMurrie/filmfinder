@@ -19,16 +19,6 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 export default function MovieCard(props) {
     return (
       <Card style={{width: 268, margin: 20}}>
-        <CardHeader
-            action={
-            <div className="right">
-              <FormControlLabel
-                  control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
-                />
-            </div>}
-            title={props.title}
-            subheader={props.yearReleased}
-            />
         <CardActionArea href="/Movie">
           <CardMedia style={{height: 320}} image={props.imageURL}/>
           <CardContent>

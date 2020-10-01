@@ -31,6 +31,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import Switch from '@material-ui/core/Switch';
 import Async from 'react-async';
 
 const useStyles = makeStyles((theme) => ({
@@ -75,7 +76,16 @@ export default function Movie() {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const fixedHeightPaperReview = clsx(classes.paper, classes.fixedHeightReviews);
+
+    const [state, setState] = React.useState({
+      seen: false,
+      wishlist: false,
+    });
   
+    const handleChange = (event) => {
+      setState({ ...state, [event.target.name]: event.target.checked });
+    };
+
     return (
       <React.Fragment>
         <CssBaseline />
@@ -95,7 +105,7 @@ export default function Movie() {
                             <LargeMovieCard />
                             <div className="title">
                               <FormControlLabel
-                                  control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
+                                  control={<Checkbox checked={state.wishlist} onChange={handleChange} icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
                                   label="Wishlist"
                                   labelPlacement="start"
                                 />
@@ -108,31 +118,35 @@ export default function Movie() {
                             <h1> Movie Details </h1>
                             <div className={classes.flexGrow}></div>
                             <div className="right">
-                                <ReviewButton />
+                                <FormControlLabel
+                                  control={<Switch checked={state.seen} onChange={handleChange} name="seen" color="primary"/>}
+                                  label="Seen"
+                                 />
+                                <ReviewButton />  
                             </div>
                         </Paper>
                     </Grid>
                     {/* Reviews */}
                     <Container component="main" maxWidth="lg">
-                    <Grid item xs={12}>
-                        <Paper className={fixedHeightPaperReview} variant="outlined">
-                            <h1> Reviews </h1>
-                            <Grid container spacing={1}>
-                                <Review /> 
-                                <Review /> 
-                                <Review /> 
-                                <Review /> 
-                                <Review /> 
-                                <Review /> 
-                                <Review /> 
-                                <Review />
-                                <Review /> 
-                                <Review /> 
-                                <Review /> 
-                                <Review />
-                            </Grid>
-                        </Paper>
-                    </Grid>
+                      <Grid item xs={12}>
+                          <Paper className={fixedHeightPaperReview} variant="outlined">
+                              <h1> Reviews </h1>
+                              <Grid container spacing={1}>
+                                  <Review /> 
+                                  <Review /> 
+                                  <Review /> 
+                                  <Review /> 
+                                  <Review /> 
+                                  <Review /> 
+                                  <Review /> 
+                                  <Review />
+                                  <Review /> 
+                                  <Review /> 
+                                  <Review /> 
+                                  <Review />
+                              </Grid>
+                          </Paper>
+                       </Grid>
                     </Container>
                 </Grid>
             </Container>
