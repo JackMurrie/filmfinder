@@ -27,6 +27,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Favorite from '@material-ui/icons/Favorite';
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Async from 'react-async';
 
 const useStyles = makeStyles((theme) => ({
@@ -53,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
       },
       fixedHeight: {
-        height: 740,
+        height: 770,
       },
       fixedHeightReviews: {
         height: 500,
@@ -86,6 +90,13 @@ export default function Movie() {
                     <Grid item xs={2.5}>
                         <Paper className={fixedHeightPaper}>
                             <LargeMovieCard />
+                            <div className="title">
+                              <FormControlLabel
+                                  control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
+                                  label="Wishlist"
+                                  labelPlacement="start"
+                                />
+                              </div>
                         </Paper>
                     </Grid>
                     {/* Information */}
@@ -165,9 +176,10 @@ function LargeMovieCard() {
                 <Box component="fieldset" mb={3} borderColor="transparent">
                     <Rating name="read-only" precision={0.5} value={5} readOnly/>
                 </Box>
-                <Chip label={'Drama'} style={{margin: 5}}/>
-                <Chip label={'Adventure'} style={{margin: 5}}/>
-                <Chip label={'Action'} style={{margin: 5}}/>
+                             
+                  <Chip label={'Drama'} style={{margin: 5}}/>
+                  <Chip label={'Adventure'} style={{margin: 5}}/>
+                  <Chip label={'Action'} style={{margin: 5}}/>
             </div>
           </CardContent>
         </CardActionArea>
