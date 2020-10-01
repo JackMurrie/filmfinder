@@ -65,6 +65,9 @@ const useStyles = makeStyles((theme) => ({
       reviewPlace: {
         flexGrow: 1,
       },
+      flexGrow: {
+        flexGrow: 1,
+      },
   }));
 
 
@@ -103,6 +106,10 @@ export default function Movie() {
                     <Grid item xs={8} >
                         <Paper className={fixedHeightPaper}>
                             <h1> Movie Details </h1>
+                            <div className={classes.flexGrow}></div>
+                            <div className="right">
+                                <ReviewButton />
+                            </div>
                         </Paper>
                     </Grid>
                     {/* Reviews */}
@@ -110,9 +117,6 @@ export default function Movie() {
                     <Grid item xs={12}>
                         <Paper className={fixedHeightPaperReview} variant="outlined">
                             <h1> Reviews </h1>
-                            <div className="right">
-                                <ReviewButton />
-                            </div>
                             <Grid container spacing={1}>
                                 <Review /> 
                                 <Review /> 
