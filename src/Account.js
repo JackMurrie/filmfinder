@@ -1,5 +1,5 @@
-import Header from './Header';
-import MovieCard from './MovieCard';
+import Header from './components/Header';
+import MovieCard from './components/MovieCard';
 import './css/Account.css';
 
 import React from 'react';
@@ -14,6 +14,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import ThumbUp from '@material-ui/icons/ThumbUp';
+import RateReviewIcon from '@material-ui/icons/RateReview';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
@@ -107,7 +108,8 @@ function TabButtons() {
             <Tab label="Wishlist" icon={<FavoriteIcon />} {...a11yProps(1)} />
             <Tab label="Recommended" icon={<ThumbUp />} {...a11yProps(2)} />
             <Tab label="Seen" icon={<VisibilityIcon />} {...a11yProps(3)} />
-            <Tab label="Account Settings" icon={<PersonPinIcon />} {...a11yProps(4)} />
+            <Tab label="My Reviews" icon={<RateReviewIcon />} {...a11yProps(4)} />
+            <Tab label="Account Settings" icon={<PersonPinIcon />} {...a11yProps(5)} />
             
           </Tabs>
         </AppBar>
@@ -121,6 +123,9 @@ function TabButtons() {
           Seen
         </TabPanel>
         <TabPanel value={value} index={3}>
+          My Reviews
+        </TabPanel>
+        <TabPanel value={value} index={4}>
           Account Settings
         </TabPanel>
       </div>

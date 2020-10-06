@@ -1,5 +1,5 @@
-import MovieCard from './MovieCard';
-import Header from './Header';
+import MovieCard from './components/MovieCard';
+import Header from './components/Header';
 import './css/Movie.css';
 import { getMovies } from './services/getMovies';
 

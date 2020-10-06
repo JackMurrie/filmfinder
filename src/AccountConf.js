@@ -1,4 +1,4 @@
-import Header from './Header';
+import Header from './components/Header';
 
 import Container from '@material-ui/core/Container';
 import React from 'react';

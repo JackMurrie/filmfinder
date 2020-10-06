@@ -1,6 +1,6 @@
 import './css/Home.css';
-import Header from './Header';
-import MovieCard from './MovieCard';
+import Header from './components/Header';
+import MovieCard from './components/MovieCard';
 import { getMovies } from './services/getMovies';
 
 import React from 'react';

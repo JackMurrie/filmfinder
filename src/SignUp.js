@@ -1,4 +1,4 @@
-import Header from './Header';
+import Header from './components/Header';
 
 import React from 'react';
 import Button from '@material-ui/core/Button';
