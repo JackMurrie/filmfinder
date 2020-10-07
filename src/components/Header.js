@@ -75,34 +75,35 @@ export default function Header() {
   
     return (
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
-        <Toolbar className={classes.toolbar}>
-        <Button href="/" color="primary" className={classes.link}>
-            FilmFinder
-          </Button>
-          <div className={classes.toolbarTitle}></div>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
-          <Button href="/Login" color="primary" variant="outlined" className={classes.link}>
-            Login
-          </Button>
-          <Button href="/SignUp" color="primary" variant="outlined" className={classes.link}>
-            Sign Up
-          </Button>
-            <IconButton aria-label="search" color="inherit" href="/Account">
-              <PersonPinIcon />
-            </IconButton>
-        </Toolbar>
-      </AppBar>
+            <Toolbar className={classes.toolbar}>
+              <Button href="/" color="primary" className={classes.link}>
+                  FilmFinder
+               </Button>
+              <div className={classes.toolbarTitle}></div>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <InputBase
+                  id="search"
+                  placeholder="Search…"
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ 'aria-label': 'search' }}
+                />
+              </div>
+              <Button href="/Login" color="primary" variant="outlined" className={classes.link}>
+                Login
+              </Button>
+              <Button href="/SignUp" color="primary" variant="outlined" className={classes.link}>
+                Sign Up
+              </Button>
+                <IconButton aria-label="search" color="inherit" href="/Account">
+                  <PersonPinIcon />
+                </IconButton>
+            </Toolbar>
+         </AppBar>
     );
 }

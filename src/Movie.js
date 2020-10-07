@@ -152,22 +152,21 @@ export default function Movie() {
                 <h1>Similar Movies</h1>
             </div>
             {/* Display Movies */}
-            <Container component="main" maxWidth="lg">
-                
+            <Container component="main" maxWidth="lg">   
                 <Async promiseFn={getMovies}>
                 <Async.Loading>Loading...</Async.Loading>
                 <Async.Fulfilled>
                     {data => {
                     return(
                             <div className="container">
-                            {data.movies.map((movie, index) => (
-                            <MovieCard 
-                            key={index} 
-                            title={movie.title}
-                            yearReleased={movie.yearReleased}
-                            imageURL={movie.imageURL}
-                            />
-                            ))} 
+                              {data.movies.map((movie, index) => (
+                              <MovieCard 
+                              key={index} 
+                              title={movie.title}
+                              yearReleased={movie.yearReleased}
+                              imageURL={movie.imageURL}
+                              />
+                              ))} 
                             </div> 
                     )
                     }}
