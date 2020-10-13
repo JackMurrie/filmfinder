@@ -23,7 +23,7 @@ public class Main {
         ServletHolder serHol = ctx.addServlet(ServletContainer.class, "/rest/*");
         serHol.setInitOrder(1);
         serHol.setInitParameter("jersey.config.server.provider.packages", 
-                "com.filmfinder.api");
+                "com.filmfinder.resources");
 
         try {
             server.start();
