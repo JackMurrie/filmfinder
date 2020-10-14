@@ -38,11 +38,14 @@ public class MysqlConnector {
             ResultSetMetaData rsmd = resultSet.getMetaData();
             int columnsNumber = rsmd.getColumnCount();
                 
+            System.out.println("----");
+            System.out.println(rsmd.getColumnName(1));
+            System.out.println("----");
             while (resultSet.next()) {
                 for (int i = 1; i <= columnsNumber; i++) {
                     if (i > 1) System.out.print(",  ");
                     String columnValue = resultSet.getString(i);
-                    System.out.print(columnValue + " " + rsmd.getColumnName(i));
+                    System.out.print(columnValue);
                 }
                 System.out.println("");
             }
