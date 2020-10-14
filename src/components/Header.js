@@ -8,6 +8,7 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import IconButton from '@material-ui/core/IconButton';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -72,35 +73,48 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Header() {
     const classes = useStyles();
-  
+    const [search, setSearch] = React.useState('');
+    const history = useHistory();
+
+    const handleSearch = (event) => {
+      event.preventDefault();
+      const data = {
+        title: search,
+      };
+      history.push("/SearchResults", data);
+    }; 
+    
     return (
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
-              <Button href="/" color="primary" className={classes.link}>
-                  FilmFinder
-               </Button>
-              <div className={classes.toolbarTitle}></div>
-              <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
+                <Button href="/" color="primary" className={classes.link}>
+                    FilmFinder
+                </Button>
+                <div className={classes.toolbarTitle}></div>
+                <div className={classes.search}>
+                  <div className={classes.searchIcon}>
+                    <SearchIcon />
+                  </div>
+                    <form onSubmit={handleSearch}>
+                      <InputBase
+                        id="search"
+                        placeholder="Search…"
+                        onChange={(event) => setSearch(event.target.value)}
+                        classes={{
+                          root: classes.inputRoot,
+                          input: classes.inputInput,
+                        }}
+                        inputProps={{ 'aria-label': 'search' }}
+                      />
+                    </form>
                 </div>
-                <InputBase
-                  id="search"
-                  placeholder="Search…"
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                  inputProps={{ 'aria-label': 'search' }}
-                />
-              </div>
-              <Button href="/Login" color="primary" variant="outlined" className={classes.link}>
-                Login
-              </Button>
-              <Button href="/SignUp" color="primary" variant="outlined" className={classes.link}>
-                Sign Up
-              </Button>
-                <IconButton aria-label="search" color="inherit" href="/Account">
+                <Button href="/Login" color="primary" variant="outlined" className={classes.link}>
+                  Login
+                </Button>
+                <Button href="/SignUp" color="primary" variant="outlined" className={classes.link}>
+                  Sign Up
+                </Button>
+                <IconButton aria-label="account" color="inherit" href="/Account">
                   <PersonPinIcon />
                 </IconButton>
             </Toolbar>

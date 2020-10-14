@@ -11,6 +11,7 @@ import ResetPassword from './ResetPassword';
 import NewPassConf from './NewPassConf';
 import Account from './Account';
 import PublicProfile from './PublicProfile';
+import SearchResults from './SearchResults';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 function App() {
@@ -46,6 +47,9 @@ function App() {
             </Route>
             <Route path="/PublicProfile">
                 <PublicProfile />
+            </Route>
+            <Route path="/SearchResults">
+                <SearchResults />
             </Route>
             <Route path="/">
                 <Home />
