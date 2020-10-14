@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
+import javassist.bytecode.stackmap.BasicBlock.Catch;
+
 public class MysqlConnector {
     private Connection connection = null;
     private Statement statement = null;
@@ -22,8 +24,20 @@ public class MysqlConnector {
 
             resultSet = statement.executeQuery("select * from film_finder.genre");
 
+            printResult();
+
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            close();
+        }
+    }
+
+    private void printResult() throws Exception {
+        try {
             ResultSetMetaData rsmd = resultSet.getMetaData();
             int columnsNumber = rsmd.getColumnCount();
+                
             while (resultSet.next()) {
                 for (int i = 1; i <= columnsNumber; i++) {
                     if (i > 1) System.out.print(",  ");
@@ -32,12 +46,10 @@ public class MysqlConnector {
                 }
                 System.out.println("");
             }
-
         } catch (Exception e) {
             throw e;
-        } finally {
-            close();
         }
+
     }
 
     // You need to close the resultSet
