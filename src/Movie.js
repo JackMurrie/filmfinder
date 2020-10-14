@@ -203,6 +203,7 @@ function LargeMovieCard() {
 
   function ReviewButton() {
     const [open, setOpen] = React.useState(false);
+    const [review, setReview] = React.useState('');
   
     const handleClickOpen = () => {
       setOpen(true);
@@ -211,6 +212,14 @@ function LargeMovieCard() {
     const handleClose = () => {
       setOpen(false);
     };
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      alert(review); //remove later
+      const data = {
+        new_review: review,
+      };
+    }; 
   
     return (
       <div>
@@ -218,30 +227,32 @@ function LargeMovieCard() {
           Leave a Review
         </Button>
         <Dialog fullwidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Review</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Leave a review for The Lord of the Rings: The Fellowship of the Ring below 
-            </DialogContentText>
-            <TextField
-              autoFocus
-              multiline
-              rowsMax={10}
-              margin="dense"
-              id="name"
-              label=""
-              type="email"
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleClose} color="primary">
-              Leave Review
-            </Button>
-          </DialogActions>
+          <form onSubmit={handleSubmit}>
+            <DialogTitle id="form-dialog-title">Review</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Leave a review for The Lord of the Rings: The Fellowship of the Ring below 
+              </DialogContentText>
+              <TextField
+                autoFocus
+                multiline
+                rowsMax={10}
+                margin="dense"
+                id="review"
+                label=""
+                fullWidth
+                onChange={(event) => setReview(event.target.value)}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleClose} color="primary" type="submit">
+                Leave Review
+              </Button>
+            </DialogActions>
+          </form>
         </Dialog>
       </div>
     );
