@@ -35,6 +35,7 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Switch from '@material-ui/core/Switch';
 import Async from 'react-async';
 
+
 const useStyles = makeStyles((theme) => ({
     '@global': {
       ul: {
@@ -85,6 +86,23 @@ export default function Movie() {
   
     const handleChange = (event) => {
       setState({ ...state, [event.target.name]: event.target.checked });
+
+      {/* Call POST to API */}
+      const data = {
+        seen: state.seen,
+        wishlist: state.wishlist,
+      };
+    };
+
+    const [rating, setRating] = React.useState(0); //React.useState(user.movie.rating);
+
+    const handleRatingChange = (event, newRating) => {
+      setRating(newRating);
+
+      {/* Call POST to API */}
+      const data = {
+        rating: state.rating,
+      };
     };
 
     return (
@@ -95,7 +113,12 @@ export default function Movie() {
                 <h1>The Lord of the Rings: The Fellowship of the Ring</h1>
             </div>
             <Box className="title" component="fieldset" mb={3} borderColor="transparent">
-                <Rating name="rating" precision={0.5} value={0} size="large"/>
+                <Rating 
+                name="rating" 
+                precision={0.5} 
+                value={rating} 
+                size="large" 
+                onChange={handleRatingChange}/>
             </Box>
             
             <Container component="main" maxWidth="xl">
@@ -219,6 +242,7 @@ function LargeMovieCard() {
       const data = {
         new_review: review,
       };
+      {/* Call POST to API */}
     }; 
   
     return (

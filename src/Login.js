@@ -49,6 +49,23 @@ export default function Login() {
 function LoginScreen() {
   const classes = useStyles();
 
+  const [state, setState] = React.useState({
+    email: '',
+    password: '',
+  });
+
+  const handleSubmit = (event) => {
+    setState({ ...state, [event.target.name]: event.target.value });
+    event.preventDefault();
+    const data = {
+      email: state.email,
+      password: state.password
+    };
+    {/* Call POST to API */}
+    alert(state.email); //remove later
+  }; 
+
+
   return (
 
     <Container component="main" maxWidth="xs">
@@ -90,6 +107,7 @@ function LoginScreen() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit}
           >
             Log In
           </Button>
