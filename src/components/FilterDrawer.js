@@ -8,6 +8,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import GradeIcon from '@material-ui/icons/Grade';
 import ListItemText from '@material-ui/core/ListItemText';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import TheatersIcon from '@material-ui/icons/Theaters';
@@ -68,6 +69,7 @@ export default function Drawer() {
         Thriller: false,
         Not_Seen: false,
         Not_Wishlist: false,
+        five_stars: false,
     });
 
     const handleChange = (event) => {
@@ -140,6 +142,25 @@ export default function Drawer() {
             </FormControl>
         </List>
         <Divider />
+        <List>
+            <ListItem>
+              <ListItemIcon>{<GradeIcon style={{fill: "white"}}/>}</ListItemIcon>
+              <ListItemText primary={"Rating"} />
+            </ListItem>
+            <FormControl component="fieldset">
+                <FormGroup column>
+                        <FormControlLabel
+                        control={<WhiteCheckbox
+                            checked={state.five_stars}
+                            onChange={handleChange}
+                            name={"five_stars"}
+                            />}
+                        label={"5 Stars"}
+                        labelPlacement="start"
+                        />
+                </FormGroup>
+            </FormControl>
+        </List>
       </div>
     );
   
