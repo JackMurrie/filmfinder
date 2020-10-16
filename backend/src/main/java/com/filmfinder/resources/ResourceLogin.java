@@ -38,6 +38,7 @@ public class ResourceLogin {
     public Response loginUser(AuthTemplate data) throws Exception {
         String email = data.getEmail();
         String password = data.getPassword();
+        System.out.println("email="+email+", password="+ password);
         String token = CredentialHandler.authorise(email, password);
         if (token == null) {
             // throw exception.
