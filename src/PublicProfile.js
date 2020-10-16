@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
       },
   }));
 
-export default function Movie() {
+export default function PublicProfile() {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -58,6 +58,11 @@ export default function Movie() {
     
       const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
+        {/* Call POST to API */}
+        const data = {
+          [event.target.name]: event.target.checked
+        };
+        {console.log("POST: ", data)}
       };
 
     return (

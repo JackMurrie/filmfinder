@@ -89,9 +89,9 @@ export default function Movie() {
 
       {/* Call POST to API */}
       const data = {
-        seen: state.seen,
-        wishlist: state.wishlist,
+        [event.target.name]: event.target.checked
       };
+      {console.log("POST: ", data)}
     };
 
     const [rating, setRating] = React.useState(0); //React.useState(user.movie.rating);
@@ -101,8 +101,9 @@ export default function Movie() {
 
       {/* Call POST to API */}
       const data = {
-        rating: state.rating,
+        rating: newRating,
       };
+      {console.log("POST Rating: ", data.rating)}
     };
 
     return (
@@ -238,11 +239,11 @@ function LargeMovieCard() {
 
     const handleSubmit = (event) => {
       event.preventDefault();
-      alert(review); //remove later
       const data = {
         new_review: review,
       };
       {/* Call POST to API */}
+      {console.log("POST Review: ", review)}
     }; 
   
     return (

@@ -17,6 +17,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Rating from '@material-ui/lab/Rating';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     list: {
@@ -39,8 +41,9 @@ const WhiteCheckbox = withStyles({
     checked: {},
   })((props) => <Checkbox color="default" {...props} />);
 
-export default function Drawer() {
+export default function Drawer(props) {
     const classes = useStyles();
+    const history = useHistory();
     const genres = [
         'Action',
         'Adventure',
@@ -53,6 +56,7 @@ export default function Drawer() {
         'Romance',
         'SciFI',
         'Thriller',
+        'other',
       ];
     
     const [checked, setChecked] = React.useState({
@@ -63,26 +67,38 @@ export default function Drawer() {
         Documentary: false,
         Drama: false,
         Fantasy: false,
-        Horro: false,
+        Horror: false,
         Romance: false,
         SciFi: false,
         Thriller: false,
+        other: false,
         Not_Seen: false,
         Not_Wishlist: false,
         five_stars: false,
+        four_stars: false,
+        three_stars: false,
+        two_stars: false,
+        one_stars: false,
     });
 
     const handleChange = (event) => {
-        setChecked({ ...state, [event.target.name]: event.target.checked });
+        setChecked({ ...checked, [event.target.name]: event.target.checked });
     };
 
     const [state, setState] = React.useState({
-        drawer: false,
-      });
+        right: false,
+    });
   
     const toggleDrawer = (anchor, open) => (event) => {
       if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
         return;
+      }
+      if (state.right === true) {
+        const data = {
+          title: props.title,
+          filters: checked,
+        };
+        history.push("/SearchResults", data);
       }
       setState({ ...state, [anchor]: open });
     };
@@ -100,9 +116,9 @@ export default function Drawer() {
               <ListItemIcon>{<VisibilityOffIcon style={{fill: "white"}}/>}</ListItemIcon>
               <ListItemText primary={"Unseen"} />
               <WhiteCheckbox
-                    checked={state.Not_Seen}
+                    checked={checked.Not_Seen}
                     onChange={handleChange}
-                    name={"Seen"}
+                    name={"Not_Seen"}
                     />
             </ListItem>
         </List>
@@ -112,7 +128,7 @@ export default function Drawer() {
               <ListItemIcon>{<FavoriteBorderIcon style={{fill: "white"}}/>}</ListItemIcon>
               <ListItemText primary={"Not in Wishlist"} />
               <WhiteCheckbox
-                    checked={state.Not_Wishlist}
+                    checked={checked.Not_Wishlist}
                     onChange={handleChange}
                     name={"Not_Wishlist"}
                     />
@@ -130,7 +146,7 @@ export default function Drawer() {
                         <FormControlLabel
                         value={genre}
                         control={<WhiteCheckbox
-                            checked={state.genre}
+                            checked={checked.[genre]}
                             onChange={handleChange}
                             name={genre}
                             />}
@@ -151,16 +167,53 @@ export default function Drawer() {
                 <FormGroup column>
                         <FormControlLabel
                         control={<WhiteCheckbox
-                            checked={state.five_stars}
+                            checked={checked.five_stars}
                             onChange={handleChange}
                             name={"five_stars"}
                             />}
-                        label={"5 Stars"}
+                        label={<Rating value={5} readOnly size="small" className={classes.ratingColor}/>}
+                        labelPlacement="start"
+                        />
+                        <FormControlLabel
+                        control={<WhiteCheckbox
+                            checked={checked.four_stars}
+                            onChange={handleChange}
+                            name={"four_stars"}
+                            />}
+                        label={<Rating value={4} readOnly size="small" className={classes.ratingColor}/>}
+                        labelPlacement="start"
+                        />
+                        <FormControlLabel
+                        control={<WhiteCheckbox
+                            checked={checked.three_stars}
+                            onChange={handleChange}
+                            name={"three_stars"}
+                            />}
+                        label={<Rating value={3} readOnly size="small" className={classes.ratingColor}/>}
+                        labelPlacement="start"
+                        />
+                        <FormControlLabel
+                        control={<WhiteCheckbox
+                            checked={checked.two_stars}
+                            onChange={handleChange}
+                            name={"two_stars"}
+                            />}
+                        label={<Rating value={2} readOnly size="small" className={classes.ratingColor}/>}
+                        labelPlacement="start"
+                        />
+                        <FormControlLabel
+                        control={<WhiteCheckbox
+                            checked={checked.one_stars}
+                            onChange={handleChange}
+                            name={"one_stars"}
+                            />}
+                        label={<Rating value={1} readOnly size="small" className={classes.ratingColor}/>}
                         labelPlacement="start"
                         />
                 </FormGroup>
             </FormControl>
         </List>
+        <Divider />
       </div>
     );
   

@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         backgroundColor: theme.palette.background.paper,
     },
+    right: {
+      textAlign: "right",
+    },
   }));
   
   
@@ -114,10 +117,8 @@ function TabButtons() {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          Wishlist
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Recommended
         </TabPanel>
         <TabPanel value={value} index={2}>
           Seen

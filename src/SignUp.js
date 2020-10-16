@@ -43,6 +43,25 @@ export default function SignUp() {
 
 function SignUpScreen() {
     const classes = useStyles();
+
+    const [state, setState] = React.useState({
+      email: '',
+      password: '',
+      first_name: '',
+      last_name: '',
+    });
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      const data = {
+        email: state.email,
+        password: state.password,
+        first_name: state.first_name,
+        last_name: state.last_name,
+      };
+      {/* Call POST to API */}
+      {console.log(data)}
+    }; 
   
     return (
         <Container component="main" maxWidth="xs">
@@ -56,13 +75,14 @@ function SignUpScreen() {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     autoComplete="fname"
-                    name="firstName"
+                    name="first_name"
                     variant="outlined"
                     required
                     fullWidth
                     id="firstName"
                     label="First Name"
                     autoFocus
+                    onChange={(event) => setState({ ...state, [event.target.name]: event.target.value })}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -72,8 +92,9 @@ function SignUpScreen() {
                     fullWidth
                     id="lastName"
                     label="Last Name"
-                    name="lastName"
+                    name="last_name"
                     autoComplete="lname"
+                    onChange={(event) => setState({ ...state, [event.target.name]: event.target.value })}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -85,6 +106,7 @@ function SignUpScreen() {
                     label="Email Address"
                     name="email"
                     autoComplete="email"
+                    onChange={(event) => setState({ ...state, [event.target.name]: event.target.value })}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -97,6 +119,7 @@ function SignUpScreen() {
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    onChange={(event) => setState({ ...state, [event.target.name]: event.target.value })}
                   />
                 </Grid>
               </Grid>
@@ -106,6 +129,7 @@ function SignUpScreen() {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
+                onClick={handleSubmit}
               >
                 Sign Up
               </Button>

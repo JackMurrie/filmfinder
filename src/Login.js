@@ -55,14 +55,13 @@ function LoginScreen() {
   });
 
   const handleSubmit = (event) => {
-    setState({ ...state, [event.target.name]: event.target.value });
     event.preventDefault();
     const data = {
       email: state.email,
       password: state.password
     };
     {/* Call POST to API */}
-    alert(state.email); //remove later
+    {console.log(data)}
   }; 
 
 
@@ -85,6 +84,7 @@ function LoginScreen() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={(event) => setState({ ...state, [event.target.name]: event.target.value })}
           />
           <TextField
             variant="outlined"
@@ -96,6 +96,7 @@ function LoginScreen() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(event) => setState({ ...state, [event.target.name]: event.target.value })}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

@@ -20,6 +20,7 @@ export default function SearchResults() {
     const classes = useStyles();
     const location = useLocation();
     const title = location.state.title;
+    const filters = location.state.filters;
 
     return (
         <React.Fragment>
@@ -28,12 +29,12 @@ export default function SearchResults() {
             <Container component="main" maxWidth="lg">
                 <div className={classes.center}>
                     <h1>Results for "{title}"</h1>
-                    
                 </div>
                 <div className={classes.right}>
-                    <Drawer />
+                    <Drawer title={title}/>
                 </div>
                 {/* Call get from API */}
+                {console.log("GET movies title ", title)}
             </Container>
         </React.Fragment>
     )
