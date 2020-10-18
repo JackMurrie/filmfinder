@@ -1,13 +1,10 @@
 package com.filmfinder.db;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
-
-import javassist.bytecode.stackmap.BasicBlock.Catch;
 
 public class MysqlConnector {
     private Connection connection = null;
@@ -17,8 +14,9 @@ public class MysqlConnector {
 
     public void readDb() throws Exception {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://film-finder.cqhhu7re8ogq.ap-southeast-2.rds.amazonaws.com:3306/?user=filmfinder&password=COMP3900-filmfinder&serverTimezone=UTC");
+            // Class.forName("com.mysql.cj.jdbc.Driver");
+            // connection = DriverManager.getConnection("jdbc:mysql://film-finder.cqhhu7re8ogq.ap-southeast-2.rds.amazonaws.com:3306/?user=filmfinder&password=COMP3900-filmfinder&serverTimezone=UTC");
+            connection = DbDataSource.getConnection();
 
             statement = connection.createStatement();
 
