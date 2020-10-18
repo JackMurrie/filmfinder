@@ -103,7 +103,7 @@ export default function Movie() {
       const data = {
         rating: newRating,
       };
-      {console.log("POST Rating: ", data.rating)}
+      {console.log("POST Rating: ", data)}
     };
 
     return (

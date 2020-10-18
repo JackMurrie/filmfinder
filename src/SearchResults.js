@@ -22,6 +22,20 @@ export default function SearchResults() {
     const title = location.state.title;
     const filters = location.state.filters;
 
+    function handleGet() {
+        if (filters === undefined) {
+            console.log("GET movies titled ", title)
+        } 
+        else {
+            const data = {
+                title: title,
+                filters: filters,
+            }
+            console.log("GET movies titled ", title)
+            console.log("and filtered by: ", filters)
+        }
+    }
+
     return (
         <React.Fragment>
             <CssBaseline />
@@ -34,7 +48,8 @@ export default function SearchResults() {
                     <Drawer title={title}/>
                 </div>
                 {/* Call get from API */}
-                {console.log("GET movies title ", title)}
+                {handleGet()}
+                
             </Container>
         </React.Fragment>
     )
