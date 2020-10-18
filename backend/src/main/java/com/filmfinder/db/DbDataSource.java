@@ -11,7 +11,7 @@ public class DbDataSource {
 
     static {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://film-finder.cqhhu7re8ogq.ap-southeast-2.rds.amazonaws.com:3306/?serverTimezone=UTC");
+        config.setJdbcUrl("jdbc:mysql://film-finder.cqhhu7re8ogq.ap-southeast-2.rds.amazonaws.com:3306/film_finder?serverTimezone=UTC");
         config.setUsername("filmfinder");
         config.setPassword("COMP3900-filmfinder");
         config.addDataSourceProperty("minimumIdle", "5");
