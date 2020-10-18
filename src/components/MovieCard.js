@@ -4,20 +4,27 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
-import CardHeader from '@material-ui/core/CardHeader';
-import Typography from '@material-ui/core/Typography';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import { useHistory } from "react-router-dom";
 
 
 export default function MovieCard(props) {
+    
+    const history = useHistory();
+
+    const handleClick = (event) => {
+      event.preventDefault();
+      const data = {
+        title: props.title,
+        imageURL: props.imageURL,
+      };
+      history.push("/Movie", data);
+    }; 
+
     return (
       <Card style={{width: 268, margin: 20}}>
-        <CardActionArea href="/Movie">
+        <CardActionArea onClick = {handleClick}>
           <CardMedia style={{height: 320}} image={props.imageURL}/>
           <CardContent>
             <div className='title'>
@@ -29,4 +36,4 @@ export default function MovieCard(props) {
         </CardActionArea>
       </Card>
     );
-  }
+}

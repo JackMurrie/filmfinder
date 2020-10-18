@@ -34,6 +34,7 @@ import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Switch from '@material-ui/core/Switch';
 import Async from 'react-async';
+import { useLocation } from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -78,6 +79,12 @@ export default function Movie() {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const fixedHeightPaperReview = clsx(classes.paper, classes.fixedHeightReviews);
+    const location = useLocation();
+
+    const props = location.state;
+
+    {/* Call GET */} //data = GET(props.title)
+    {console.log("GET Movie Info: ", props.title)}
 
     const [state, setState] = React.useState({
       seen: false,
@@ -111,7 +118,7 @@ export default function Movie() {
         <CssBaseline />
             <Header />
             <div className="title">
-                <h1>The Lord of the Rings: The Fellowship of the Ring</h1>
+                <h1>{props.title}</h1>
             </div>
             <Box className="title" component="fieldset" mb={3} borderColor="transparent">
                 <Rating 
@@ -127,7 +134,7 @@ export default function Movie() {
                     {/* Movie Card */}
                     <Grid item xs={2.5}>
                         <Paper className={fixedHeightPaper}>
-                            <LargeMovieCard />
+                            <LargeMovieCard  imageURL={props.imageURL}/>
                             <div className="title">
                               <FormControlLabel
                                   control={<Checkbox checked={state.wishlist} onChange={handleChange} icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
@@ -204,11 +211,11 @@ export default function Movie() {
     );
 }
 
-function LargeMovieCard() {
+function LargeMovieCard(props) {
     return (
       <Card style={{width: 350, margin: 20}}>
         <CardActionArea href="/Movie">
-          <CardMedia style={{height: 500}} image="https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_SY999_CR0,0,673,999_AL_.jpg"/>
+          <CardMedia style={{height: 500}} image={props.imageURL}/>
           <CardContent>
             <div className='title'>
                 <Box component="fieldset" mb={3} borderColor="transparent">
