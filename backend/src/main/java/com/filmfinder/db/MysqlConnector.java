@@ -6,13 +6,19 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
+import javassist.bytecode.stackmap.BasicBlock.Catch;
+
+
+
+
 public class MysqlConnector {
     private Connection connection = null;
     private Statement statement = null;
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet = null;
 
-    public void readDb() throws Exception {
+
+    public void readDb(String query) throws Exception{
         try {
             // Class.forName("com.mysql.cj.jdbc.Driver");
             // connection = DriverManager.getConnection("jdbc:mysql://film-finder.cqhhu7re8ogq.ap-southeast-2.rds.amazonaws.com:3306/?user=filmfinder&password=COMP3900-filmfinder&serverTimezone=UTC");
@@ -20,7 +26,8 @@ public class MysqlConnector {
 
             statement = connection.createStatement();
 
-            resultSet = statement.executeQuery("select * from film_finder.genre");
+            // TEST QUERY: select * from film_finder.genre
+            resultSet = statement.executeQuery(query);
 
             printResult();
 
@@ -29,6 +36,9 @@ public class MysqlConnector {
         } finally {
             close();
         }
+    }
+    public void readDb() throws Exception {
+        readDb("select * from film_finder.genre");
     }
 
     private void printResult() throws Exception {
