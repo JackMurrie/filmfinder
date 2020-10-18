@@ -2,6 +2,11 @@ package com.filmfinder.auth;
 
 import com.filmfinder.db.AuthDB;
 
+// Note need to handle sql exceptions,
+// Need to check if email already exists
+// Need to check if email is valid
+// Need to return/handle any of the above errors and pass correctly to front end
+
 public class CredentialHandler {
 
     static public String authenticate(String firstName, String lastName, String email, String password) {
