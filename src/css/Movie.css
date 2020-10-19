@@ -1,0 +1,17 @@
+.text {
+    text-align: center;
+  }
+  
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+  
+.title {
+    text-align: center;
+    font-size: calc(6px + 2vmin);
+}
+
+.right {
+    text-align: right;
+}
