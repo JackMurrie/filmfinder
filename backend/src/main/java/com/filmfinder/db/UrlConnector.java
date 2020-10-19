@@ -3,7 +3,7 @@ package com.filmfinder.db;
 import java.net.URL;
 import java.util.Map;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 // read generic data from url
 public class UrlConnector {
