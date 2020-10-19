@@ -124,6 +124,8 @@ On your terminal that executed ```curl``` command should print.
 Register unsuccessful
 ```
 
+# Frontend
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Installation and Setup Instructions
@@ -158,7 +160,8 @@ The build is minified and the filenames include the hashes.<br />
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-## Dependancies 
+
+## Dependencies 
 
 /node_modules
 
