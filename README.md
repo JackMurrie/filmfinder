@@ -1,6 +1,11 @@
 # capstone-project-comp3900-w15a-lol_i_dunno
 capstone-project-comp3900-w15a-lol_i_dunno created by GitHub Classroom
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 6ecaa61b359bb2581dcdbd1b042e503460f200f2
 # Backend setup v1.0
 
 Change logs:
@@ -121,3 +126,47 @@ On your terminal that executed ```curl``` command should print.
 ``` 
 Register unsuccessful
 ```
+
+# Frontend
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Installation and Setup Instructions
+
+Installation:
+You will need `node` and `npm` installed globally on your machine.  
+
+ Visit https://www.npmjs.com/get-npm and click “Download Node.js and npm”. 
+
+Run:<br />
+`npm install`<br />
+`npm install @material-ui/core`<br />
+`npm install @material-ui/icons`<br />
+`npm install @material-ui/lab`<br />
+`npm install react-router-dom` <br />
+
+To Start Server:
+
+`npm start`  
+
+To Visit App:
+
+`localhost:3000/`  
+
+Build app for production: 
+
+`npm run build`
+
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.<br />
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+
+## Dependencies 
+
+/node_modules
+
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
