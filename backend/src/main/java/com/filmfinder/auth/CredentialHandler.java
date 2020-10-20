@@ -2,6 +2,8 @@ package com.filmfinder.auth;
 
 import java.util.Date;
 import java.time.Duration;
+import java.sql.SQLException;
+import javassist.NotFoundException;
 
 import io.jsonwebtoken.Jwts;  
 import io.jsonwebtoken.SignatureAlgorithm;  
@@ -23,8 +25,11 @@ public class CredentialHandler {
     }
 
     static public String authenticate(String firstName, String lastName, String email, String password) {
-
-        AuthDB.putCredentials(firstName, lastName, email, password.hashCode());
+        try {
+            AuthDB.putCredentials(firstName, lastName, email, password.hashCode());
+        } catch (SQLException e) {
+            return null;
+        } 
         return authorise(email, password);
     }
 
@@ -32,19 +37,28 @@ public class CredentialHandler {
 
         int hashed = password.hashCode();
 
-        int hashed_ = AuthDB.getHashedPassword(email);
+        int hashedDb = 0;
+        try {
+            hashedDb = AuthDB.getHashedPassword(email);
+        } catch (SQLException e) {
+            return null;
+        } catch (NotFoundException e) {
+            return null;
+        }
         String token = null;
-        if (hashed == hashed_) {
+        if (hashed == hashedDb) {
             token = generateToken(email);
         }
         return token;
     }
 
     private static String generateToken(String email) {
-        // LocalDateTime currentTime = LocalDateTime.now();
+        // byte[] key = "SECRET".getBytes();
+        // int VALID_LOGIN_DURATION = 30;
+
         Date currentTime = new Date();
         Date expireDate = Date.from(currentTime.toInstant().plus(Duration.ofMinutes(VALID_LOGIN_DURATION)));
-        String jwt = Jwts.builder().setIssuer("http://filmfinder.com.au/").setSubject(email).setExpiration(expireDate).put("scope", "user").signWith(SignatureAlgorithm.HS256, key).compact();
+        String jwt = Jwts.builder().setIssuer("http://filmfinder.com.au/").setSubject(email).setExpiration(expireDate).claim("scope", "user").signWith(SignatureAlgorithm.HS256, key).compact();
         return jwt;
     }
 
