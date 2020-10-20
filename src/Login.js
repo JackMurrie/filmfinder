@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,6 +49,7 @@ export default function Login() {
 
 function LoginScreen() {
   const classes = useStyles();
+  const history = useHistory();
 
   const [state, setState] = React.useState({
     email: '',
@@ -60,8 +62,15 @@ function LoginScreen() {
       email: state.email,
       password: state.password
     };
-    {/* Call POST to API */}
-    {console.log(data)}
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    };
+
+    fetch('/rest/auth/login', requestOptions)
+      .then(() => history.push('/Account'))
   }; 
 
 

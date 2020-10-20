@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import { useHistory } from 'react-router-dom';
+
 const useStyles = makeStyles((theme) => ({
     paper: {
       marginTop: theme.spacing(8),
@@ -43,6 +45,7 @@ export default function SignUp() {
 
 function SignUpScreen() {
     const classes = useStyles();
+    const history = useHistory();
 
     const [state, setState] = React.useState({
       email: '',
@@ -56,12 +59,19 @@ function SignUpScreen() {
       const data = {
         email: state.email,
         password: state.password,
-        first_name: state.first_name,
-        last_name: state.last_name,
+        firstName: state.first_name,
+        lastName: state.last_name,
       };
-      {/* Call POST to API */}
-      {console.log(data)}
-    }; 
+      
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      };
+  
+      fetch('/rest/auth/register', requestOptions)
+        .then(() => history.push('/Account'))
+    };
   
     return (
         <Container component="main" maxWidth="xs">
