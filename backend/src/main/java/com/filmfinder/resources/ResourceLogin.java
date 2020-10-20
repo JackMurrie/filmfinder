@@ -7,6 +7,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import io.jsonwebtoken.SignatureAlgorithm;
+
 import com.filmfinder.templates.AuthTemplate;
 import com.filmfinder.auth.CredentialHandler;
 
