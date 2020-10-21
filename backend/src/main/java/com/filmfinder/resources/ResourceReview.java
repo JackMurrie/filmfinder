@@ -24,49 +24,38 @@ public class ResourceReview {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addReview(@PathParam("movieId") int id, ReviewTemplate review) throws Exception {
 
+        // String token = review.getToken();
+        String comment = review.getComment();
+        float star = review.getStar();
+
+        // DB.putReview(userEmail, comment, star);
         return Response.status(200).entity("todo").build();        
     }
+
     @PUT
     @Path("/review")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response editReview(@PathParam("movieId") int id,  ReviewTemplate review) throws Exception {
-       
+        // String token = review.getToken();
+        String comment = review.getComment();
+        float star = review.getStar();
+        String reviewId = review.getReviewId();
+
+        // DB.setReview(userEmail, comment, star);
         return Response.status(200).entity("todo").build();        
     }
+
     @DELETE
     @Path("/review")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeReview( @PathParam("movie_id") int id, ReviewTemplate review) throws Exception {
-       
+        
+        String reviewId = review.getReviewId();
+        // String userEmail = CredentialHandler.decodeToken(token);
+        // DB.removeReview(userEmail, movieId);
         return Response.status(200).entity("todo").build();        
     }
 
-    @POST
-    @Path("/star")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response addStars( @PathParam("movie_id") int id) throws Exception {
-
-        return Response.status(200).entity("todo").build();
-    }
-
-    @PUT
-    @Path("/star")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response editStars( @PathParam("movie_id") int id) throws Exception {
-       
-        return Response.status(200).entity("todo").build();          
-    }
-
-    @DELETE
-    @Path("/star")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response removeStars( @PathParam("movie_id") int id) throws Exception {
-       
-        return Response.status(200).entity("todo").build();        
-    }
 }
