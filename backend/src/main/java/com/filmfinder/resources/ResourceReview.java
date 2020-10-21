@@ -10,6 +10,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
 
+import com.filmfinder.db.ReviewDB;
 import com.filmfinder.templates.ReviewTemplate;
 
 import com.google.gson.Gson;
@@ -28,7 +29,12 @@ public class ResourceReview {
         String comment = review.getComment();
         float star = review.getStar();
 
-        // DB.putReview(userEmail, comment, star);
+        String userEmail;
+        try {
+            ReviewDB.putReview(userEmail, id, comment, star);
+        } catch (Exception e) {
+
+        }
         return Response.status(200).entity("todo").build();        
     }
 
@@ -40,9 +46,16 @@ public class ResourceReview {
         // String token = review.getToken();
         String comment = review.getComment();
         float star = review.getStar();
-        String reviewId = review.getReviewId();
+        // String reviewId = review.getReviewId();
 
-        // DB.setReview(userEmail, comment, star);
+        String userEmail;
+        // String userEmail = CredentialHandler.decodeToken(token);
+        
+        try {
+            ReviewDB.editReview(userEmail, id, comment, star);
+        } catch (Exception e) {
+
+        }
         return Response.status(200).entity("todo").build();        
     }
 
@@ -52,9 +65,14 @@ public class ResourceReview {
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeReview( @PathParam("movie_id") int id, ReviewTemplate review) throws Exception {
         
-        String reviewId = review.getReviewId();
+        int reviewId = review.getReviewId();
+        String userEmail;
         // String userEmail = CredentialHandler.decodeToken(token);
-        // DB.removeReview(userEmail, movieId);
+        try {
+            ReviewDB.removeReview(userEmail, id);
+        } catch (Exception e) {
+
+        }
         return Response.status(200).entity("todo").build();        
     }
 
