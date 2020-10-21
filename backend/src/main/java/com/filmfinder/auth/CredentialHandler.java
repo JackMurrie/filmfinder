@@ -62,24 +62,15 @@ public class CredentialHandler {
         return jws;
     }
 
-    public static String decodeToken(String token) {
-        
+    public static String decodeToken(String token) throws Exception {
+        String userEmail = null;
         try {
-            String userEmail = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
-            /* Here we need to check if userName matches with the userName extracted from token */
-            String userEmailDB = null;
-            // try {
-            //     userEmailDB = extractedUserEmail(token);
-            // } catch () {
-            // }
-            userEmailDB = "user@gmail.com";
-            if (userEmail.equals(userEmailDB)) {
-                return userEmail;
-            }
+            userEmail = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
+            if (!AuthDB.checkEmail(userEmail)) throw new Exception();
         }
         catch (SignatureException e) {
-            return null;
+            throw e;
         }
-        return null;
+        return userEmail;
     }
 }
