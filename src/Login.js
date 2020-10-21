@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login() {
-    const classes = useStyles();
   
     return (
         <React.Fragment>
@@ -51,25 +50,16 @@ function LoginScreen() {
   const classes = useStyles();
   const history = useHistory();
 
-  const [state, setState] = React.useState({
-    email: '',
-    password: '',
-    wrong_credentials: false
-  });
-
-  const handleChange = (event) => {
-    setState(state => Object.assign(state, {[event.target.name]: event.target.value}));
-  };
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [wrong_credentials, setWrongCredentials] = React.useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = {
-      email: state.email,
-      password: state.password
+      email: email,
+      password: password
     };
-
-    setState(state => Object.assign(state, {wrong_credentials: false}));
-    console.log(data);
     
     const requestOptions = {
       method: 'POST',
@@ -82,7 +72,7 @@ function LoginScreen() {
         if (response.ok) {
           history.push('/Account');
         } else {
-          setState(state => Object.assign(state, {wrong_credentials: false}));
+          setWrongCredentials(true);
         }
       });
   }
@@ -106,7 +96,7 @@ function LoginScreen() {
             name="email"
             autoComplete="email"
             autoFocus
-            onChange={handleChange}
+            onChange={event => setEmail(event.target.value)}
           />
           <TextField
             variant="outlined"
@@ -118,13 +108,13 @@ function LoginScreen() {
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={handleChange}
+            onChange={event => setPassword(event.target.value)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          { state.wrong_credentials &&
+          { wrong_credentials &&
             <Typography variant="subtitle2" color="secondary">
               Sorry, those credentials didn't work. Try again?
             </Typography>
