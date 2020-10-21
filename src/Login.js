@@ -64,6 +64,8 @@ function LoginScreen() {
       password: state.password
     };
 
+    setState({wrong_credentials: false});
+
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -99,7 +101,7 @@ function LoginScreen() {
             name="email"
             autoComplete="email"
             autoFocus
-            onChange={(event) => setState({ ...state, [event.target.name]: event.target.value })}
+            onChange={(event) => setState(state => Object.assign(state, {[event.target.name]: event.target.value}))}
           />
           <TextField
             variant="outlined"
@@ -111,7 +113,7 @@ function LoginScreen() {
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={(event) => setState({ ...state, [event.target.name]: event.target.value })}
+            onChange={(event) => setState(state => Object.assign(state, {[event.target.name]: event.target.value}))}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
