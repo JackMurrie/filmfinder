@@ -57,6 +57,10 @@ function LoginScreen() {
     wrong_credentials: false
   });
 
+  const handleChange = (event) => {
+    setState({[event.target.name]: event.target.value});
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = {
@@ -101,7 +105,7 @@ function LoginScreen() {
             name="email"
             autoComplete="email"
             autoFocus
-            onChange={(event) => setState(state => Object.assign(state, {[event.target.name]: event.target.value}))}
+            onChange={handleChange}
           />
           <TextField
             variant="outlined"
@@ -113,7 +117,7 @@ function LoginScreen() {
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={(event) => setState(state => Object.assign(state, {[event.target.name]: event.target.value}))}
+            onChange={handleChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
