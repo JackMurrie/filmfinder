@@ -13,9 +13,6 @@ import javax.ws.rs.core.MediaType;
 import com.filmfinder.db.ReviewDB;
 import com.filmfinder.templates.ReviewTemplate;
 
-// import com.google.gson.Gson;
-
-
 @Path("movies/{movieId}")
 public class ResourceReview {
 
@@ -25,12 +22,11 @@ public class ResourceReview {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addReview(@PathParam("movieId") int id, ReviewTemplate review) throws Exception {
 
-        // String token = review.getToken();
+
         String comment = review.getComment();
         float star = review.getStar();
-
-        String userEmail;
         // try {
+        //      String userEmail = CredentialHandler.decodeToken(token);
         //     ReviewDB.putReview(userEmail, id, comment, star);
         // } catch (Exception e) {
 
@@ -43,15 +39,12 @@ public class ResourceReview {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response editReview(@PathParam("movieId") int id,  ReviewTemplate review) throws Exception {
-        // String token = review.getToken();
+
         String comment = review.getComment();
         float star = review.getStar();
-        // String reviewId = review.getReviewId();
-
-        String userEmail;
-        // String userEmail = CredentialHandler.decodeToken(token);
         
         // try {
+        // String userEmail = CredentialHandler.decodeToken(token);
         //     ReviewDB.editReview(userEmail, id, comment, star);
         // } catch (Exception e) {
 
@@ -66,13 +59,12 @@ public class ResourceReview {
     public Response removeReview( @PathParam("movie_id") int id, ReviewTemplate review) throws Exception {
         
         int reviewId = review.getReviewId();
-        String userEmail;
-        // String userEmail = CredentialHandler.decodeToken(token);
         // try {
+            // String userEmail = CredentialHandler.decodeToken(token);
         //     ReviewDB.removeReview(userEmail, id);
         // } catch (Exception e) {
 
-        // }
+        // }        
         return Response.status(200).entity("todo").build();        
     }
 
