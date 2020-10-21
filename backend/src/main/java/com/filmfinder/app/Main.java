@@ -4,7 +4,6 @@ package com.filmfinder.app;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.filmfinder.db.MovieApiParser;
 import com.filmfinder.db.UrlConnector;
 
 import org.eclipse.jetty.server.Server;

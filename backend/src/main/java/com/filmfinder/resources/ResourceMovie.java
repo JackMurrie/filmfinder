@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.filmfinder.auth.CredentialHandler;
 
-import com.filmfinder.db.MovieApiParser;
+import com.filmfinder.movie.MovieApiParser;
 import com.google.gson.Gson;
 
 
