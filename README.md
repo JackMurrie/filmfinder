@@ -1,11 +1,6 @@
 # capstone-project-comp3900-w15a-lol_i_dunno
 capstone-project-comp3900-w15a-lol_i_dunno created by GitHub Classroom
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 6ecaa61b359bb2581dcdbd1b042e503460f200f2
 # Backend setup v1.0
 
 Change logs:
