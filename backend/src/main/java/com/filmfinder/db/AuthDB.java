@@ -136,7 +136,7 @@ public class AuthDB {
      * @return the number of entries deleted
      * @throws SQLException if an SQL error occurs
      */
-    public static int delteUser(String email) throws SQLException {
+    public static int deleteUser(String email) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
         try {
