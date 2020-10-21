@@ -54,6 +54,7 @@ function LoginScreen() {
   const [state, setState] = React.useState({
     email: '',
     password: '',
+    wrong_credentials: false
   });
 
   const handleSubmit = (event) => {
@@ -70,9 +71,14 @@ function LoginScreen() {
     };
 
     fetch('/rest/auth/login', requestOptions)
-      .then(() => history.push('/Account'))
-  }; 
-
+      .then(response => {
+        if (response.ok) {
+          history.push('/Account');
+        } else {
+          setState({wrong_credentials: true});
+        }
+      });
+  }
 
   return (
 
@@ -111,6 +117,11 @@ function LoginScreen() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
+          { state.wrong_credentials &&
+            <Typography variant="subtitle2" color="secondary">
+              Sorry, those credentials didn't work. Try again?
+            </Typography>
+          }
           <Button
             type="submit"
             fullWidth
@@ -136,5 +147,5 @@ function LoginScreen() {
         </form>
       </div>
     </Container>
-  );
+  )
 }
