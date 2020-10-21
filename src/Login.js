@@ -58,7 +58,7 @@ function LoginScreen() {
   });
 
   const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.value});
+    setState(state => Object.assign(state, {[event.target.name]: event.target.value}));
   };
 
   const handleSubmit = (event) => {
@@ -68,7 +68,8 @@ function LoginScreen() {
       password: state.password
     };
 
-    setState({wrong_credentials: false});
+    setState(state => Object.assign(state, {wrong_credentials: false}));
+    console.log(data);
     
     const requestOptions = {
       method: 'POST',
@@ -81,7 +82,7 @@ function LoginScreen() {
         if (response.ok) {
           history.push('/Account');
         } else {
-          setState({...state, wrong_credentials: true});
+          setState(state => Object.assign(state, {wrong_credentials: false}));
         }
       });
   }
