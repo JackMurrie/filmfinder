@@ -27,12 +27,11 @@ public class ResourceLogin {
         String last = data.getLastName();
         String email = data.getEmail();
         String password = data.getPassword();
-        System.out.println("first="+first+", last="+last+", email="+email+", password="+ password);
         
         String token = null;
         try {
             token = CredentialHandler.authenticate(first, last, email, password);
-            return Response.status(200).entity(token).build();
+            return Response.status(200).entity("Register successful\n").cookie(new NewCookie("auth_token", token)).build();
         } catch (Exception e) {
             return Response.status(400).entity("Register unsuccessful\n").build();
         }
@@ -47,18 +46,9 @@ public class ResourceLogin {
         
         try {
             String token = CredentialHandler.authorise(email, password);
-            // String decoded = CredentialHandler.decodeToken(token);
-            // System.out.println("email="+email+", password="+ password);
-            // System.out.println("token: " + token);
-            // System.out.println("decoded: " + decoded);
-            return Response.status(200).entity(token).build();
+            return Response.status(200).entity("Login successful\n").cookie(new NewCookie("auth_token", token)).build();
         } catch (Exception e) {
             return Response.status(400).entity("Login unsuccessful\n").build();
         }
-//             return Response.status(200)
-//                     .entity("Login successful\n")
-//                     .cookie(new NewCookie("auth_token", token))
-//                     .build();
-//         }
     }
 }
