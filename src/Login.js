@@ -69,7 +69,6 @@ function LoginScreen() {
     };
 
     setState({wrong_credentials: false});
-    console.log(data);
     
     const requestOptions = {
       method: 'POST',
@@ -82,7 +81,7 @@ function LoginScreen() {
         if (response.ok) {
           history.push('/Account');
         } else {
-          setState({wrong_credentials: true});
+          setState({...state, wrong_credentials: true});
         }
       });
   }
