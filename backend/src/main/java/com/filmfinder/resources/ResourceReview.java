@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import com.filmfinder.db.ReviewDB;
 import com.filmfinder.templates.ReviewTemplate;
 
-import com.google.gson.Gson;
+// import com.google.gson.Gson;
 
 
 @Path("movies/{movieId}")
@@ -30,11 +30,11 @@ public class ResourceReview {
         float star = review.getStar();
 
         String userEmail;
-        try {
-            ReviewDB.putReview(userEmail, id, comment, star);
-        } catch (Exception e) {
+        // try {
+        //     ReviewDB.putReview(userEmail, id, comment, star);
+        // } catch (Exception e) {
 
-        }
+        // }
         return Response.status(200).entity("todo").build();        
     }
 
@@ -51,11 +51,11 @@ public class ResourceReview {
         String userEmail;
         // String userEmail = CredentialHandler.decodeToken(token);
         
-        try {
-            ReviewDB.editReview(userEmail, id, comment, star);
-        } catch (Exception e) {
+        // try {
+        //     ReviewDB.editReview(userEmail, id, comment, star);
+        // } catch (Exception e) {
 
-        }
+        // }
         return Response.status(200).entity("todo").build();        
     }
 
@@ -68,11 +68,11 @@ public class ResourceReview {
         int reviewId = review.getReviewId();
         String userEmail;
         // String userEmail = CredentialHandler.decodeToken(token);
-        try {
-            ReviewDB.removeReview(userEmail, id);
-        } catch (Exception e) {
+        // try {
+        //     ReviewDB.removeReview(userEmail, id);
+        // } catch (Exception e) {
 
-        }
+        // }
         return Response.status(200).entity("todo").build();        
     }
 
