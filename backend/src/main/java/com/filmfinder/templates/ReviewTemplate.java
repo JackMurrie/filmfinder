@@ -6,7 +6,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ReviewTemplate {
 
     private String token;
-    private String comment;
+	private String comment;
+	private float star;
     private int reviewId;
 
     public ReviewTemplate() {}
@@ -37,6 +38,14 @@ public class ReviewTemplate {
 		this.comment = comment;
 	}
 
+	public float getStar() {
+		return this.star;
+	}
+
+	public void setStar(float star) {
+		this.star = star;
+	}
+	
 	public int getReviewId() {
 		return this.reviewId;
 	}
