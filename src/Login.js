@@ -59,7 +59,6 @@ function LoginScreen() {
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.value});
-    console.log(event.target.value);
   };
 
   const handleSubmit = (event) => {
@@ -71,6 +70,7 @@ function LoginScreen() {
 
     setState({wrong_credentials: false});
     console.log(data);
+    
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
