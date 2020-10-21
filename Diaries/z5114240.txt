@@ -9,5 +9,31 @@ I started development of the storyboards and interface designs for the UI and Fl
 I also started coding some drafts of the site home page with plain old HTML, CSS before we really dig into the front-end frameworks like React. Also did some basic stuff like setting up plug-ins like emmet and visual studio code while I'm working in Windows.
 
 Week 3:
-The paperwork has come through for my transfer to the W15A lab.
+The paperwork has come through for my transfer to the W15A lab. This week was
+mainly working on the project proposal, finishing the UI designs for the website
+and the novelty features, and writing associated report stuff.
+
+Week 4 (1st Sprint):
+This week was effectively a no-op for me, Jack did some great work implementing
+the UI and front-end in preparation for our Week 5 demo. 
+
+Week 5 (2nd Sprint):
+We presented our project demo at the beginning of this sprint. For this sprint,
+I was working on integrating the front-end and back-end. I had to fix up a few
+dependency issues to get the backend to build in the correct Java environment.
+Jack did some great work building on his UI implementation from week 4 to flesh
+out a few details of the design. 
+
+I also worked with Hai to flesh out some of the API endpoints that we need for
+backend and front-end for everything to work. Spent a lot of time figuring out
+how the backend works to aid in integrating everything. Kept running into issues
+with Cross Origin Request permissions (CORS), took a long time to debug that.
+
+Final thing before the end of this sprint, I worked with Jack and Hikari to
+put the finishing touches on the login and signup functionality, link it
+completely with the backend.
+
+
+
+
 

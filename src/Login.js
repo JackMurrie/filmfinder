@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login() {
-    const classes = useStyles();
   
     return (
         <React.Fragment>
@@ -51,18 +50,17 @@ function LoginScreen() {
   const classes = useStyles();
   const history = useHistory();
 
-  const [state, setState] = React.useState({
-    email: '',
-    password: '',
-  });
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [wrong_credentials, setWrongCredentials] = React.useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = {
-      email: state.email,
-      password: state.password
+      email: email,
+      password: password
     };
-
+    
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -70,9 +68,14 @@ function LoginScreen() {
     };
 
     fetch('/rest/auth/login', requestOptions)
-      .then(() => history.push('/Account'))
-  }; 
-
+      .then(response => {
+        if (response.ok) {
+          history.push('/Account');
+        } else {
+          setWrongCredentials(true);
+        }
+      });
+  }
 
   return (
 
@@ -93,7 +96,7 @@ function LoginScreen() {
             name="email"
             autoComplete="email"
             autoFocus
-            onChange={(event) => setState({ ...state, [event.target.name]: event.target.value })}
+            onChange={event => setEmail(event.target.value)}
           />
           <TextField
             variant="outlined"
@@ -105,12 +108,17 @@ function LoginScreen() {
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={(event) => setState({ ...state, [event.target.name]: event.target.value })}
+            onChange={event => setPassword(event.target.value)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
+          { wrong_credentials &&
+            <Typography variant="subtitle2" color="secondary">
+              Sorry, those credentials didn't work. Try again?
+            </Typography>
+          }
           <Button
             type="submit"
             fullWidth
@@ -136,5 +144,5 @@ function LoginScreen() {
         </form>
       </div>
     </Container>
-  );
+  )
 }
