@@ -1,8 +1,7 @@
 package com.filmfinder.movie;
 
-import com.filmfinder.movie.MovieData;
-import com.filmfinder.db.UrlConnector;
 import java.util.Map;
+import com.filmfinder.util.UrlConnector;
 
 public class MovieApiParser {
     // DO NOT COMMIT 
@@ -14,7 +13,10 @@ public class MovieApiParser {
     public MovieData getMovie(int id) throws Exception {
     
         try {
-            return parseMovie( connector.getJsonEntries("https://api.themoviedb.org/3/movie/" + id + " ?api_key=" + ApiKey + "&language=en-US") );
+            Map data = connector.getJsonEntries("https://api.themoviedb.org/3/movie/" + id + " ?api_key=" + ApiKey + "&language=en-US");
+            // System.out.println(data.toString());
+            System.out.println(data.get("genres"));
+            return parseMovie( data );
         
         }
         finally {
@@ -23,7 +25,7 @@ public class MovieApiParser {
         
     }
 
-    MovieData parseMovie(Map entries) {
+    public MovieData parseMovie(Map entries) {
         
         // 
         return new MovieData((String)entries.get("title"), (String)entries.get("overview"), "", (String)entries.get("poster_path"));
