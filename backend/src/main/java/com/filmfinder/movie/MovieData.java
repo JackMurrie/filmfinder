@@ -7,12 +7,15 @@ public class MovieData {
     String director;
     String imageUrl;
 
+    // Todo: get different available sizes and post to frontend
+    String baseImageUrl = "http://image.tmdb.org/t/p/w185/";
+
     public MovieData(String _name, String _description, String _director, String _imageUrl) {
 
         name = _name;
         description = _description;
         director = _director;
-        imageUrl = _imageUrl;
+        imageUrl = baseImageUrl + _imageUrl;
     }
 
     public String toString() {
