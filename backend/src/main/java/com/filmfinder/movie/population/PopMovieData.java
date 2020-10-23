@@ -2,12 +2,46 @@ package com.filmfinder.movie.population;
 
 import java.util.ArrayList;
 
+import com.filmfinder.db.MovieDb;
+import com.filmfinder.util.UrlConnector;
+import com.google.gson.Gson;
+
 public class PopMovieData {
     private int id;
     private String original_title;
     
     private ArrayList<Genre> genres;
     private Crew credits;
+
+    public static PopMovieData getPopMovieData(int id) throws Exception {
+        String json = UrlConnector.readUrl("https://api.themoviedb.org/3/movie/" + id + "?api_key=70ae629f88a806e8758ac3900483833e&append_to_response=credits");
+        PopMovieData data = new Gson().fromJson(json, PopMovieData.class);
+        return data;
+    }
+
+    public String getTitle() {
+        return this.original_title;
+    }
+
+    public void updateDBDirector() {
+        for (Person p: credits.getDirectors()) {
+            try {
+                MovieDb.putDirector(p.getName(), this.id);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public void updateDBGenres() {
+        for (Genre g: genres) {
+            try {
+                MovieDb.putGenre(g.name, this.id);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 
     public class Genre {
         private String name;
