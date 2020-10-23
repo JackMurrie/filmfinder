@@ -45,10 +45,10 @@ public class AuthDB {
         return;
     }
 
-    //Not sure what this if for
-    public static String getEmail(String handle) {
-        return "user@gmail.com";
-    }
+    // //Not sure what this if for
+    // public static String getEmail(String handle) {
+    //     return "user@gmail.com";
+    // }
 
     /**
      * 
