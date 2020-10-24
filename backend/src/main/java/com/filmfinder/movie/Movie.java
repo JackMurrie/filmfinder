@@ -20,7 +20,7 @@ import com.google.gson.annotations.Expose;
 
 import javassist.NotFoundException;
 
-public class Movie implements frontendObject {
+public class Movie extends frontendObject {
     @Expose
     String name;
 
@@ -106,11 +106,7 @@ public class Movie implements frontendObject {
         return movie;
     }
 
-    public String toJson() {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-        return gson.toJson(this);
-    }
-
+    @Override
     public String toString() {
         return toJson();
         // return "Movie: " + this.name + "\n Description: " + this.description + "\n Director: " + this.director + "\n Image URL: " + this.imageUrl;

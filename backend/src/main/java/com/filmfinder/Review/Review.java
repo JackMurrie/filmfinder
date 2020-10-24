@@ -3,14 +3,18 @@ package com.filmfinder.review;
 import java.sql.Date;
 
 import com.filmfinder.frontendObject.frontendObject;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 
-public class Review implements frontendObject {
+public class Review extends frontendObject {
+    @Expose
     private int userId;
+    @Expose
     private int movieId;
+    @Expose
     private String comment;
+    @Expose
     private float rating;
+    @Expose
     private Date post_date;
 
     public Review(int userId, int movieId, String comment, float rating, Date date) {
@@ -21,14 +25,4 @@ public class Review implements frontendObject {
             this.post_date = date;
     }
 
-    @Override
-    public String toJson() {
-        Gson gson = new GsonBuilder().create();
-        return gson.toJson(this);
-    }
-
-    @Override
-    public String toString() {
-        return toJson();
-    }
 }

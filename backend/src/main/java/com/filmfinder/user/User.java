@@ -3,9 +3,12 @@ package com.filmfinder.user;
 import com.filmfinder.frontendObject.frontendObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 
-public class User implements frontendObject {
+public class User extends frontendObject {
+    @Expose
     private int userId;
+    @Expose
     private String first;
     private String last;
     private String email;
@@ -17,14 +20,4 @@ public class User implements frontendObject {
         this.email = email;
     }
 
-    @Override
-    public String toJson() {
-        Gson gson = new GsonBuilder().create();
-        return gson.toJson(this);
-    }
-
-    @Override
-    public String toString() {
-        return toJson();
-    }
 }

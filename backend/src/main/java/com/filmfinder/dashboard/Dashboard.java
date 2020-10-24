@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
-public class Dashboard implements frontendObject {
+public class Dashboard extends frontendObject {
     @Expose
     private ArrayList<Movie> watchlist;
     private ArrayList<Movie> wishlist;
@@ -29,17 +29,6 @@ public class Dashboard implements frontendObject {
         } catch (Exception e) {
 
         }
-    }
-
-    @Override
-    public String toJson() {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-        return gson.toJson(this);
-    }
-
-    @Override
-    public String toString() {
-        return toJson();
     }
 
 }

@@ -3,10 +3,8 @@ package com.filmfinder.review;
 import java.util.ArrayList;
 
 import com.filmfinder.frontendObject.frontendObject;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-public class Reviews implements frontendObject {
+public class Reviews extends frontendObject {
     private ArrayList<Review> reviews;
 
     public Reviews(ArrayList<Review> reviews) {
@@ -21,14 +19,4 @@ public class Reviews implements frontendObject {
         this.reviews = reviews;
     }
 
-    @Override
-    public String toJson() {
-        Gson gson = new GsonBuilder().create();
-        return gson.toJson(this);
-    }
-
-    @Override
-    public String toString() {
-        return toJson();
-    }
 }
