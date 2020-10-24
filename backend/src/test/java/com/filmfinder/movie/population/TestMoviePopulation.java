@@ -18,7 +18,7 @@ public class TestMoviePopulation {
         }
         assertTrue(true);
     }
-    @Test
+    // @Test
     public void populateDB() {
         Populate.populateGenreDirector();
         assertTrue(true);
