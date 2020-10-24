@@ -1,8 +1,6 @@
 package com.filmfinder.user;
 
 import com.filmfinder.frontendObject.frontendObject;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
 public class User extends frontendObject {
@@ -11,6 +9,7 @@ public class User extends frontendObject {
     @Expose
     private String first;
     private String last;
+    @Expose
     private String email;
 
     public User(int userId, String first, String last, String email) {
