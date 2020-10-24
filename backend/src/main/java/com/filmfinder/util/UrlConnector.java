@@ -3,25 +3,13 @@ package com.filmfinder.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javassist.NotFoundException;
 
 // read generic data from url
 public class UrlConnector {
     
-
-    public Map getJsonEntries(String url) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        URL _url = new URL(url);
-        
-        Map<?, ?> map = objectMapper.readValue(_url, Map.class);
-
-        return map;
-    }
-
-    public static String readUrl(String urlString) throws Exception {
+public static String readUrl(String urlString) throws NotFoundException {
     BufferedReader reader = null;
     try {
         URL url = new URL(urlString);
@@ -33,9 +21,16 @@ public class UrlConnector {
             buffer.append(chars, 0, read); 
 
         return buffer.toString();
+    } catch (Exception e) {
+        throw new NotFoundException("Cannot find movie");
     } finally {
-        if (reader != null)
-            reader.close();
+        if (reader != null) {
+            try {
+                reader.close();
+            } catch (Exception e) {
+
+            }
+        }
     }
 }
 }
