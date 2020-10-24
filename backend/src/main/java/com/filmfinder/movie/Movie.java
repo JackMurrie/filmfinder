@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.filmfinder.db.MovieDb;
+import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.population.DBMovieData;
 import com.filmfinder.movie.population.Populate;
 import com.filmfinder.util.UrlConnector;
@@ -19,7 +20,7 @@ import com.google.gson.annotations.Expose;
 
 import javassist.NotFoundException;
 
-public class Movie {
+public class Movie implements frontendObject {
     @Expose
     String name;
 
