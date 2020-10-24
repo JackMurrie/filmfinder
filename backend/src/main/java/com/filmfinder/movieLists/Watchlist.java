@@ -3,37 +3,43 @@ package com.filmfinder.movieLists;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.filmfinder.db.MovieListDB;
+import com.filmfinder.db.WatchlistDB;
+import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movies;
+import com.google.gson.annotations.Expose;
 
 import javassist.NotFoundException;
 
-public class Watchlist extends MovieListDB {
-    private String list = "wishlist";
-    private int userId;
+public class Watchlist extends frontendObject {
+    private WatchlistDB dbUtil;
+    @Expose
+    private Movies movies;
 
-    public Watchlist(int userId) {
-        this.userId = userId;
+    public Watchlist(int userId) throws NotFoundException, SQLException {
+        dbUtil = new WatchlistDB(userId);
+        movies = dbUtil.getMovies();
     }
 
-    @Override
-    public void addToList(int movieId) throws SQLException {
-        addToList(list, userId, movieId);
+    public void addMovie(int movieId) throws NotFoundException, SQLException {
+        dbUtil.addToList(movieId);
+        movies = dbUtil.getMovies();
     }
 
-    @Override
-    public int deleteFromList(int movieId) throws SQLException {
-        return deleteFromList(list, userId, movieId);
+    public void deleteMovie(int movieId) throws SQLException {
+        dbUtil.deleteFromList(movieId);
+        try {
+            movies = dbUtil.getMovies();
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+    } 
+
+    public ArrayList<Integer> getMovieList() {
+        return getMovieList();
     }
 
-    @Override
-    public ArrayList<Integer> getMovieList() throws SQLException {
-        return getMovieList(list, userId);
-    }
-
-    @Override
-    public Movies getMovies() throws NotFoundException, SQLException {
-        return getMovies(list, userId);
+    public Movies getMovies() {
+        return movies;
     }
 
 }
