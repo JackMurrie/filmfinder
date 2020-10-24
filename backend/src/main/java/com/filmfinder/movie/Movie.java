@@ -1,6 +1,6 @@
 package com.filmfinder.movie;
 
-public class MovieData {
+public class Movie {
     String name;
     String description;
 
@@ -10,7 +10,7 @@ public class MovieData {
     // Todo: get different available sizes and post to frontend
     String baseImageUrl = "http://image.tmdb.org/t/p/w185/";
 
-    public MovieData(String _name, String _description, String _director, String _imageUrl) {
+    public Movie(String _name, String _description, String _director, String _imageUrl) {
 
         name = _name;
         description = _description;

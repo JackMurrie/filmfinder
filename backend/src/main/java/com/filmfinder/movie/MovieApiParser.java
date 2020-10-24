@@ -10,7 +10,7 @@ public class MovieApiParser {
     UrlConnector connector = new UrlConnector();
     
     // gets a movie by id from the site
-    public MovieData getMovie(int id) throws Exception {
+    public Movie getMovie(int id) throws Exception {
     
         try {
             Map data = connector.getJsonEntries("https://api.themoviedb.org/3/movie/" + id + " ?api_key=" + ApiKey + "&language=en-US");
@@ -25,10 +25,10 @@ public class MovieApiParser {
         
     }
 
-    public MovieData parseMovie(Map entries) {
+    public Movie parseMovie(Map entries) {
         
         // 
-        return new MovieData((String)entries.get("title"), (String)entries.get("overview"), "", (String)entries.get("poster_path"));
+        return new Movie((String)entries.get("title"), (String)entries.get("overview"), "", (String)entries.get("poster_path"));
 
     }
 
