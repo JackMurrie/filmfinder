@@ -25,5 +25,16 @@ public class Populate {
             System.out.println(e.getMessage());
         }
     }
+
+    public static boolean populateDBMovieData(int movieId) {
+        try {
+            PopMovieData popMovie = PopMovieData.getPopMovieData(movieId);
+            popMovie.updateDBDirector();
+            popMovie.updateDBGenres();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
     
 }

@@ -1,5 +1,6 @@
 package com.filmfinder.movie.population;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.filmfinder.db.MovieDb;
@@ -23,23 +24,15 @@ public class PopMovieData {
         return this.original_title;
     }
 
-    public void updateDBDirector() {
+    public void updateDBDirector() throws SQLException {
         for (Person p: credits.getDirectors()) {
-            try {
-                MovieDb.putDirector(p.getName(), this.id);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            MovieDb.putDirector(p.getName(), this.id);
         }
     }
 
-    public void updateDBGenres() {
+    public void updateDBGenres() throws SQLException {
         for (Genre g: genres) {
-            try {
-                MovieDb.putGenre(g.name, this.id);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            MovieDb.putGenre(g.name, this.id);
         }
     }
 
