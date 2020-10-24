@@ -18,5 +18,15 @@ public class TestReview {
             assertTrue(false);
         }
     }
+
+    @Test
+    public void testInvalidMovieId() {
+        try {
+            ArrayList<Review> reviews = ReviewDB.getReviews(1);
+            System.out.println(reviews);
+        } catch (Exception e) {
+            assertTrue(true);
+        }
+    }
     
 }
