@@ -18,7 +18,6 @@ public class Wishlist extends frontendObject {
     public Wishlist(int userId) throws NotFoundException, SQLException {
         dbUtil = new WishlistDB(userId);
         movies = dbUtil.getMovies();
-        System.out.println(movies);
     }
 
     public void addMovie(int movieId) throws NotFoundException, SQLException {
