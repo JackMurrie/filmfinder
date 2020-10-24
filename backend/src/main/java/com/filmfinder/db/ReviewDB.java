@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.filmfinder.review.Review;
+import com.filmfinder.review.Reviews;
 
 import javassist.NotFoundException;
 
@@ -148,7 +149,7 @@ public class ReviewDB {
         }
     }
 
-    public static ArrayList<Review> getReviews(int movieId) throws SQLException {
+    public static Reviews getReviews(int movieId) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
         ResultSet rs = null;
@@ -167,7 +168,7 @@ public class ReviewDB {
                 list.add(new Review(rs.getInt("uId"), movieId, rs.getString("comment"), rs.getFloat("rating"), new Date(10000)));
             };
 
-            return list;
+            return new Reviews(list);
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
