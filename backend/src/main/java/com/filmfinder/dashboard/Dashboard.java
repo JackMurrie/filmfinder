@@ -1,38 +1,35 @@
 package com.filmfinder.dashboard;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.filmfinder.frontendObject.frontendObject;
-import com.filmfinder.movie.Movie;
+import com.filmfinder.movie.Movies;
+import com.filmfinder.movieLists.Watchlist;
+import com.filmfinder.movieLists.Wishlist;
 import com.filmfinder.user.User;
+import com.filmfinder.user.Users;
 import com.google.gson.annotations.Expose;
+
+import javassist.NotFoundException;
 
 public class Dashboard extends frontendObject {
     @Expose
-    private ArrayList<Movie> watchlist;
+    private Watchlist watchlist;
     @Expose
-    private ArrayList<Movie> wishlist;
+    private Wishlist wishlist;
     @Expose
-    private ArrayList<Movie> recommedations;
+    private Movies recommedations;
     @Expose
-    private ArrayList<User> blacklisted;
+    private Users blacklisted;
 
-    public Dashboard(int userId) {
-        //TODO implement functions
-        watchlist = new ArrayList<Movie>();
-        wishlist = new ArrayList<Movie>();
-        recommedations = new ArrayList<Movie>();
-        blacklisted = new ArrayList<User>();
-        try {
-            ArrayList<Integer> wList = new ArrayList<Integer>();
-            wList.add(2);
-            wList.add(5);
-            for (Integer i: wList) {
-                watchlist.add(Movie.getMovie(i));
-            }
-        } catch (Exception e) {
-
-        }
+    public Dashboard(int userId) throws NotFoundException, SQLException {
+        watchlist = new Watchlist(userId);
+        wishlist = new Wishlist(userId);
+        //TODO implement recommendation and blacklisted functions
+        recommedations = new Movies();
+        blacklisted = new Users(new ArrayList<User>());
     }
+
 
 }
