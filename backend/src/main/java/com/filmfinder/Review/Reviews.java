@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.filmfinder.frontendObject.frontendObject;
 
+//TODO implement database connection within object
 public class Reviews extends frontendObject {
     private ArrayList<Review> reviews;
 
