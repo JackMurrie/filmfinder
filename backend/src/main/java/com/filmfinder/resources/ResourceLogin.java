@@ -40,7 +40,7 @@ public class ResourceLogin {
     @POST
     @Path("login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response loginUser(AuthTemplate data) throws Exception {
+    public Response loginUser(AuthTemplate data) {
         String email = data.getEmail();
         String password = data.getPassword();
         
