@@ -9,8 +9,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
 
 import com.filmfinder.auth.CredentialHandler;
-
-import com.filmfinder.movie.MovieApiParser;
+import com.filmfinder.movie.Movie;
 import com.google.gson.Gson;
 
 
@@ -31,12 +30,10 @@ public class ResourceMovie {
         //     return Response.status(400).entity("invalid token").build();
         // }
 
-        MovieApiParser parser = new MovieApiParser();
-        
-        Gson gson = new Gson();
+        Movie movie = Movie.getMovie(id);
 
         // resource table wants a "MovieData" type, what is this ? discuss with FE 
-        return Response.status(200).entity(gson.toJson(parser.getMovie(id))).build();
+        return Response.status(200).entity(movie.toJson()).build();
         
     }
 
