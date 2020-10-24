@@ -14,3 +14,5 @@ SELECT * FROM genre;
 CALL insert_movie_id(1, 'Drama', 'Colin Frith');
 CALL insert_movie_id(1, 'Comedy', 'Colin Frith');
 CALL insert_movie_id(1, 'Action', 'Johnny Blake');
+
+SELECT * FROM review;
