@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.filmfinder.movie.population.DBMovieData;
+
+import javassist.NotFoundException;
+
 public class MovieDb {
     public static ArrayList<Integer> getMoviesNoDirector() throws SQLException {
         Connection c = null;
@@ -40,7 +44,7 @@ public class MovieDb {
                 throw e;
             }
         }
-    }   
+    }
 
     public static void putGenre(String name, int movieId) throws SQLException {
         Connection c = null;
@@ -97,4 +101,120 @@ public class MovieDb {
         }
         return;
     }
+
+    public static boolean checkMovie(int movieId) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT name FROM movie WHERE id=?";
+            s = c.prepareStatement(q);
+
+            s.setInt(1, movieId);
+
+            rs = s.executeQuery();
+            
+            if (rs.next()) {
+                return true;
+            };
+
+            return false;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+    }
+
+    public static ArrayList<String> getGenres(int movieId) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        ArrayList<String> list = new ArrayList<String>();
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT genre_name name FROM movie_genre WHERE movie_id=?";
+            s = c.prepareStatement(q);
+
+            s.setInt(1, movieId);
+
+            rs = s.executeQuery();
+            
+            while (rs.next()) {
+                list.add(rs.getString("name"));
+            };
+
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+    }
+
+    public static ArrayList<String> getDirectors(int movieId) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        ArrayList<String> list = new ArrayList<String>();
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT name FROM director WHERE movie_id=?";
+            s = c.prepareStatement(q);
+
+            s.setInt(1, movieId);
+
+            rs = s.executeQuery();
+            
+            while (rs.next()) {
+                list.add(rs.getString("name"));
+            };
+
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+    }
+
+    public static DBMovieData getDBMovie(int movieID) throws NotFoundException, SQLException {
+        DBMovieData movie = new DBMovieData();
+        if (!checkMovie(movieID)) throw new NotFoundException("Movie not found");
+        //TODO implement this function
+        movie.setAverageRating(0);
+        movie.setGenres(getGenres(movieID));
+        movie.setDirectors(getDirectors(movieID));
+        return movie;
+        
+    }
+    
 }
