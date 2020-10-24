@@ -22,3 +22,5 @@ SELECT m.id, m.name movie, g.genre_name FROM movie m
     WHERE g.genre_name is NULL;
 
 SELECT COUNT(*) FROM movie;
+
+SELECT genre_name FROM movie_genre WHERE movie_id=2;
