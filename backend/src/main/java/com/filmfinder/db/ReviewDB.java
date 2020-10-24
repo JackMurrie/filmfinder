@@ -1,9 +1,13 @@
 package com.filmfinder.db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import com.filmfinder.review.Review;
 
 import javassist.NotFoundException;
 
@@ -132,6 +136,42 @@ public class ReviewDB {
         } catch (NotFoundException e) {
             System.out.println(e.getMessage());
             return false;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+    }
+
+    public static ArrayList<Review> getReviews(int movieId) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        ArrayList<Review> list = new ArrayList<Review>();
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT rating, review comment, user_id uId, movie_id mId FROM review WHERE movie_id=?";
+            s = c.prepareStatement(q);
+
+            s.setInt(1, movieId);
+
+            rs = s.executeQuery();
+            
+            while (rs.next()) {
+                //TODO: implement Date
+                list.add(new Review(rs.getInt("uId"), movieId, rs.getString("comment"), rs.getFloat("rating"), new Date(10000)));
+            };
+
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
         } finally {
             try {
                 if (c != null) c.close();
