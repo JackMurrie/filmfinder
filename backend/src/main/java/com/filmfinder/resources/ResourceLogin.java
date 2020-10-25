@@ -43,7 +43,7 @@ public class ResourceLogin {
     public Response loginUser(AuthTemplate data) {
         String email = data.getEmail();
         String password = data.getPassword();
-        
+        // --> here get userID from email.
         try {
             String token = CredentialHandler.authorise(email, password);
             return Response.status(200).entity("Login successful\n").cookie(new NewCookie("auth_token", token)).build();

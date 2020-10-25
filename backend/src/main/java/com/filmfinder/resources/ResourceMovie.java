@@ -13,7 +13,7 @@ import com.filmfinder.movie.Movie;
 import com.google.gson.Gson;
 
 
-@Path("movie/")
+@Path("movies/")
 public class ResourceMovie {
 
     @CookieParam("auth_token")
@@ -24,11 +24,11 @@ public class ResourceMovie {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMovieById(@PathParam("movie_id") int id ) throws Exception {
         
-        // try {
-        //     CredentialHandler.decodeToken(token);
-        // } catch (Exception e) {
-        //     return Response.status(400).entity("invalid token").build();
-        // }
+        try {
+            CredentialHandler.decodeToken(token);
+        } catch (Exception e) {
+            return Response.status(400).entity("invalid token").build();
+        }
 
         Movie movie = Movie.getMovie(id);
 

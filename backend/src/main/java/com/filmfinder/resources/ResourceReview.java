@@ -5,6 +5,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.DELETE;
@@ -15,77 +16,88 @@ import com.filmfinder.auth.CredentialHandler;
 import com.filmfinder.db.ReviewDB;
 import com.filmfinder.templates.ReviewTemplate;
 
-@Path("movies/{movieId}")
+@Path("review/{movie_id}")
 public class ResourceReview {
 
     @CookieParam("auth_token")
     private String token;
 
     @POST
-    @Path("/review")
+    // @Path("/review")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addReview(@PathParam("movieId") int id, ReviewTemplate review) throws Exception {
-        String userEmail = null;
+    public Response addReview(@PathParam("movie_id") int movieId, ReviewTemplate review) {
+
+        String email = null;
         try {
-            userEmail = CredentialHandler.decodeToken(token);
+            email = CredentialHandler.decodeToken(token);
         } catch (Exception e) {
             return Response.status(400).entity("invalid token.").build();
         }
-
+        
         String comment = review.getComment();
         float star = review.getStar();
         try {
-            ReviewDB.putReview(userEmail, id, comment, star);
-            return Response.status(200).entity("Review successfully written.").build();  
+            if (!ReviewDB.exists(email, movieId)) {
+                ReviewDB.putReview(email, movieId, comment, star);
+                return Response.status(200).entity("Review added").build();     
+            } else {
+                return Response.status(400).entity("Review already exists").build();     
+            }
         } catch (Exception e) {
-            return Response.status(400).entity("Review was not written.").build();  
+            return Response.status(400).entity("Failed to add review").build();        
         }
-              
     }
 
     @PUT
-    @Path("/review")
+    // @Path("/review")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editReview(@PathParam("movieId") int id,  ReviewTemplate review) throws Exception {
+    public Response editReview(@PathParam("movie_id") int movieId,  ReviewTemplate review) {
 
-        String userEmail = null;
+        String email = null;
         try {
-            userEmail = CredentialHandler.decodeToken(token);
+            email = CredentialHandler.decodeToken(token);
         } catch (Exception e) {
             return Response.status(400).entity("invalid token.").build();
         }
 
         String comment = review.getComment();
         float star = review.getStar();
+        
         try {
-            ReviewDB.editReview(userEmail, id, comment, star);
-            return Response.status(200).entity("Review edited.").build();        
+            if (ReviewDB.exists(email, movieId)) {
+                ReviewDB.editReview(email, movieId, comment, star);
+                return Response.status(200).entity("Review edited").build();     
+            } else {
+                return Response.status(400).entity("Review does not exist").build();     
+            }
         } catch (Exception e) {
-            return Response.status(400).entity("Review was not edited.").build();
+            return Response.status(400).entity("Failed to edit review").build();     
         }
     }
 
     @DELETE
-    @Path("/review")
+    // @Path("/review")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response removeReview( @PathParam("movie_id") int id, ReviewTemplate review) throws Exception {
-        
-        String userEmail = null;
+    public Response removeReview( @PathParam("movie_id") int movieId, ReviewTemplate review) {
+        String email = null;
         try {
-            userEmail = CredentialHandler.decodeToken(token);
+            email = CredentialHandler.decodeToken(token);
         } catch (Exception e) {
             return Response.status(400).entity("invalid token.").build();
         }
-
         // int reviewId = review.getReviewId();
         try {
-            ReviewDB.removeReview(userEmail, id);
-            return Response.status(200).entity("Review was removed.").build();        
+            if (ReviewDB.exists(email, movieId)) {
+                ReviewDB.removeReview(email, movieId);
+                return Response.status(200).entity("Review removed.").build();
+            } else {
+                return Response.status(400).entity("Review does not exist").build();     
+            }
         } catch (Exception e) {
-            return Response.status(400).entity("Review was not removed.").build();        
+            return Response.status(400).entity("Failed to remove review").build();     
         }        
     }
 
