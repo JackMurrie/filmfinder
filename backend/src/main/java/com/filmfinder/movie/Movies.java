@@ -28,4 +28,8 @@ public class Movies extends frontendObject {
     public void add(Movie m) {
         movies.add(m);
     }
+
+    public ArrayList<Movie> arrayList() {
+        return movies;
+    }
 }
