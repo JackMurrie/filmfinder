@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import com.filmfinder.frontendObject.frontendObject;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.JsonAdapter;
 
 //TODO implement database connection within object
+@JsonAdapter(ReviewListSerializer.class)
 public class Reviews extends frontendObject {
     @Expose
     private ArrayList<Review> reviews;
