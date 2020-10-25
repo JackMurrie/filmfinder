@@ -9,9 +9,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
 
 import com.filmfinder.auth.CredentialHandler;
-import com.filmfinder.movie.Movie;
-import com.google.gson.Gson;
-
+import com.filmfinder.movie.movieCombo.MovieCombo;
 
 @Path("movies/")
 public class ResourceMovie {
@@ -22,18 +20,20 @@ public class ResourceMovie {
     @GET
     @Path("{movie_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMovieById(@PathParam("movie_id") int id ) throws Exception {
+    public Response getMovieById(@PathParam("movie_id") int movieId) {
         
         try {
             CredentialHandler.decodeToken(token);
         } catch (Exception e) {
             return Response.status(400).entity("invalid token").build();
         }
-
-        Movie movie = Movie.getMovie(id);
-
-        // resource table wants a "MovieData" type, what is this ? discuss with FE 
-        return Response.status(200).entity(movie.toJson()).build();
+        try {
+            MovieCombo mc = new MovieCombo(movieId);
+            // resource table wants a "MovieData" type, what is this ? discuss with FE 
+            return Response.status(200).entity(mc.toJson()).build();
+        } catch (Exception e) {
+            return Response.status(400).entity("Failed to get movie data").build();
+        }
         
     }
 
