@@ -111,4 +111,16 @@ public class Movie extends frontendObject {
         return toJson();
         // return "Movie: " + this.name + "\n Description: " + this.description + "\n Director: " + this.director + "\n Image URL: " + this.imageUrl;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<String> getGenres() {
+        return genres;
+    }
 }
