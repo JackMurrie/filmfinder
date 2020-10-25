@@ -13,10 +13,8 @@ public class TestCombo {
             MovieCombo mc = new MovieCombo(2);
             System.out.println(mc);
         } catch (NotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
