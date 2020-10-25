@@ -5,22 +5,18 @@ import java.util.ArrayList;
 
 import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movies;
-import com.filmfinder.movieLists.MovieListSerializer;
 import com.filmfinder.movieLists.Watchlist;
 import com.filmfinder.movieLists.Wishlist;
 import com.filmfinder.user.User;
 import com.filmfinder.user.Users;
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.JsonAdapter;
 
 import javassist.NotFoundException;
 
 public class Dashboard extends frontendObject {
     @Expose
-    @JsonAdapter(MovieListSerializer.class)
     private Watchlist watchlist;
     @Expose
-    @JsonAdapter(MovieListSerializer.class)
     private Wishlist wishlist;
     @Expose
     private Movies recommedations;
