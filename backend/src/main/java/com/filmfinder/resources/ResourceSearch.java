@@ -16,19 +16,21 @@ import java.util.regex.Pattern;
 
 import com.filmfinder.movie.Movie;
 import com.filmfinder.templates.SearchTemplate;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
-@Path("movies/")
+@Path("search/")
 public class ResourceSearch {
 
     @POST
     @Path("search")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response search(SearchTemplate searchTemplate) throws Exception {
+    //@Consumes(MediaType.APPLICATION_JSON)
+    //@Produces(MediaType.APPLICATION_JSON)
+    public Response search(String searchString) throws Exception {
 
         // get distinct words from search query
-
-        String rawQuery = searchTemplate.getSearchString();
+        String rawQuery = searchString;
         HashSet<String> words = new HashSet<String>();
 
         Pattern pattern_allWords = Pattern.compile("\\w+");
@@ -60,53 +62,74 @@ public class ResourceSearch {
             count++;
         }
 
-        // get some movies
-
+        // get some movies here
         ArrayList<Movie> searchList = new ArrayList<Movie>();
+        ArrayList<Integer> searchListId = new ArrayList<Integer>();
 
-        for(int i = 0; i < 1000; i++) {
+        for(int i = 0; i < 100; i++) {
             try {
                 searchList.add(Movie.getMovie(i));
+                searchListId.add(i);
             } catch (Exception e) {
                 //..
             }
             
         }
 
+
+        // look for matches here
         Iterator<Movie> movie_it = searchList.iterator();
+        Iterator<Integer> id_it = searchListId.iterator();
+        ArrayList<Integer> movieMatches = new ArrayList<Integer>();
 
         while(movie_it.hasNext()) {
 
             Movie movie = movie_it.next();
+            int id = id_it.next();
 
             String title = movie.getName();
             String description = movie.getDescription();
 
-
             for (int i = 0; i < results.length; i++) {
                 int titleHits = stringSearch(movie.getName(), results[i]);
                 int descriptionHits = stringSearch(movie.getDescription(), results[i]);
-                System.out.println("descriptionHits: " + descriptionHits);
+
+
+                int genreHits = 0;
+                ArrayList<String> genres = movie.getGenres();
+                for(int j = 0; j < genres.size(); j++) {
+                    genreHits += stringSearch(genres.get(j), results[i]);
+                }
+
+                if (titleHits > 0 || descriptionHits > 0 || genreHits > 0) {
+                    movieMatches.add(id);
+                    break;
+                }
             }
         }
-        return Response.status(200).entity("todo").build();        
+        JsonObject returnData = new JsonObject();
+        Gson gson = new Gson();
+        JsonArray jsonMatches = gson.toJsonTree(movieMatches).getAsJsonArray();
+        returnData.add("matchingList", jsonMatches);
+        
+        return Response.status(200).entity(gson.toJson(returnData)).build();        
     }
+
 
     // bad character herustic boyes moore algorithm
     public int stringSearch(String target, String pattern) {
 
-        int[] badChar = new int[512];
+        int[] badChar = new int[16384];
 
         int m = pattern.length();
         int n = target.length();
 
-        for (int i = 0; i < 512; i++) {
+        for (int i = 0; i < 16384; i++) {
             badChar[i] = -1;
         }
 
         for (int i = 0; i < pattern.length(); i++) {
             badChar[ (int) pattern.charAt(i) ] = i;
-            System.out.println((int) pattern.charAt(i));
         }
 
         int hits = 0;
@@ -138,7 +161,6 @@ public class ResourceSearch {
                 }
             }
         }
-        System.out.println("hits: " + hits);
         return hits;
     }
 
