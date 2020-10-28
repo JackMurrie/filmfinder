@@ -2,8 +2,6 @@ package com.filmfinder.review;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-
 import com.filmfinder.db.ReviewDB;
 
 import org.junit.Test;
