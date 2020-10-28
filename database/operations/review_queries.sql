@@ -15,5 +15,8 @@ Select distinct r1.movie_id from review r1, review r2 where r1.user_id=184 and r
 
 SELECT avg(rating) from review where movie_id=3;
 
-alter table movie
-add column avg_rating decimal(10,2) NOT NULL DEFAULT 0;
+SELECT * FROM movie WHERE id=2;
+
+UPDATE movie
+SET rating=(SELECT avg(rating) from review where movie_id=?)
+WHERE id=?;
