@@ -45,7 +45,10 @@ public class ReviewDB {
             s.setInt(1, userId);
             s.setInt(2, movieId);
 
-            return s.executeUpdate();
+            int number = s.executeUpdate();
+            MovieDb.updateRating(movieId);
+            
+            return number;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -53,7 +56,7 @@ public class ReviewDB {
         } catch (NotFoundException e) {
             System.out.println(e.getMessage());
             return 1;
-        } finally{
+        } finally {
             try {
                 if (c != null) c.close();
                 if (s != null) s.close();
@@ -85,6 +88,10 @@ public class ReviewDB {
             s.setFloat(4, star);
 
             s.executeUpdate();
+
+            try {
+                MovieDb.updateRating(movieId);
+            } catch (Exception e){}
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());

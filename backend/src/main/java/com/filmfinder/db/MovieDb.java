@@ -216,5 +216,67 @@ public class MovieDb {
         return movie;
         
     }
+
+    public static float getRating(int movieId) throws NotFoundException, SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT rating FROM movie WHERE id=?";
+            s = c.prepareStatement(q);
+            s.setInt(1, movieId);
+
+            rs = s.executeQuery();
+            
+            if (!rs.next()) {
+                throw new NotFoundException("Email doesn't exist in database");
+            };
+            return rs.getFloat("rating");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+    }
+
+    public static void updateRating(int movieId) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "UPDATE movie " +
+                       "SET rating=(SELECT avg(rating) from review where movie_id=?) " +
+                       "WHERE id=?;";
+            s = c.prepareStatement(q);
+            s.setInt(1, movieId);
+            s.setInt(2, movieId);
+
+            rs = s.executeQuery();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+    }
     
 }
