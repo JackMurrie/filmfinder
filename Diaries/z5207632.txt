@@ -11,7 +11,7 @@ Week4
 Finished the majority of the frontend skeleton pages in preparation for week 5 progressive demo. Hikari created new branch dev and rebranched example_frontend off of this. 
 
 Week5/6
-Helped Quoc connect signup/login to API, created filter component and search pages.
+Week 5 demo. Helped Quoc connect signup/login to API, created filter component and search pages.
 
 Week 7
-Started on Film Poker creating UI. 
+Started on Film Poker creating UI. Quoc connected all basic functionality with backend. 
