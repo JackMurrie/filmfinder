@@ -1,5 +1,6 @@
 package com.filmfinder.blacklist;
 
+
 import com.filmfinder.db.BlacklistDB;
 import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.user.Users;
@@ -12,6 +13,7 @@ public class Blacklist extends frontendObject {
 
     public Blacklist(int userId) {
         this.userId = userId;
+        this.users = BlacklistDB.getBlacklist(userId);
     }
 
     public void add(int userId) {
