@@ -7,6 +7,7 @@ import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movies;
 import com.filmfinder.movieLists.Watchlist;
 import com.filmfinder.movieLists.Wishlist;
+import com.filmfinder.review.Reviews;
 import com.filmfinder.user.User;
 import com.filmfinder.user.Users;
 import com.google.gson.annotations.Expose;
@@ -21,6 +22,8 @@ public class Dashboard extends frontendObject {
     @Expose
     private Movies recommedations;
     @Expose
+    private Reviews reviews;
+    @Expose
     private Users blacklisted;
 
     public Dashboard(int userId) throws NotFoundException, SQLException {
@@ -28,13 +31,8 @@ public class Dashboard extends frontendObject {
         wishlist = new Wishlist(userId);
         //TODO implement recommendation and blacklisted functions
         recommedations = new Movies();
+        reviews = Reviews.getReviews(userId);
         blacklisted = new Users(new ArrayList<User>());
-    }
-
-    @Override
-    public String toJson() {
-        // TODO Auto-generated method stub
-        return super.toJson();
     }
 
 }
