@@ -27,13 +27,13 @@ public class ResourceLogin {
         String last = data.getLastName();
         String email = data.getEmail();
         String password = data.getPassword();
-        
         String token = null;
+        
         try {
             token = CredentialHandler.authenticate(first, last, email, password);
-            return Response.status(200).entity("Register successful\n").cookie(new NewCookie("auth_token", token)).build();
+            return Response.status(200).entity("Register successful.\n").cookie(new NewCookie("auth_token", token)).build();
         } catch (Exception e) {
-            return Response.status(400).entity("Register unsuccessful\n").build();
+            return Response.status(400).entity("Register unsuccessful.\n").build();
         }
     }
 

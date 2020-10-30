@@ -23,7 +23,6 @@ public class ResourceReview {
     private String token;
 
     @POST
-    // @Path("/review")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addReview(@PathParam("movie_id") int movieId, ReviewTemplate review) {
@@ -50,7 +49,6 @@ public class ResourceReview {
     }
 
     @PUT
-    // @Path("/review")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response editReview(@PathParam("movie_id") int movieId,  ReviewTemplate review) {
@@ -78,7 +76,6 @@ public class ResourceReview {
     }
 
     @DELETE
-    // @Path("/review")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeReview( @PathParam("movie_id") int movieId, ReviewTemplate review) {
@@ -88,7 +85,6 @@ public class ResourceReview {
         } catch (Exception e) {
             return Response.status(400).entity("invalid token.").build();
         }
-        // int reviewId = review.getReviewId();
         try {
             if (ReviewDB.exists(email, movieId)) {
                 ReviewDB.removeReview(email, movieId);

@@ -26,7 +26,10 @@ public class CredentialHandler {
         VALID_LOGIN_DURATION = 30;
     }
 
-    static public String authenticate(String firstName, String lastName, String email, String password) throws SQLException, NotFoundException {
+    static public String authenticate(String firstName, String lastName, String email, String password) throws SQLException, NotFoundException, Exception {
+
+        if (AuthDB.checkEmail(email))
+            throw new Exception();
         try {
             AuthDB.putCredentials(firstName, lastName, email, password.hashCode());
             return authorise(email, password);
