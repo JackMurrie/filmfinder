@@ -1,12 +1,13 @@
 package com.filmfinder.review;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.filmfinder.db.ReviewDB;
 import com.filmfinder.frontendObject.frontendObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.JsonAdapter;
 
-//TODO implement database connection within object
 @JsonAdapter(ReviewListSerializer.class)
 public class Reviews extends frontendObject {
     @Expose
@@ -16,7 +17,11 @@ public class Reviews extends frontendObject {
         setReviews(reviews);
     }
 
-    public ArrayList<Review> getReviews() {
+    public static Reviews getReviews(int userId) throws SQLException {
+        return ReviewDB.getReviews(userId);
+	}
+
+	public ArrayList<Review> getReviews() {
         return reviews;
     }
 
