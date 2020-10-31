@@ -3,10 +3,6 @@ package com.filmfinder.db;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-
-import com.filmfinder.movie.Movie;
-import com.filmfinder.movie.Movies;
 
 import org.junit.Test;
 
@@ -16,7 +12,7 @@ public class ListsTest {
     @Test
     public void testGetMovieList() {
         try {
-            WishlistDB w = new WishlistDB(184);
+            WishlistDB w = new WishlistDB(1);
 
             System.out.println(w.getMovieList());
         } catch (SQLException e) {
@@ -28,7 +24,7 @@ public class ListsTest {
     @Test
     public void testGetMovies() {
         try {
-            WishlistDB w = new WishlistDB(184);
+            WishlistDB w = new WishlistDB(1);
             System.out.println(w.getMovies());
 
         } catch (SQLException e) {

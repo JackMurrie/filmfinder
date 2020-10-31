@@ -12,7 +12,7 @@ public class TestsLists {
     @Test
     public void testWishlist() {
         try {
-            Wishlist w = new Wishlist(184);
+            Wishlist w = new Wishlist(1);
 
             System.out.println(w);
         } catch (SQLException e) {

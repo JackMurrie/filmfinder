@@ -3,10 +3,10 @@ package com.filmfinder.db;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
+// import org.junit.Test;
 
 public class ReviewTest {
-    @Test
+    // @Test
     public void testStandard() {
         System.out.println("Review DB test");
         String email = "testing@somthingrandom.test";
