@@ -3,6 +3,7 @@ package com.filmfinder.dashboard;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.filmfinder.blacklist.Blacklist;
 import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movies;
 import com.filmfinder.movieLists.Watchlist;
@@ -24,7 +25,7 @@ public class Dashboard extends frontendObject {
     @Expose
     private Reviews reviews;
     @Expose
-    private Users blacklisted;
+    private Blacklist blacklisted;
 
     public Dashboard(int userId) throws NotFoundException, SQLException {
         watchlist = new Watchlist(userId);
@@ -32,7 +33,7 @@ public class Dashboard extends frontendObject {
         //TODO implement recommendation and blacklisted functions
         recommedations = new Movies();
         reviews = Reviews.getReviews(userId);
-        blacklisted = new Users(new ArrayList<User>());
+        blacklisted = new Blacklist(userId);
     }
 
 }
