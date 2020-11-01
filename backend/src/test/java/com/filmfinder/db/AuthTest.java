@@ -5,7 +5,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
 
+import com.filmfinder.user.User;
+
 import org.junit.Test;
+
+import javassist.NotFoundException;
 
 public class AuthTest {
     // @Test
@@ -29,7 +33,7 @@ public class AuthTest {
             assertTrue(false);
         }
     }
-    
+
     // @Test
     public void testDoubleInsert() {
         System.out.println("Running Auth double test");
@@ -88,6 +92,20 @@ public class AuthTest {
         }
     }
 
+    @Test
+    public void testGetUser() {
+        try {
+            User u = AuthDB.getUser(1);
+            System.out.println(u);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+            assertTrue(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+
+    }
     @Test
     public void testAuth() {
         assertEquals(true, true);
