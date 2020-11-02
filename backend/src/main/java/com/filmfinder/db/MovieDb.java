@@ -278,5 +278,40 @@ public class MovieDb {
             }
         }
     }
+
+    // hey, sorry if i missed if there is something functionally identical to this !
+    //
+    public static ArrayList<Integer> getMovies() throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT id mId FROM movie";
+            s = c.prepareStatement(q);
+
+            rs = s.executeQuery();
+            
+            while (rs.next()) {
+                list.add(rs.getInt("mId"));
+            };
+
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+    }
     
 }

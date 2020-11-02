@@ -6,25 +6,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.filmfinder.recommender.SimilarityPair;
+
 import javassist.NotFoundException;
 
-public class UtilDB {
-    public static int getUserId(String email) throws SQLException, NotFoundException {
+public class RecommenderDB {
+    private String list = "similarityList";
+
+    public static void putSimilarity(int userId_1, int userId_2, float similarity) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
-        ResultSet rs = null;
         try {
             c = DbDataSource.getConnection();
-            String q = "SELECT id FROM user WHERE email=?";
+            String q = "REPLACE INTO similarity(user_1, user_2, similarity) values (?, ?, ?);";
             s = c.prepareStatement(q);
-            s.setString(1, email);
+            s.setInt(1, userId_1);
+            s.setInt(2, userId_2);
+            s.setFloat(3, similarity);
 
-            rs = s.executeQuery();
-            
-            if (!rs.next()) {
-                throw new NotFoundException("Email doesn't exist in database");
-            };
-            return rs.getInt("id");
+            s.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -33,31 +33,33 @@ public class UtilDB {
             try {
                 if (c != null) c.close();
                 if (s != null) s.close();
-                if (rs != null) rs.close();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                throw e;
             }
         }
-    }
+        return;
+	}
 
-    public static ArrayList<Integer> getAllUserIds() throws SQLException, NotFoundException {
+    public static ArrayList<SimilarityPair> getUserSimilaritiesTo(int userId) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
         ResultSet rs = null;
-
-        ArrayList<Integer> list = new ArrayList<Integer>();
+        ArrayList<SimilarityPair> list = new ArrayList<SimilarityPair>();
         try {
             c = DbDataSource.getConnection();
-            String q = "SELECT id uId FROM user";
+            String q = "SELECT user_2 uId, similarity sim FROM similarity WHERE user_1 =?";
             s = c.prepareStatement(q);
+
+            s.setInt(1, userId);
 
             rs = s.executeQuery();
             
             while (rs.next()) {
-                list.add(rs.getInt("uId"));
+                list.add(new SimilarityPair(rs.getInt("uId"), rs.getFloat("sim")));
             };
+
             return list;
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw e;
