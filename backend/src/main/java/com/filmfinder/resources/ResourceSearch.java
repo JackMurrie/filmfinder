@@ -64,28 +64,23 @@ public class ResourceSearch {
 
         // get some movies here
         ArrayList<Movie> searchList = new ArrayList<Movie>();
-        ArrayList<Integer> searchListId = new ArrayList<Integer>();
 
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 10; i++) {
             try {
                 searchList.add(Movie.getMovie(i));
-                searchListId.add(i);
             } catch (Exception e) {
                 //..
             }
-            
         }
 
 
         // look for matches here
         Iterator<Movie> movie_it = searchList.iterator();
-        Iterator<Integer> id_it = searchListId.iterator();
-        ArrayList<Integer> movieMatches = new ArrayList<Integer>();
+        ArrayList<Movie> movieMatches = new ArrayList<Movie>();
 
         while(movie_it.hasNext()) {
 
             Movie movie = movie_it.next();
-            int id = id_it.next();
 
             String title = movie.getName();
             String description = movie.getDescription();
@@ -102,7 +97,7 @@ public class ResourceSearch {
                 }
 
                 if (titleHits > 0 || descriptionHits > 0 || genreHits > 0) {
-                    movieMatches.add(id);
+                    movieMatches.add(movie);
                     break;
                 }
             }
