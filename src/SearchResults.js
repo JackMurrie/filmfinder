@@ -1,11 +1,13 @@
 import Header from './components/Header';
 import Drawer from './components/FilterDrawer';
+import MovieCard from './components/MovieCard';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useLocation } from "react-router-dom";
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
+import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 
 const useStyles = makeStyles({
     right: {
@@ -20,21 +22,22 @@ export default function SearchResults() {
     const classes = useStyles();
     const location = useLocation();
     const title = location.state.title;
-    const filters = location.state.filters;
 
-    function handleGet() {
-        if (filters === undefined) {
-            console.log("GET movies titled ", title)
-        } 
-        else {
-            const data = {
-                title: title,
-                filters: filters,
-            }
-            console.log("GET movies titled ", title)
-            console.log("and filtered by: ", filters)
-        }
-    }
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: JSON.stringify({searchString: title})
+    };
+    const state = useFetch('/rest/search/search', requestOptions);
+
+    useEffect(state.run, [title]);
+
+    const handleResults = ({ matchingList }) => {
+        const searchResults = matchingList.map(({ movieId, name, year, description, imageUrl }) => {
+            return <MovieCard key={movieId} title={name} yearReleased={year} imageURL={imageUrl}/>
+        });
+        return searchResults;
+    };
 
     return (
         <React.Fragment>
@@ -43,13 +46,15 @@ export default function SearchResults() {
             <Container component="main" maxWidth="lg">
                 <div className={classes.center}>
                     <h1>Results for "{title}"</h1>
+                    <h1>
+                    <IfRejected state={state}>Error...</IfRejected>
+                    <IfPending state={state}>Loading...</IfPending>
+                    <IfFulfilled state={state}>{handleResults}</IfFulfilled>
+                    </h1>
                 </div>
                 <div className={classes.right}>
                     <Drawer title={title}/>
                 </div>
-                {/* Call get from API */}
-                {handleGet()}
-                
             </Container>
         </React.Fragment>
     )
