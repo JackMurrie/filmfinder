@@ -80,11 +80,10 @@ export default function Movie() {
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const fixedHeightPaperReview = clsx(classes.paper, classes.fixedHeightReviews);
     const location = useLocation();
+    const MovieID = location.state.MovieID;
 
-    const props = location.state;
-
-    {/* Call GET */} //data = GET(props.title)
-    {console.log("GET Movie Info: ", props.title)}
+    {/* Call GET */} 
+    {console.log("GET Movie Info: ", MovieID)}
 
     const [state, setState] = React.useState({
       seen: false,
@@ -94,7 +93,7 @@ export default function Movie() {
     const handleChange = (event) => {
       setState({ ...state, [event.target.name]: event.target.checked });
 
-      {/* Call POST to API */}
+      {/* Call POST to API for wishlist/seen event*/}
       const data = {
         [event.target.name]: event.target.checked
       };
@@ -106,7 +105,7 @@ export default function Movie() {
     const handleRatingChange = (event, newRating) => {
       setRating(newRating);
 
-      {/* Call POST to API */}
+      {/* Call POST to API for new rating event*/}
       const data = {
         rating: newRating,
       };
@@ -118,7 +117,7 @@ export default function Movie() {
         <CssBaseline />
             <Header />
             <div className="title">
-                <h1>{props.title}</h1>
+                <h1>Movie Title</h1>
             </div>
             <Box className="title" component="fieldset" mb={3} borderColor="transparent">
                 <Rating 
@@ -134,7 +133,7 @@ export default function Movie() {
                     {/* Movie Card */}
                     <Grid item xs={2.5}>
                         <Paper className={fixedHeightPaper}>
-                            <LargeMovieCard  imageURL={props.imageURL}/>
+                            <LargeMovieCard />
                             <div className="title">
                               <FormControlLabel
                                   control={<Checkbox checked={state.wishlist} onChange={handleChange} icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
@@ -211,11 +210,11 @@ export default function Movie() {
     );
 }
 
-function LargeMovieCard(props) {
+function LargeMovieCard() {
     return (
       <Card style={{width: 350, margin: 20}}>
         <CardActionArea href="/Movie">
-          <CardMedia style={{height: 500}} image={props.imageURL}/>
+          <CardMedia style={{height: 500}} image={"https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg"}/>
           <CardContent>
             <div className='title'>
                 <Box component="fieldset" mb={3} borderColor="transparent">
