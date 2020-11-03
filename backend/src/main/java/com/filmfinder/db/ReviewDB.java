@@ -158,7 +158,7 @@ public class ReviewDB {
         }
     }
 
-    public static Reviews getReviews(int movieId) throws SQLException {
+    public static Reviews getReviewsByMovieId(int movieId) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
         ResultSet rs = null;
@@ -175,6 +175,42 @@ public class ReviewDB {
             while (rs.next()) {
                 //TODO: implement Date
                 list.add(new Review(rs.getInt("uId"), movieId, rs.getString("comment"), rs.getFloat("rating"), new Date(10000)));
+            };
+
+            return new Reviews(list);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+    }
+
+    public static Reviews getReviewsByUserId(int userId) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        ArrayList<Review> list = new ArrayList<Review>();
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT rating, review comment, user_id uId, movie_id mId FROM review WHERE user_id=?";
+            s = c.prepareStatement(q);
+
+            s.setInt(1, userId);
+
+            rs = s.executeQuery();
+            
+            while (rs.next()) {
+                //TODO: implement Date
+                list.add(new Review(userId, rs.getInt("mId"), rs.getString("comment"), rs.getFloat("rating"), new Date(10000)));
             };
 
             return new Reviews(list);

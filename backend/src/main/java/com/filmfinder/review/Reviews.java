@@ -17,10 +17,14 @@ public class Reviews extends frontendObject {
         setReviews(reviews);
     }
 
-    public static Reviews getReviews(int userId) throws SQLException {
-        return ReviewDB.getReviews(userId);
-	}
+    public static Reviews getReviewsByMovieId(int movieId) throws SQLException {
+        return ReviewDB.getReviewsByMovieId(movieId);
+    }
 
+    public static Reviews getReviewsByUserId(int userId) throws SQLException {
+        return ReviewDB.getReviewsByUserId(userId);
+    }
+    
 	public ArrayList<Review> getReviews() {
         return reviews;
     }
@@ -28,5 +32,4 @@ public class Reviews extends frontendObject {
     public void setReviews(ArrayList<Review> reviews) {
         this.reviews = reviews;
     }
-
 }

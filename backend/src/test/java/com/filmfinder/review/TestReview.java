@@ -10,7 +10,7 @@ public class TestReview {
     @Test
     public void testReview() {
         try {
-            Reviews reviews = ReviewDB.getReviews(2);
+            Reviews reviews = ReviewDB.getReviewsByMovieId(2);
             System.out.println(reviews);
         } catch (Exception e) {
             assertTrue(false);
@@ -20,7 +20,7 @@ public class TestReview {
     @Test
     public void testInvalidMovieId() {
         try {
-            Reviews reviews = ReviewDB.getReviews(1);
+            Reviews reviews = ReviewDB.getReviewsByMovieId(1);
             System.out.println(reviews);
         } catch (Exception e) {
             assertTrue(true);
