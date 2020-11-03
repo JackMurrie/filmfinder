@@ -37,7 +37,7 @@ export default function SearchResults() {
 
     const handleResults = ({ movies }) => {
         const searchResults = movies.map(({ movieId, name, year, imageUrl }) => {
-            return <MovieCard key={movieId} title={name} yearReleased={year} imageURL={imageUrl}/>
+            return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>
         });
         return searchResults;
     };

@@ -17,9 +17,8 @@ export default function MovieCard(props) {
       const data = {
         title: props.title,
         imageURL: props.imageURL,
-        MovieID: 1234, 
       };
-      history.push(`/Movie/${data.MovieID}`, data);
+      history.push(`/Movie/${props.movieId}`, data);
     }; 
 
     return (

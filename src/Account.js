@@ -107,21 +107,21 @@ function TabButtons() {
 
     const displayWishlist = ({ wishlist }) => {
       const componentWishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
-        return <MovieCard key={movieId} title={name} yearReleased={year} imageURL={imageUrl}/>;
+        return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
       });
       return componentWishlist;
     };
   
     const displayWatchlist = ({ watchlist }) => {
       const componentWatchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
-        return <MovieCard key={movieId} title={name} yearReleased={year} imageURL={imageUrl}/>;
+        return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
       });
       return componentWatchlist;
     };
 
     const displayRecommendations = ({ recommendations }) => {
       const componentRecommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
-        return <MovieCard key={movieId} title={name} yearReleased={year} imageURL={imageUrl}/>;
+        return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
       });
       return componentRecommendations;
     };

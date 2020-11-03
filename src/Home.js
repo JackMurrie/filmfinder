@@ -46,16 +46,17 @@ export default function Home() {
             <Async.Fulfilled>
               {data => {
                 return(
-                      <div className="container">
-                      {data.movies.map((movie, index) => (
-                        <MovieCard 
-                        key={index} 
-                        title={movie.title}
-                        yearReleased={movie.yearReleased}
-                        imageURL={movie.imageURL}
-                        />
-                      ))} 
-                      </div> 
+                  <div className="container">
+                    {data.movies.map((movie, index) => (
+                      <MovieCard 
+                      key={index}
+                      movieId={index}
+                      title={movie.title}
+                      yearReleased={movie.yearReleased}
+                      imageUrl={movie.imageURL}
+                      />
+                    ))} 
+                  </div> 
                 )
               }}
             </Async.Fulfilled>
