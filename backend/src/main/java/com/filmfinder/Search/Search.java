@@ -16,11 +16,11 @@ public class Search {
 
     public static Movies getMovieIdsBySearch(String query, int limit) throws NotFoundException, SQLException {
         ArrayList<Movie> movies = new ArrayList<Movie>();
-
-        String data = UrlConnector.readUrl(
-            "https://api.themoviedb.org/3/search/movie?"+
-            "api_key=70ae629f88a806e8758ac3900483833e&language=en-US&page=1&include_adult=false&query="+query);
-
+        String formattedQuery = query.replace(" ", "+");
+        String url = "https://api.themoviedb.org/3/search/movie?"+
+            "api_key=70ae629f88a806e8758ac3900483833e&language=en-US&page=1&include_adult=false&query=\""+formattedQuery+"\"";
+        String data = UrlConnector.readUrl(url);
+        
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(data, JsonObject.class);
         JsonArray results = jsonObject.get("results").getAsJsonArray();
