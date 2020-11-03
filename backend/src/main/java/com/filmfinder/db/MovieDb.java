@@ -290,7 +290,7 @@ public class MovieDb {
             s.setInt(1, movieId);
             s.setInt(2, movieId);
 
-            rs = s.executeQuery();
+            s.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
