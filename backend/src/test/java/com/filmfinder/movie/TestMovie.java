@@ -10,7 +10,7 @@ public class TestMovie {
     @Test
     public void testGetMovie() {
         try {
-            Movie m = Movie.getMovie(8);
+            Movie m = Movie.getMovie(105800);
             System.out.println(m);
         } catch (Exception e) {
             assertTrue(false);

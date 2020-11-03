@@ -29,6 +29,7 @@ public class Populate {
     public static boolean populateDBMovieData(int movieId) {
         try {
             PopMovieData popMovie = PopMovieData.getPopMovieData(movieId);
+            MovieDb.putMovie(movieId, popMovie.getTitle());
             popMovie.updateDBDirector();
             popMovie.updateDBGenres();
             return true;

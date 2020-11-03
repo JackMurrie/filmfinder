@@ -46,6 +46,34 @@ public class MovieDb {
         }
     }
 
+    public static void putMovie(int movieId, String name) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "INSERT INTO movie (id, name)" +
+                       "VALUES" +
+                       "(?, ?);";
+            s = c.prepareStatement(q);
+            s.setInt(1, movieId);
+            s.setString(2, name);
+
+            s.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return;
+    }
+
     public static void putGenre(String name, int movieId) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
