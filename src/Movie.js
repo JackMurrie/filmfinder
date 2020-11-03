@@ -1,10 +1,7 @@
-import MovieCard from './components/MovieCard';
 import Header from './components/Header';
 import PublicReview from './components/PublicReview'
 import './css/Movie.css';
-import { getMovies } from './services/getMovies';
 
-import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -33,235 +30,327 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Switch from '@material-ui/core/Switch';
-import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
-import { useLocation } from "react-router-dom";
+
+import React, { useEffect, useState } from 'react';
+import { useAsync, useFetch, IfFulfilled } from 'react-async';
+import { useHistory, useLocation } from 'react-router-dom';
+
+import _, { set } from 'lodash';
 
 
 const useStyles = makeStyles((theme) => ({
-    '@global': {
-      ul: {
-        margin: 0,
-        padding: 0,
-        listStyle: 'none',
-      },
+  '@global': {
+    ul: {
+      margin: 0,
+      padding: 0,
+      listStyle: 'none',
     },
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        '& > *': {
-          margin: theme.spacing(1),
-          width: theme.spacing(16),
-          height: theme.spacing(16),
-        },
-      },
-      paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        overflow: 'auto',
-        flexDirection: 'column',
-      },
-      fixedHeight: {
-        height: 770,
-      },
-      fixedHeightReviews: {
-        height: 500,
-      },
-      reviewPlace: {
-        flexGrow: 1,
-      },
-      flexGrow: {
-        flexGrow: 1,
-      },
-  }));
+  },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(1),
+      width: theme.spacing(16),
+      height: theme.spacing(16),
+    },
+  },
+  paper: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+  },
+  fixedHeight: {
+    height: 770,
+  },
+  fixedHeightReviews: {
+    height: 500,
+  },
+  reviewPlace: {
+    flexGrow: 1,
+  },
+  flexGrow: {
+    flexGrow: 1,
+  },
+}));
 
+const requestOptions = {
+  method: 'GET',
+  headers: { 
+    'Accept': 'application/json',
+    'Content-Type': 'application/json' 
+  }
+};
 
 export default function Movie() {
-    const classes = useStyles();
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    const fixedHeightPaperReview = clsx(classes.paper, classes.fixedHeightReviews);
-    const location = useLocation();
-    const movieId = location.pathname.split('/').pop();
-
-    const requestOptions = {
-      method: 'GET',
-      headers: { 'Accept': 'application/json' },
-    };
-  
-    const movieData = useFetch(`/rest/movies/${movieId}`, requestOptions, {defer: true});
-    useEffect(movieData.run, []);
-
-    const userData = useFetch('/rest/user', requestOptions, {defer: true});
-    useEffect(userData.run, []);
+  const classes = useStyles();
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const fixedHeightPaperReview = clsx(classes.paper, classes.fixedHeightReviews);
+  const location = useLocation();
+  const movieId = parseInt(location.pathname.split('/').pop(), 10);
 
 
-    const [watched, setWatched] = React.useState(false);
-    const [wished, setWishlist] = React.useState(false);
-    const [rating, setRating] = React.useState(0);
-  
-    const toggleWishlist = (event) => {
-      setWishlist(wished => !wished);
 
-    };
+  const [watched, setWatched] = useState(false);
+  const [wished, setWished] = useState(false);
+  const [hasReview, setHasReview] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
 
-    const toggleWatched = (event) => {
-      setWatched(watched => !watched);
+  const movieData = useFetch(`/rest/movies/${movieId}`, requestOptions, { defer: true });
+  useEffect(movieData.run, []);
+
+  const loadUserData = async () => {
+    const userDataResponse = await fetch('/rest/user', requestOptions);
+    const { reviews, watchlist, wishlist } = await userDataResponse.json();
+    const myReview = _.find(reviews, review => review.movieId === movieId);
+    if (myReview) {
+      setRating(myReview.rating);
+      setComment(myReview.comment);
+      setHasReview(true);
     };
 
-    const changeRating = (event, newRating) => {
-      setRating(newRating);
-
+    const inWishlist = _.find(wishlist.movies, movie => movie.movieId === movieId);
+    if (inWishlist) {
+      setWished(true);
     };
 
-    return (
-      <React.Fragment>
-        <CssBaseline />
-        <Header />
-        <IfFulfilled state={movieData}>
-          { ({ movie, reviews }) => 
-            <div>
-              <div className="title">
-                <h1>{movie.name}</h1>
-              </div>
-              <Box className="title" component="fieldset" mb={3} borderColor="transparent">
-                <Rating 
-                name="rating" 
-                precision={0.5} 
-                value={rating} 
-                size="large" 
-                onChange={changeRating}/>
-              </Box>
-              
-              <Container component="main" maxWidth="xl">
-                <Grid container spacing={3}>
-                    {/* Movie Card */}
-                    <Grid item>
-                        <Paper className={fixedHeightPaper}>
-                          <MoviePoster movie={movie} />
-                          <div className="title">
-                            <FormControlLabel
-                              control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
-                              label="Wishlist"
-                              labelPlacement="start"
-                            />
-                          </div>
-                        </Paper>
-                    </Grid>
-                    {/* Information */}
-                    <Grid item xs={8} >
-                        <Paper className={fixedHeightPaper}>
-                            <Typography variant="h4">
-                              Movie Details
-                            </Typography>
-                            <Typography variant="body1" paragraph={true} >
-                              {movie.description}
-                            </Typography>
-                            <div className="right">
-                                <FormControlLabel
-                                  control={<Switch checked={watched} onChange={toggleWatched} name="seen" color="primary"/>}
-                                  label="Seen"
-                                  />
-                                <ReviewButton />  
-                            </div>
-                        </Paper>
-                    </Grid>
-                    {/* Reviews */}
-                    <Container component="main" maxWidth="lg">
-                      <Grid item xs={12}>
-                          <Paper className={fixedHeightPaperReview} variant="outlined">
-                              <h1> Reviews </h1>
-                              <Grid container spacing={1}>
-                                {reviews.map(({ comment, rating, post_date, userId }) => 
-                                  <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />
-                                )}
-                              </Grid>
-                          </Paper>
-                        </Grid>
-                    </Container>
-                </Grid>
-              </Container>
+    const inWatchlist = _.find(watchlist.movies, movie => movie.movieId === movieId);
+    if (inWatchlist) {
+      setWatched(true);
+    };
+  };
+  const userData = useAsync({ deferFn: loadUserData });
+  useEffect(userData.run, []);
 
-              <div className="text">
-                <h1>Similar Movies</h1>
-              </div>
-              <Container component="main" maxWidth="lg">   
-              </Container>
+  const updateWishlist = useFetch('/rest/user/wishlist', requestOptions, { defer: true });
+  const updateWatchlist = useFetch('/rest/user/watchedlist', requestOptions, { defer: true });
+  const updateRating = useFetch(`/rest/review/${movieId}`, requestOptions, { defer: true });
+
+
+  const toggleWishlist = (event) => {
+    if (wished) {
+      updateWishlist.run({
+        method: 'DELETE',
+        body: JSON.stringify({ movieId: movieId })
+      });
+    } else {
+      updateWishlist.run({
+        method: 'POST',
+        body: JSON.stringify({ movieId: movieId })
+      });
+    };
+
+    setWished(wished => !wished);
+  };
+
+  const toggleWatched = (event) => {
+    if (watched) {
+      updateWatchlist.run({
+        method: 'DELETE',
+        body: JSON.stringify({ movieId: movieId })
+      });
+    } else {
+      updateWatchlist.run({
+        method: 'POST',
+        body: JSON.stringify({ movieId: movieId })
+      });
+    };
+
+    setWatched(watched => !watched);
+  }
+
+  const changeRating = (event, newRating) => {
+    if (hasReview) {
+      updateRating.run({
+        method: 'PUT',
+        body: JSON.stringify({
+          comment: comment,
+          star: newRating
+        })
+      });
+    } else {
+      updateRating.run({
+        method: 'POST',
+        body: JSON.stringify({
+          comment: comment,
+          star: newRating
+        })
+      });
+    }
+
+    setRating(newRating);
+  };
+
+  return (
+    <React.Fragment>
+      <CssBaseline />
+      <Header />
+      <IfFulfilled state={movieData}>
+        { ({ movie, reviews }) => 
+          <div>
+            <div className="title">
+              <h1>{movie.name}</h1>
             </div>
-          }
-        </IfFulfilled>
-      </React.Fragment>
-    );
+            <Box className="title" component="fieldset" mb={3} borderColor="transparent">
+              <Rating 
+              name="rating" 
+              precision={0.5} 
+              value={rating} 
+              size="large" 
+              onChange={changeRating}/>
+            </Box>
+            <Container component="main" maxWidth="xl">
+              <Grid container spacing={3}>
+                {/* Movie Card */}
+                <Grid item>
+                  <Paper className={fixedHeightPaper}>
+                    <MoviePoster movie={movie} />
+                    <div className="title">
+                      <FormControlLabel
+                        control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
+                        label="Wishlist"
+                        labelPlacement="start"
+                      />
+                    </div>
+                  </Paper>
+                </Grid>
+                {/* Information */}
+                <Grid item xs={8} >
+                  <Paper className={fixedHeightPaper}>
+                    <Typography variant="h4">
+                      Movie Details
+                    </Typography>
+                    <Typography variant="body1" paragraph={true} >
+                      {movie.description}
+                    </Typography>
+                    <div className="right">
+                      <FormControlLabel
+                        control={<Switch checked={watched} onChange={toggleWatched} name="seen" color="primary"/>}
+                        label="Seen"
+                      />
+                      <ReviewButton movieId={movieId} rating={rating} setComment={setComment} hasReview={hasReview} reloadMovieData={movieData} />  
+                    </div>
+                  </Paper>
+                </Grid>
+                {/* Reviews */}
+                <Container component="main" maxWidth="lg">
+                  <Grid item xs={12}>
+                    <Paper className={fixedHeightPaperReview} variant="outlined">
+                        <h1> Reviews </h1>
+                        <Grid container spacing={1}>
+                          {reviews.map(({ comment, rating, post_date, userId }) => 
+                            <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />
+                          )}
+                        </Grid>
+                    </Paper>
+                  </Grid>
+                </Container>
+              </Grid>
+            </Container>
+
+            <div className="text">
+              <h1>Similar Movies</h1>
+            </div>
+            <Container component="main" maxWidth="lg">   
+            </Container>
+          </div>
+        }
+      </IfFulfilled>
+    </React.Fragment>
+  );
 }
 
 function MoviePoster(props) {
-    return (
-      <Card style={{width: 350, margin: 20}}>
-        <CardActionArea>
-          <CardMedia style={{height: 500}} image={props.movie.imageUrl}/>
-          <CardContent>
-            <div className='title'>
-              <Box component="fieldset" mb={3} borderColor="transparent">
-                <Rating name="read-only" precision={0.5} value={props.movie.rating} readOnly/>
-              </Box>
-              {props.movie.genres.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
-            </div>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    );
-  }
+  return (
+    <Card style={{width: 350, margin: 20}}>
+      <CardActionArea>
+        <CardMedia style={{height: 500}} image={props.movie.imageUrl}/>
+        <CardContent>
+          <div className='title'>
+            <Box component="fieldset" mb={3} borderColor="transparent">
+              <Rating name="read-only" precision={0.5} value={props.movie.rating} readOnly/>
+            </Box>
+            {props.movie.genres.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
+          </div>
+        </CardContent>
+      </CardActionArea>
+    </Card>
+  );
+}
 
-  function ReviewButton() {
-    const [open, setOpen] = React.useState(false);
-    const [review, setReview] = React.useState('');
-  
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
+function ReviewButton(props) {
+  const [open, setOpen] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const history = useHistory();
 
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      const data = {
-        new_review: review,
-      };
-    }; 
-  
-    return (
-      <div>
-        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-          Leave a Review
-        </Button>
-        <Dialog fullwidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-          <form onSubmit={handleSubmit}>
-            <DialogTitle id="form-dialog-title">Review</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Leave a review for The Lord of the Rings: The Fellowship of the Ring below 
-              </DialogContentText>
-              <TextField
-                autoFocus
-                multiline
-                rowsMax={10}
-                margin="dense"
-                id="review"
-                label=""
-                fullWidth
-                onChange={(event) => setReview(event.target.value)}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={handleClose} color="primary" type="submit">
-                Leave Review
-              </Button>
-            </DialogActions>
-          </form>
-        </Dialog>
-      </div>
-    );
-  }
+  const openReviewDialogBox = () => {
+    setOpen(true);
+  };
+
+  const closeReviewDialogBox = () => {
+    setOpen(false);
+  };
+
+  const updateReview = useFetch(`/rest/review/${props.movieId}`, requestOptions, { defer: true });
+
+  const submitReview = (event) => {
+    event.preventDefault();
+    if (props.hasReview) {
+      updateReview.run({
+        method: 'PUT',
+        body: JSON.stringify({
+          comment: newComment,
+          star: props.rating
+        })
+      });
+    } else {
+      updateReview.run({
+        method: 'POST',
+        body: JSON.stringify({
+          comment: newComment,
+          star: props.rating
+        })
+      });
+    }
+
+    props.reloadMovieData.run();
+  }; 
+
+  return (
+    <div>
+      <Button variant="outlined" color="primary" onClick={openReviewDialogBox}>
+        Leave a Review
+      </Button>
+      <Dialog fullwidth open={open} onClose={closeReviewDialogBox} aria-labelledby="form-dialog-title">
+        <form onSubmit={submitReview}>
+          <DialogTitle id="form-dialog-title">Review</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Enter your review here...
+            </DialogContentText>
+            <TextField
+              autoFocus
+              multiline
+              rowsMax={10}
+              margin="dense"
+              id="review"
+              label=""
+              fullWidth
+              onChange={(event) => setNewComment(event.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeReviewDialogBox} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={closeReviewDialogBox} color="primary" type="submit">
+              Leave Review
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </div>
+  );
+}
