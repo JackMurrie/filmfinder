@@ -22,6 +22,9 @@ import javassist.NotFoundException;
 
 public class Movie extends frontendObject {
     @Expose
+    int movieId;
+
+    @Expose
     String name;
 
     @Expose
@@ -50,6 +53,7 @@ public class Movie extends frontendObject {
     public static Movie getMovie(int id) throws NotFoundException, SQLException {
         Movie movie = getTMDBData(id);
         movie.checkGetLocalData(id);
+        movie.movieId = id;
         return movie;
     }
 

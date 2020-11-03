@@ -25,4 +25,11 @@ public class Review extends frontendObject {
             this.post_date = date;
     }
 
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public float getRating() {
+        return rating;
+    }
 }

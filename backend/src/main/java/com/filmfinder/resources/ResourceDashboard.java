@@ -19,19 +19,18 @@ import com.filmfinder.templates.MovieIdTemplate;
 import com.filmfinder.movieLists.Watchlist;
 import com.filmfinder.db.UtilDB;
 
-@Path("users/")
+@Path("user/")
 public class ResourceDashboard {
     
     @CookieParam("auth_token")
     private String token;
 
     @GET
-    @Path("{user_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserDashboard(@PathParam("user_id") int userId) {
-
+    public Response getUserDashboard() {
+        int userId;
         try {
-            CredentialHandler.decodeToken(token);
+            userId = UtilDB.getUserId(CredentialHandler.decodeToken(token));
         } catch (Exception e) {
             return Response.status(400).entity("invalid token").build();
         }
