@@ -129,7 +129,7 @@ function TabButtons() {
   };
 
   const displayReviews = ({ reviews }) => {
-    const componentReviews = reviews.map(({ movieId, comment, rating, post_date, userId }) => {
+    const componentReviews = reviews.map(({ movieName, movieId, comment, rating, post_date, userId }) => {
       return <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />;
     });
     return componentReviews;
