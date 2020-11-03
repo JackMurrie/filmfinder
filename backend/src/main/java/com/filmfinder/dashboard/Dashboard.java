@@ -20,7 +20,7 @@ public class Dashboard extends frontendObject {
     @Expose
     private Wishlist wishlist;
     @Expose
-    private Movies recommedations;
+    private Movies recommendations;
     @Expose
     private Reviews reviews;
     @Expose
@@ -30,7 +30,7 @@ public class Dashboard extends frontendObject {
         watchlist = new Watchlist(userId);
         wishlist = new Wishlist(userId);
         //TODO implement recommendation and blacklisted functions
-        recommedations = new Movies();
+        recommendations = new Movies();
         reviews = Reviews.getReviews(userId);
         blacklisted = new Users(new ArrayList<User>());
     }
