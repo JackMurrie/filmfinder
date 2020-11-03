@@ -2,7 +2,7 @@ import Header from './components/Header';
 import MovieCard from './components/MovieCard';
 import './css/Account.css';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,25 +18,25 @@ import RateReviewIcon from '@material-ui/icons/RateReview';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
+import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 
 const useStyles = makeStyles((theme) => ({
-    '@global': {
-      ul: {
-        margin: 0,
-        padding: 0,
-        listStyle: 'none',
-      },
+  '@global': {
+    ul: {
+      margin: 0,
+      padding: 0,
+      listStyle: 'none',
     },
-    root: {
-        flexGrow: 1,
-        width: '100%',
-        backgroundColor: theme.palette.background.paper,
-    },
-    right: {
-      textAlign: "right",
-    },
-  }));
-  
+  },
+  root: {
+      flexGrow: 1,
+      width: '100%',
+      backgroundColor: theme.palette.background.paper,
+  },
+  right: {
+    textAlign: "right",
+  }  
+}));
   
 export default function Account() {
     const classes = useStyles();
@@ -96,7 +96,36 @@ function TabButtons() {
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
+
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+    };
   
+    const dashboardData = useFetch('/rest/user', requestOptions, {defer: true});
+    useEffect(dashboardData.run, []);
+
+    const displayWishlist = ({ wishlist }) => {
+      const componentWishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
+        return <MovieCard key={movieId} title={name} yearReleased={year} imageURL={imageUrl}/>;
+      });
+      return componentWishlist;
+    };
+  
+    const displayWatchlist = ({ watchlist }) => {
+      const componentWatchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
+        return <MovieCard key={movieId} title={name} yearReleased={year} imageURL={imageUrl}/>;
+      });
+      return componentWatchlist;
+    };
+
+    const displayRecommendations = ({ recommendations }) => {
+      const componentRecommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
+        return <MovieCard key={movieId} title={name} yearReleased={year} imageURL={imageUrl}/>;
+      });
+      return componentRecommendations;
+    };
+
     return (
       <div className={classes.root}>
         <AppBar position="static" color="default">
@@ -117,11 +146,19 @@ function TabButtons() {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
+          <IfRejected state={dashboardData}>No results found</IfRejected>
+          <IfPending state={dashboardData}>Loading...</IfPending>
+          <IfFulfilled state={dashboardData}>{displayWishlist}</IfFulfilled>
         </TabPanel>
         <TabPanel value={value} index={1}>
+          <IfRejected state={dashboardData}>No results found</IfRejected>
+          <IfPending state={dashboardData}>Loading...</IfPending>
+          <IfFulfilled state={dashboardData}>{displayRecommendations}</IfFulfilled>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Seen
+          <IfRejected state={dashboardData}>No results found</IfRejected>
+          <IfPending state={dashboardData}>Loading...</IfPending>
+          <IfFulfilled state={dashboardData}>{displayWatchlist}</IfFulfilled>
         </TabPanel>
         <TabPanel value={value} index={3}>
           My Reviews
