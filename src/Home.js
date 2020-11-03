@@ -30,43 +30,40 @@ export default function Home() {
       <CssBaseline />
       <Header/ >
         <header className="App-header">
-            <h1>FilmFinder</h1>
-            <Button href="/SignUp" color="white" variant="contained">
-                Sign Up
+          <h1>FilmFinder</h1>
+          <Button href="/SignUp" color="white" variant="contained">
+            Sign Up
           </Button>
         </header>
         <div className="text">
-                <h1>Trending</h1>
-            </div>
+          <h1>Trending</h1>
+        </div>
       {/* Display Movies */}
       <Container component="main" maxWidth="lg">
-
-          <Async promiseFn={getMovies}>
-            <Async.Loading>Loading...</Async.Loading>
-            <Async.Fulfilled>
-              {data => {
-                return(
-                  <div className="container">
-                    {data.movies.map((movie, index) => (
-                      <MovieCard 
-                      key={index}
-                      movieId={index}
-                      title={movie.title}
-                      yearReleased={movie.yearReleased}
-                      imageUrl={movie.imageURL}
-                      />
-                    ))} 
-                  </div> 
-                )
-              }}
-            </Async.Fulfilled>
-            <Async.Rejected>
-              Something went wrong.
-            </Async.Rejected>
-          </Async>
-        
+        <Async promiseFn={getMovies}>
+          <Async.Loading>Loading...</Async.Loading>
+          <Async.Fulfilled>
+            {data => {
+              return(
+                <div className="container">
+                  {data.movies.map((movie, index) => (
+                    <MovieCard 
+                    key={index}
+                    movieId={index}
+                    title={movie.title}
+                    yearReleased={movie.yearReleased}
+                    imageUrl={movie.imageURL}
+                    />
+                  ))} 
+                </div> 
+              )
+            }}
+          </Async.Fulfilled>
+          <Async.Rejected>
+            Something went wrong.
+          </Async.Rejected>
+        </Async>
       </Container>
-
     </React.Fragment>
   );
 }
