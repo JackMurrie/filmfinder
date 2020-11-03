@@ -1,5 +1,7 @@
 import Header from './components/Header';
 import MovieCard from './components/MovieCard';
+import WishlistItem from './components/WishlistItem';
+
 import './css/Account.css';
 
 import React, { useEffect } from 'react';
@@ -107,7 +109,7 @@ function TabButtons() {
 
     const displayWishlist = ({ wishlist }) => {
       const componentWishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
-        return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+        return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
       });
       return componentWishlist;
     };
