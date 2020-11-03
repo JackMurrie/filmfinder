@@ -31,7 +31,7 @@ public class ResourceLogin {
         
         try {
             token = CredentialHandler.authenticate(first, last, email, password);
-            return Response.status(200).entity("Register successful.\n").cookie(new NewCookie("auth_token", token, "/rest/", null, null, 600, false)).build();
+            return Response.status(200).entity("Register successful.\n").cookie(new NewCookie("auth_token", token, "/rest/", null, null, 3600, false)).build();
         } catch (Exception e) {
             return Response.status(400).entity("Register unsuccessful.\n").build();
         }
@@ -46,7 +46,7 @@ public class ResourceLogin {
         // --> here get userID from email.
         try {
             String token = CredentialHandler.authorise(email, password);
-            return Response.status(200).entity("Login successful\n").cookie(new NewCookie("auth_token", token, "/rest/", null, null, 600, false)).build();
+            return Response.status(200).entity("Login successful\n").cookie(new NewCookie("auth_token", token, "/rest/", null, null, 3600, false)).build();
         } catch (Exception e) {
             return Response.status(400).entity("Login unsuccessful\n").build();
         }
