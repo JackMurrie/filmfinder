@@ -98,7 +98,7 @@ public class Movie extends frontendObject {
                 try {
                     imUrl = movie.baseImageUrl+jsonObject.get("poster_path").getAsString();
                 } catch (Exception e) {
-                    
+                    imUrl = "https://ih1.redbubble.net/image.1164669701.5654/poster,504x498,f8f8f8-pad,600x600,f8f8f8.jpg";
                 }
                 movie.imageUrl = imUrl;
                 movie.description = jsonObject.get("overview").getAsString();
