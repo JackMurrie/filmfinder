@@ -16,10 +16,10 @@ import com.filmfinder.Search.Search;
 public class ResourceSearch {
 
     @POST
-    @Path("search")
-    // @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     // @Produces(MediaType.APPLICATION_JSON)
-    public Response search(String searchString) throws NotFoundException, SQLException {
+    public Response search(SearchTemplate data) throws NotFoundException, SQLException {
+        String searchString = data.getSearchString();
         try {
             Movies movies = Search.getMovieIdsBySearch(searchString, 10);
 
