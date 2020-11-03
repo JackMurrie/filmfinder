@@ -24,26 +24,19 @@ const useStyles = makeStyles((theme) => ({
       },
     }));
 
-export default function PublicReview() {
+export default function PublicReview(props) {
     const classes = useStyles();
   
     return (
         <Grid item xs={12}>
-            <Paper className={classes.paper}>
-                This is a random review. Magical, astounding filmmaking. This could've turned out terribly, 
-                oh so terribly, but it didn't. It sure didn't. It's a near-perfect cinematic experience and adaptation, 
-                delicately told right from the opening exposition dump that haunts the very marrow of my bones. 
-                A world with so much beauty soon becomes tarnished by darkness. It only becomes clear around the 
-                45 minute mark why Jackson was chosen for the project; his craft is sweeping and relentlessly classical. 
-                Only a splatter and adventure geek could evoke such crumbling destruction and still sell every mythical, 
-                at times overwrought, line of dialogue; he believes in it. The world was real to Tolkien, it was real 
-                to Jackson, and it's real to the audience. 
-                <div className="right">
-                <Button href="/PublicProfile" color="primary">
-                    User
-                </Button>
-                </div>
-            </Paper>
+          <Paper className={classes.paper}>
+            {props.text}
+            <div className="right">
+            <Button href={`/user/${props.user}`} color="primary">
+                TODO: Post date and user info
+            </Button>
+            </div>
+          </Paper>
         </Grid>
   
     );

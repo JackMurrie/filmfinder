@@ -4,7 +4,7 @@ import PublicReview from './components/PublicReview'
 import './css/Movie.css';
 import { getMovies } from './services/getMovies';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -33,7 +33,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Switch from '@material-ui/core/Switch';
-import Async from 'react-async';
+import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 import { useLocation } from "react-router-dom";
 
 
@@ -80,79 +80,86 @@ export default function Movie() {
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const fixedHeightPaperReview = clsx(classes.paper, classes.fixedHeightReviews);
     const location = useLocation();
-    const MovieID = location.state.MovieID;
+    const movieId = location.pathname.split('/').pop();
 
-    {/* Call GET */} 
-    {console.log("GET Movie Info: ", MovieID)}
-
-    const [state, setState] = React.useState({
-      seen: false,
-      wishlist: false,
-    });
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+    };
   
-    const handleChange = (event) => {
-      setState({ ...state, [event.target.name]: event.target.checked });
+    const movieData = useFetch(`/rest/movies/${movieId}`, requestOptions, {defer: true});
+    useEffect(movieData.run, []);
 
-      {/* Call POST to API for wishlist/seen event*/}
-      const data = {
-        [event.target.name]: event.target.checked
-      };
-      {console.log("POST: ", data)}
+    const userData = useFetch('/rest/user', requestOptions, {defer: true});
+    useEffect(userData.run, []);
+
+
+    const [watched, setWatched] = React.useState(false);
+    const [wished, setWishlist] = React.useState(false);
+    const [rating, setRating] = React.useState(0);
+  
+    const toggleWishlist = (event) => {
+      setWishlist(wished => !wished);
+
     };
 
-    const [rating, setRating] = React.useState(0); //React.useState(user.movie.rating);
+    const toggleWatched = (event) => {
+      setWatched(watched => !watched);
+    };
 
-    const handleRatingChange = (event, newRating) => {
+    const changeRating = (event, newRating) => {
       setRating(newRating);
 
-      {/* Call POST to API for new rating event*/}
-      const data = {
-        rating: newRating,
-      };
-      {console.log("POST Rating: ", data)}
     };
 
     return (
       <React.Fragment>
         <CssBaseline />
-            <Header />
-            <div className="title">
-                <h1>Movie Title</h1>
-            </div>
-            <Box className="title" component="fieldset" mb={3} borderColor="transparent">
+        <Header />
+        <IfFulfilled state={movieData}>
+          { ({ movie, reviews }) => 
+            <div>
+              <div className="title">
+                <h1>{movie.name}</h1>
+              </div>
+              <Box className="title" component="fieldset" mb={3} borderColor="transparent">
                 <Rating 
                 name="rating" 
                 precision={0.5} 
                 value={rating} 
                 size="large" 
-                onChange={handleRatingChange}/>
-            </Box>
-            
-            <Container component="main" maxWidth="xl">
+                onChange={changeRating}/>
+              </Box>
+              
+              <Container component="main" maxWidth="xl">
                 <Grid container spacing={3}>
                     {/* Movie Card */}
-                    <Grid item xs={2.5}>
+                    <Grid item>
                         <Paper className={fixedHeightPaper}>
-                            <LargeMovieCard />
-                            <div className="title">
-                              <FormControlLabel
-                                  control={<Checkbox checked={state.wishlist} onChange={handleChange} icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
-                                  label="Wishlist"
-                                  labelPlacement="start"
-                                />
-                              </div>
+                          <LargeMovieCard movie={movie} />
+                          <div className="title">
+                            <FormControlLabel
+                              control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
+                              label="Wishlist"
+                              labelPlacement="start"
+                            />
+                          </div>
                         </Paper>
                     </Grid>
                     {/* Information */}
                     <Grid item xs={8} >
                         <Paper className={fixedHeightPaper}>
-                            <h1> Movie Details </h1>
-                            <div className={classes.flexGrow}></div>
+                            <Typography variant="h4">
+                              Movie Details
+                            </Typography>
+                            <Typography variant="body1" paragraph={true} >
+                              {movie.description}
+                            </Typography>
                             <div className="right">
                                 <FormControlLabel
-                                  control={<Switch checked={state.seen} onChange={handleChange} name="seen" color="primary"/>}
+                                  control={<Switch checked={watched} onChange={toggleWatched} name="seen" color="primary"/>}
                                   label="Seen"
-                                 />
+                                  />
                                 <ReviewButton />  
                             </div>
                         </Paper>
@@ -163,67 +170,39 @@ export default function Movie() {
                           <Paper className={fixedHeightPaperReview} variant="outlined">
                               <h1> Reviews </h1>
                               <Grid container spacing={1}>
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview />
+                                {reviews.map(({ comment, rating, post_date, userId }) => 
+                                  <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />
+                                )}
                               </Grid>
                           </Paper>
-                       </Grid>
+                        </Grid>
                     </Container>
                 </Grid>
-            </Container>
+              </Container>
 
-            <div className="text">
+              <div className="text">
                 <h1>Similar Movies</h1>
+              </div>
+              <Container component="main" maxWidth="lg">   
+              </Container>
             </div>
-            {/* Display Movies */}
-            <Container component="main" maxWidth="lg">   
-                <Async promiseFn={getMovies}>
-                <Async.Loading>Loading...</Async.Loading>
-                <Async.Fulfilled>
-                    {data => {
-                    return(
-                            <div className="container">
-                              {data.movies.map((movie, index) => (
-                              <MovieCard 
-                              key={index} 
-                              title={movie.title}
-                              yearReleased={movie.yearReleased}
-                              imageURL={movie.imageURL}
-                              />
-                              ))} 
-                            </div> 
-                    )
-                    }}
-                </Async.Fulfilled>
-                <Async.Rejected>
-                    Something went wrong.
-                </Async.Rejected>
-                </Async>
-            </Container>
+          }
+        </IfFulfilled>
       </React.Fragment>
     );
 }
 
-function LargeMovieCard() {
+function LargeMovieCard(props) {
     return (
       <Card style={{width: 350, margin: 20}}>
-        <CardActionArea href="/Movie">
-          <CardMedia style={{height: 500}} image={"https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg"}/>
+        <CardActionArea>
+          <CardMedia style={{height: 500}} image={props.movie.imageUrl}/>
           <CardContent>
             <div className='title'>
-                <Box component="fieldset" mb={3} borderColor="transparent">
-                    <Rating name="read-only" precision={0.5} value={5} readOnly/>
-                </Box>
-                             
-                  <Chip label={'Drama'} style={{margin: 5}}/>
-                  <Chip label={'Adventure'} style={{margin: 5}}/>
-                  <Chip label={'Action'} style={{margin: 5}}/>
+              <Box component="fieldset" mb={3} borderColor="transparent">
+                <Rating name="read-only" precision={0.5} value={props.movie.rating} readOnly/>
+              </Box>
+              {props.movie.genres.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
             </div>
           </CardContent>
         </CardActionArea>
@@ -248,8 +227,6 @@ function LargeMovieCard() {
       const data = {
         new_review: review,
       };
-      {/* Call POST to API */}
-      {console.log("POST Review: ", review)}
     }; 
   
     return (
