@@ -46,7 +46,8 @@ public class Movie extends frontendObject {
     String year;
 
     // Todo: get different available sizes and post to frontend
-    String baseImageUrl = "http://image.tmdb.org/t/p/w185/";
+    // String baseImageUrl = "http://image.tmdb.org/t/p/w185/";
+    String baseImageUrl = "https://image.tmdb.org/t/p/original/";
 
     private Movie() {}
 
@@ -95,7 +96,7 @@ public class Movie extends frontendObject {
                 movie.name = jsonObject.get("original_title").getAsString();
                 String imUrl = "";
                 try {
-                    imUrl = movie.baseImageUrl+jsonObject.get("backdrop_path").getAsString();
+                    imUrl = movie.baseImageUrl+jsonObject.get("poster_path").getAsString();
                 } catch (Exception e) {
                     
                 }

@@ -10,11 +10,11 @@ import org.junit.Test;
 import javassist.NotFoundException;
 
 public class TestSearch {
-    // @Test
+    @Test
     public void testSearch() {
         Movies ms;
         try {
-            ms = Search.getMovieIdsBySearch("Ariel", 10);
+            ms = Search.getMovieIdsBySearch("Avengers", 10);
             System.out.println(ms);
         } catch (NotFoundException e) {
             // TODO Auto-generated catch block
