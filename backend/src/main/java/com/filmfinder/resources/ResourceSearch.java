@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.filmfinder.movie.Movie;
+import com.filmfinder.movie.Movies;
 import com.filmfinder.templates.SearchTemplate;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -38,24 +39,14 @@ public class ResourceSearch {
     // @Consumes(MediaType.APPLICATION_JSON)
     // @Produces(MediaType.APPLICATION_JSON)
     public Response search(String searchString) throws NotFoundException, SQLException {
-        ArrayList<Integer> results = new ArrayList<Integer>();
         try {
-            results = Search.getMovieIdsBySearch(searchString, 10);
+            Movies movies = Search.getMovieIdsBySearch(searchString, 10);
+
+        return Response.status(200).entity(movies.toJson()).build();
+
         } catch (Exception e) { 
-            return Response.status(200).entity("bad search query").build();
+            return Response.status(400).entity("bad search query").build();
         }
-
-        ArrayList<Movie> movieResults = new ArrayList<Movie>();
-
-        for (int i = 0; i < results.size(); i++) {
-            movieResults.add(Movie.getMovie((results.get(i))));
-        }
-        JsonObject returnData = new JsonObject();
-        Gson gson = new Gson();
-        JsonArray jsonMatches = gson.toJsonTree(movieResults).getAsJsonArray();
-        returnData.add("matchingList", jsonMatches);
-        return Response.status(400).entity(gson.toJson(returnData)).build();
-        
     }
 
 }
