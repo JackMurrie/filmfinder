@@ -136,7 +136,7 @@ export default function Movie() {
                     {/* Movie Card */}
                     <Grid item>
                         <Paper className={fixedHeightPaper}>
-                          <LargeMovieCard movie={movie} />
+                          <MoviePoster movie={movie} />
                           <div className="title">
                             <FormControlLabel
                               control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
@@ -192,7 +192,7 @@ export default function Movie() {
     );
 }
 
-function LargeMovieCard(props) {
+function MoviePoster(props) {
     return (
       <Card style={{width: 350, margin: 20}}>
         <CardActionArea>
