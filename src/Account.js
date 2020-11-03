@@ -21,6 +21,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
+import PublicReview from './components/PublicReview';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -127,6 +128,14 @@ function TabButtons() {
     return componentRecommendations;
   };
 
+  const displayReviews = ({ reviews }) => {
+    const componentReviews = reviews.map(({ movieId, comment, rating, post_date, userId }) => {
+      return <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />;
+    });
+    return componentReviews;
+  };
+
+
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">
@@ -162,7 +171,8 @@ function TabButtons() {
         <IfFulfilled state={dashboardData}>{displayWatchlist}</IfFulfilled>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        My Reviews
+        <IfPending state={dashboardData}>Loading...</IfPending>
+        <IfFulfilled state={dashboardData}>{displayReviews}</IfFulfilled>
       </TabPanel>
       <TabPanel value={value} index={4}>
         Account Settings
