@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   root: {
-      flexGrow: 1,
-      width: '100%',
-      backgroundColor: theme.palette.background.paper,
+    flexGrow: 1,
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
   },
   right: {
     textAlign: "right",
@@ -41,21 +41,20 @@ const useStyles = makeStyles((theme) => ({
 }));
   
 export default function Account() {
-    const classes = useStyles();
-  
-    return (
-        <React.Fragment>
-        <CssBaseline />
-            <Header />
-            <header className="Account-header">
-                <h1>Welcome User</h1>
-            </header>
-        <Container component="main" maxWidth="lg">
-            <TabButtons />
-        </Container>
+  const classes = useStyles();
 
-        </React.Fragment>
-    );
+  return (
+    <React.Fragment>
+      <CssBaseline />
+        <Header />
+        <header className="Account-header">
+          <h1>Welcome User</h1>
+        </header>
+      <Container component="main" maxWidth="lg">
+        <TabButtons />
+      </Container>
+    </React.Fragment>
+  );
 }
 
 function TabPanel(props) {
@@ -79,95 +78,95 @@ function TabPanel(props) {
 }
 
 TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
-  };
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
 
 function a11yProps(index) {
-    return {
-        id: `full-width-tab-${index}`,
-        'aria-controls': `full-width-tabpanel-${index}`,
-    };
+  return {
+    id: `full-width-tab-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
+  };
 }
 
 function TabButtons() {
-    const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-  
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
 
-    const requestOptions = {
-      method: 'GET',
-      headers: { 'Accept': 'application/json' },
-    };
-  
-    const dashboardData = useFetch('/rest/user', requestOptions, {defer: true});
-    useEffect(dashboardData.run, []);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
-    const displayWishlist = ({ wishlist }) => {
-      const componentWishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
-        return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
-      });
-      return componentWishlist;
-    };
-  
-    const displayWatchlist = ({ watchlist }) => {
-      const componentWatchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
-        return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
-      });
-      return componentWatchlist;
-    };
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' },
+  };
 
-    const displayRecommendations = ({ recommendations }) => {
-      const componentRecommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
-        return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
-      });
-      return componentRecommendations;
-    };
+  const dashboardData = useFetch('/rest/user', requestOptions, {defer: true});
+  useEffect(dashboardData.run, []);
 
-    return (
-      <div className={classes.root}>
-        <AppBar position="static" color="default">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            variant="fullWidth"
-            indicatorColor="primary"
-            textColor="primary"
-            aria-label="Buton Tabs"
-          >
-            <Tab label="Wishlist" icon={<FavoriteIcon />} {...a11yProps(1)} />
-            <Tab label="Recommended" icon={<ThumbUp />} {...a11yProps(2)} />
-            <Tab label="Seen" icon={<VisibilityIcon />} {...a11yProps(3)} />
-            <Tab label="My Reviews" icon={<RateReviewIcon />} {...a11yProps(4)} />
-            <Tab label="Account Settings" icon={<PersonPinIcon />} {...a11yProps(5)} />
-            
-          </Tabs>
-        </AppBar>
-        <TabPanel value={value} index={0}>
-          <IfRejected state={dashboardData}>No results found</IfRejected>
-          <IfPending state={dashboardData}>Loading...</IfPending>
-          <IfFulfilled state={dashboardData}>{displayWishlist}</IfFulfilled>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <IfRejected state={dashboardData}>No results found</IfRejected>
-          <IfPending state={dashboardData}>Loading...</IfPending>
-          <IfFulfilled state={dashboardData}>{displayRecommendations}</IfFulfilled>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <IfRejected state={dashboardData}>No results found</IfRejected>
-          <IfPending state={dashboardData}>Loading...</IfPending>
-          <IfFulfilled state={dashboardData}>{displayWatchlist}</IfFulfilled>
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          My Reviews
-        </TabPanel>
-        <TabPanel value={value} index={4}>
-          Account Settings
-        </TabPanel>
-      </div>
-    );
-  }
+  const displayWishlist = ({ wishlist }) => {
+    const componentWishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
+      return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+    });
+    return componentWishlist;
+  };
+
+  const displayWatchlist = ({ watchlist }) => {
+    const componentWatchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
+      return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+    });
+    return componentWatchlist;
+  };
+
+  const displayRecommendations = ({ recommendations }) => {
+    const componentRecommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
+      return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+    });
+    return componentRecommendations;
+  };
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="static" color="default">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          variant="fullWidth"
+          indicatorColor="primary"
+          textColor="primary"
+          aria-label="Buton Tabs"
+        >
+          <Tab label="Wishlist" icon={<FavoriteIcon />} {...a11yProps(1)} />
+          <Tab label="Recommended" icon={<ThumbUp />} {...a11yProps(2)} />
+          <Tab label="Seen" icon={<VisibilityIcon />} {...a11yProps(3)} />
+          <Tab label="My Reviews" icon={<RateReviewIcon />} {...a11yProps(4)} />
+          <Tab label="Account Settings" icon={<PersonPinIcon />} {...a11yProps(5)} />
+          
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>
+        <IfRejected state={dashboardData}>No results found</IfRejected>
+        <IfPending state={dashboardData}>Loading...</IfPending>
+        <IfFulfilled state={dashboardData}>{displayWishlist}</IfFulfilled>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <IfRejected state={dashboardData}>No results found</IfRejected>
+        <IfPending state={dashboardData}>Loading...</IfPending>
+        <IfFulfilled state={dashboardData}>{displayRecommendations}</IfFulfilled>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <IfRejected state={dashboardData}>No results found</IfRejected>
+        <IfPending state={dashboardData}>Loading...</IfPending>
+        <IfFulfilled state={dashboardData}>{displayWatchlist}</IfFulfilled>
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        My Reviews
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        Account Settings
+      </TabPanel>
+    </div>
+  );
+}
