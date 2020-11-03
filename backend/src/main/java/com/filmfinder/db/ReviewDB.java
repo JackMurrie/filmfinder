@@ -165,7 +165,7 @@ public class ReviewDB {
         ArrayList<Review> list = new ArrayList<Review>();
         try {
             c = DbDataSource.getConnection();
-            String q = "SELECT rating, review comment, user_id uId, movie_id mId FROM review WHERE movie_id=?";
+            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name FROM review INNER JOIN movie ON id=movie_id WHERE movie_id=?";
             s = c.prepareStatement(q);
 
             s.setInt(1, movieId);
@@ -174,7 +174,7 @@ public class ReviewDB {
             
             while (rs.next()) {
                 //TODO: implement Date
-                list.add(new Review(rs.getInt("uId"), movieId, rs.getString("comment"), rs.getFloat("rating"), new Date(10000)));
+                list.add(new Review(rs.getInt("uId"), movieId, rs.getString("comment"), rs.getFloat("rating"), new Date(10000), rs.getString("name")));
             };
 
             return new Reviews(list);
@@ -201,7 +201,7 @@ public class ReviewDB {
         ArrayList<Review> list = new ArrayList<Review>();
         try {
             c = DbDataSource.getConnection();
-            String q = "SELECT rating, review comment, user_id uId, movie_id mId FROM review WHERE user_id=?";
+            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name FROM review INNER JOIN movie ON id=movie_id WHERE user_id=?";
             s = c.prepareStatement(q);
 
             s.setInt(1, userId);
@@ -210,7 +210,7 @@ public class ReviewDB {
             
             while (rs.next()) {
                 //TODO: implement Date
-                list.add(new Review(userId, rs.getInt("mId"), rs.getString("comment"), rs.getFloat("rating"), new Date(10000)));
+                list.add(new Review(userId, rs.getInt("mId"), rs.getString("comment"), rs.getFloat("rating"), new Date(10000), rs.getString("name")));
             };
 
             return new Reviews(list);
@@ -307,7 +307,7 @@ public class ReviewDB {
         ResultSet rs = null;
         try {
             c = DbDataSource.getConnection();
-            String q = "SELECT rating, review comment, user_id uId, movie_id mId FROM review WHERE movie_id=? and user_id=?";
+            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name FROM review INNER JOIN movie ON id=movie_id WHERE movie_id=? and user_id=?";
             s = c.prepareStatement(q);
 
             s.setInt(1, movieId);
@@ -317,7 +317,7 @@ public class ReviewDB {
             
             if (rs.next()) {
                 //TODO: implement Date
-                return new Review(rs.getInt("uId"), movieId, rs.getString("comment"), rs.getFloat("rating"), new Date(10000));
+                return new Review(rs.getInt("uId"), movieId, rs.getString("comment"), rs.getFloat("rating"), new Date(10000), rs.getString("name"));
             } else {
                 throw new NotFoundException("review for user " + userId + " does not exist");
             }
