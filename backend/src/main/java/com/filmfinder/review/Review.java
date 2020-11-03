@@ -35,4 +35,8 @@ public class Review extends frontendObject {
     public float getRating() {
         return rating;
     }
+
+	public String getComment() {
+		return comment;
+	}
 }
