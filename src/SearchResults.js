@@ -25,15 +25,18 @@ export default function SearchResults() {
 
     const requestOptions = {
         method: 'POST',
-        headers: { 'Accept': 'application/json' },
+        headers: { 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json' 
+        },
         body: JSON.stringify({searchString: title})
     };
-    const state = useFetch('/rest/search/search', requestOptions);
+    const state = useFetch('/rest/search', requestOptions);
 
     useEffect(state.run, [title]);
 
-    const handleResults = ({ matchingList }) => {
-        const searchResults = matchingList.map(({ movieId, name, year, description, imageUrl }) => {
+    const handleResults = ({ movies }) => {
+        const searchResults = movies.map(({ movieId, name, year, imageUrl }) => {
             return <MovieCard key={movieId} title={name} yearReleased={year} imageURL={imageUrl}/>
         });
         return searchResults;
