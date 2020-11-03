@@ -16,7 +16,7 @@ export default function MovieCard(props) {
       event.preventDefault();
       const data = {
         title: props.title,
-        imageURL: props.imageURL,
+        imageUrl: props.imageUrl,
       };
       history.push(`/Movie/${props.movieId}`, data);
     }; 
@@ -24,7 +24,7 @@ export default function MovieCard(props) {
     return (
       <Card style={{width: 268, margin: 20}}>
         <CardActionArea onClick = {handleClick}>
-          <CardMedia style={{height: 320}} image={props.imageURL}/>
+          <CardMedia style={{height: 320}} image={props.imageUrl}/>
           <CardContent>
             <div className='title'>
               <Box component="fieldset" mb={3} borderColor="transparent">
