@@ -107,7 +107,7 @@ public class Recommender {
         ArrayList<Integer> movieIds = MovieDb.getMovies();
         ArrayList<PredictedMoviePair> predictedValues = new ArrayList<PredictedMoviePair>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             int movieId = movieIds.get(i);
             predictedValues.add(new PredictedMoviePair(movieId, getPredictedValue(movieId, userId)));
         }
