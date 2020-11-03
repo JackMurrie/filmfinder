@@ -89,8 +89,14 @@ public class Movie extends frontendObject {
 
                 Movie movie = new Movie();
                 movie.name = jsonObject.get("original_title").getAsString();
+                String imUrl = "";
+                try {
+                    imUrl = movie.baseImageUrl+jsonObject.get("backdrop_path").getAsString();
+                } catch (Exception e) {
+                    
+                }
+                movie.imageUrl = imUrl;
                 movie.description = jsonObject.get("overview").getAsString();
-                movie.imageUrl = movie.baseImageUrl+jsonObject.get("backdrop_path").getAsString();
                 movie.year = jsonObject.get("release_date").getAsString();
 
                 return movie;
