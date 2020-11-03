@@ -14,7 +14,7 @@ public class TestSearch {
     public void testSearch() {
         Movies ms;
         try {
-            ms = Search.getMovieIdsBySearch("Daddy's+home", 10);
+            ms = Search.getMovieIdsBySearch("Daddy's home 2", 10);
             System.out.println(ms);
         } catch (NotFoundException e) {
             // TODO Auto-generated catch block
