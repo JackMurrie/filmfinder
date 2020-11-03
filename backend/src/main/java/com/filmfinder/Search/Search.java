@@ -28,7 +28,6 @@ public class Search {
         for (int i = 0; i < Math.min(results.size(), limit); i++) {
             try {
                 int id = results.get(i).getAsJsonObject().get("id").getAsNumber().intValue();
-                System.out.println(id);
                 movies.add(Movie.getMovie(id));
             } catch (NotFoundException e) {
                 System.out.println(e.getMessage());
