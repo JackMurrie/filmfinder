@@ -1,4 +1,4 @@
-package com.filmfinder.Review;
+package com.filmfinder.review;
 
 public class ReviewPair {
     private float ratingA, ratingB;

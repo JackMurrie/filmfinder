@@ -7,9 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.filmfinder.Review.ReviewPair;
-import com.filmfinder.Review.Review;
-import com.filmfinder.Review.Reviews;
+import com.filmfinder.review.ReviewPair;
+import com.filmfinder.review.Review;
+import com.filmfinder.review.Reviews;
 import com.filmfinder.recommender.RatingSimilarityPair;
 
 import javassist.NotFoundException;

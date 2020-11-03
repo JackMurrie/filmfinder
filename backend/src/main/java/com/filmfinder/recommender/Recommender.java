@@ -18,10 +18,10 @@ import com.filmfinder.db.UtilDB;
 
 import javassist.NotFoundException;
 
-import com.filmfinder.Review.Review;
-import com.filmfinder.Review.ReviewPair;
-import com.filmfinder.Review.Reviews;
-import com.filmfinder.Review.SortByRating;
+import com.filmfinder.review.Review;
+import com.filmfinder.review.ReviewPair;
+import com.filmfinder.review.Reviews;
+import com.filmfinder.review.SortByRating;
 
 public class Recommender {
         // this is the function that populates the similarity table

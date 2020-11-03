@@ -1,4 +1,4 @@
-package com.filmfinder.Review;
+package com.filmfinder.review;
 
 import java.util.Comparator;
 
