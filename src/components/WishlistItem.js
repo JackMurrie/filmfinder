@@ -47,12 +47,12 @@ export default function WishlistItem(props) {
         if (wished) {
           updateWishlist.run({
             method: 'DELETE',
-            body: JSON.stringify({ movieId: props.key})
+            body: JSON.stringify({ movieId: props.movieId})
           });
         } else {
           updateWishlist.run({
             method: 'POST',
-            body: JSON.stringify({ movieId: props.key})
+            body: JSON.stringify({ movieId: props.movieId})
           });
         };
     

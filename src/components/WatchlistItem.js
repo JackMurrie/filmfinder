@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -8,7 +8,15 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import Switch from '@material-ui/core/Switch';
+import { useAsync, useFetch, IfFulfilled } from 'react-async';
 
+const requestOptions = {
+    method: 'GET',
+    headers: { 
+      'Accept': 'application/json',
+      'Content-Type': 'application/json' 
+    }
+  };
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -32,18 +40,24 @@ const useStyles = makeStyles((theme) => ({
 export default function WatchlistItem(props) {
     const classes = useStyles();
 
-    const [state, setState] = React.useState({
-        seen: true,
-      });
+    const [watched, setWatched] = useState(true);
 
-    const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-  
-        {/* Call POST to API */}
-        const data = {
-          [event.target.name]: event.target.checked
+    const updateWatchlist = useFetch('/rest/user/watchedlist', requestOptions, { defer: true });
+
+    const toggleWatchlist = (event) => {
+        if (watched) {
+            updateWatchlist.run({
+            method: 'DELETE',
+            body: JSON.stringify({ movieId: props.movieId})
+          });
+        } else {
+            updateWatchlist.run({
+            method: 'POST',
+            body: JSON.stringify({ movieId: props.movieId})
+          });
         };
-        {console.log("POST: ", data)}
+    
+        setWatched(watched => !watched);
       };
 
     return (
@@ -52,7 +66,7 @@ export default function WatchlistItem(props) {
           title={<Link href={`/Movie/${props.movieId}`} color="primary" className={classes.link} style={{ fontSize: '30px' }}> {props.title} </Link>}
           action={
             <FormControlLabel
-                control={<Switch checked={state.seen} onChange={handleChange} name="seen" color="primary"/>}
+                control={<Switch checked={watched} onChange={toggleWatchlist} name="seen" color="primary"/>}
             />
           }>
           </CardHeader>
