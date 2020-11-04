@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
   },
   background: {
     backgroundColor: "	#282828",
+  },
+  header: {
+    backgroundColor: "black",
   }
 }));
 
@@ -31,7 +34,8 @@ export default function Home() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Header/ >
+      <div className={classes.header}>
+      <Header />
       <div className={classes.background}>
         <header className="App-header">
           <h1>FilmFinder</h1>
@@ -68,6 +72,7 @@ export default function Home() {
           </Async.Rejected>
         </Async>
       </Container>
+      </div>
       </div>
     </React.Fragment>
   );

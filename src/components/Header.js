@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     margin: theme.spacing(1, 1.5),
+    color: "white",
   },
   search: {
     position: 'relative',
@@ -68,10 +69,11 @@ const useStyles = makeStyles((theme) => ({
         width: '20ch',
       },
     },
+    color:"white",
   },
 }));
 
-export default function Header(props) {
+export default function Header() {
     const classes = useStyles();
     const [search, setSearch] = React.useState('');
     const history = useHistory();
@@ -83,27 +85,30 @@ export default function Header(props) {
       };
       history.push("/SearchResults", data);
     }; 
-
-    let headerButtons;
-    if (props.isLoggedIn) {
-      headerButtons = (
-        <Button href={`/Logout`} color="primary" variant="outlined" className={classes.link}>
-          Logout
-        </Button>
-      );
-    } else {
-      headerButtons = ['Login', 'Signup'].map(buttonName => (
-        <Button href={`/${buttonName}`} color="primary" variant="outlined" className={classes.link}>
-          {buttonName}
-        </Button>
-      ));
-    }
     
+    const [navBackground, setNavBackground] = useState('transparent')
+    const navRef = React.useRef()
+    navRef.current = navBackground
+    useEffect(() => {
+        const handleScroll = () => {
+            const show = window.scrollY > 200
+            if (show) {
+                setNavBackground('primary')
+            } else {
+                setNavBackground('transparent')
+            }
+        }
+        document.addEventListener('scroll', handleScroll)
+        return () => {
+            document.removeEventListener('scroll', handleScroll)
+        }
+    }, [])
+
     return (
-        <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
+        <AppBar position="sticky" color={navRef.current} elevation={0} >
             <Toolbar className={classes.toolbar}>
-                <Button href="/" color="primary" className={classes.link}>
-                  FilmFinder
+                <Button href="/" className={classes.link}>
+                    FilmFinder
                 </Button>
                 <div className={classes.toolbarTitle}></div>
                 <div className={classes.search}>
@@ -113,19 +118,23 @@ export default function Header(props) {
                     <form onSubmit={handleSearch}>
                       <InputBase
                         id="search"
-                        placeholder="Search…"
+                        placeholder="Search?"
                         onChange={(event) => setSearch(event.target.value)}
                         classes={{
                           root: classes.inputRoot,
                           input: classes.inputInput,
                         }}
-                        inputProps={{ 'aria-label': 'search' }}
                       />
                     </form>
                 </div>
-                {headerButtons}
-                <IconButton aria-label="account" color="inherit" href="/Account">
-                  <PersonPinIcon />
+                <Button href="/Login" className={classes.link}>
+                  Login
+                </Button>
+                <Button href="/SignUp"  className={classes.link}>
+                  Sign Up
+                </Button>
+                <IconButton aria-label="account" href="/Account">
+                  <PersonPinIcon style={{fill: "white"}}/>
                 </IconButton>
             </Toolbar>
          </AppBar>
