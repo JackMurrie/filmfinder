@@ -49,7 +49,7 @@ export default function WatchlistItem(props) {
     return (
       <Card style={{width: 1150, margin: 10}}>
           <CardHeader
-          title={<Link href="/" color="primary" className={classes.link} style={{ fontSize: '30px' }}> {props.title} </Link>}
+          title={<Link href={`/Movie/${props.movieId}`} color="primary" className={classes.link} style={{ fontSize: '30px' }}> {props.title} </Link>}
           action={
             <FormControlLabel
                 control={<Switch checked={state.seen} onChange={handleChange} name="seen" color="primary"/>}
