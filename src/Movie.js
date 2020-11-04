@@ -164,14 +164,14 @@ export default function Movie() {
       updateRating.run({
         method: 'PUT',
         body: JSON.stringify({
-          rating: newRating
+          rating: (newRating ? newRating : 0)
         })
       });
     } else {
       updateRating.run({
         method: 'POST',
         body: JSON.stringify({
-          rating: newRating
+          rating: (newRating ? newRating : 0)
         })
       });
     }
