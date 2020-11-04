@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     margin: theme.spacing(1, 1.5),
+    color: "white",
   },
   search: {
     position: 'relative',
@@ -68,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
         width: '20ch',
       },
     },
+    color:"white",
   },
 }));
 
@@ -98,9 +100,28 @@ export default function Header(props) {
         </Button>
       ));
     }
+
+    //Scrollable Header
+    const [navBackground, setNavBackground] = useState('transparent')
+    const navRef = React.useRef()
+    navRef.current = navBackground
+    useEffect(() => {
+        const handleScroll = () => {
+            const show = window.scrollY > 200
+            if (show) {
+                setNavBackground('primary')
+            } else {
+                setNavBackground('transparent')
+            }
+        }
+        document.addEventListener('scroll', handleScroll)
+        return () => {
+            document.removeEventListener('scroll', handleScroll)
+        }
+    }, [])
     
     return (
-        <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
+        <AppBar position="sticky" color={navRef.current} elevation={0}>
             <Toolbar className={classes.toolbar}>
                 <Button href="/" color="primary" className={classes.link}>
                   FilmFinder
@@ -124,8 +145,8 @@ export default function Header(props) {
                     </form>
                 </div>
                 {headerButtons}
-                <IconButton aria-label="account" color="inherit" href="/Account">
-                  <PersonPinIcon />
+                <IconButton aria-label="account" href="/Account">
+                  <PersonPinIcon style={{fill: "white"}}/>
                 </IconButton>
             </Toolbar>
          </AppBar>
