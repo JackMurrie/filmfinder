@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -7,7 +7,15 @@ import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
+import { useAsync, useFetch, IfFulfilled } from 'react-async';
 
+const requestOptions = {
+    method: 'GET',
+    headers: { 
+      'Accept': 'application/json',
+      'Content-Type': 'application/json' 
+    }
+  };
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -31,19 +39,24 @@ const useStyles = makeStyles((theme) => ({
 export default function WishlistItem(props) {
     const classes = useStyles();
 
-    const [state, setState] = React.useState({
-        seen: false,
-        wishlist: false,
-      });
+    const [wished, setWished] = useState(true);
 
-    const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-  
-        {/* Call POST to API */}
-        const data = {
-          [event.target.name]: event.target.checked
+    const updateWishlist = useFetch('/rest/user/wishlist', requestOptions, { defer: true });
+
+    const toggleWishlist = (event) => {
+        if (wished) {
+          updateWishlist.run({
+            method: 'DELETE',
+            body: JSON.stringify({ movieId: props.key})
+          });
+        } else {
+          updateWishlist.run({
+            method: 'POST',
+            body: JSON.stringify({ movieId: props.key})
+          });
         };
-        {console.log("POST: ", data)}
+    
+        setWished(wished => !wished);
       };
 
     return (
@@ -52,8 +65,8 @@ export default function WishlistItem(props) {
           title={<Link href={`/Movie/${props.movieId}`} color="primary" className={classes.link} style={{ fontSize: '30px' }}> {props.title} </Link>}
           action={
             <FormControlLabel
-                control={<Checkbox checked={state.wishlist} 
-                onChange={handleChange} icon={<FavoriteBorder className={classes.largeIcon}/>} 
+                control={<Checkbox checked={wished} 
+                onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} 
                 checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
             />
           }>
