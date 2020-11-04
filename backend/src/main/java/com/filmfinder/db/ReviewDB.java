@@ -17,17 +17,6 @@ import javassist.NotFoundException;
 
 public class ReviewDB {
 
-    /**
-     * 
-     * @param email the users email
-     * @param movieId the movie id
-     * @param comment empty string if no comment to insert i.e. ""
-     * @param star negative value if no start given
-     * @throws SQLException if error occurs in database
-     */
-	public static void editReview(String email, int movieId, String comment, float star) throws SQLException {
-        putReview(email, movieId, comment, star);
-	}
 
     /**
      * 
@@ -118,6 +107,91 @@ public class ReviewDB {
         }
         return;
 	}
+
+    /**
+     * 
+     * @param email the users email
+     * @param movieId the movie id
+     * @param comment empty string if no comment to insert i.e. ""
+     * @param star negative value if no start given
+     * @throws SQLException if error occurs in database
+     */
+	public static void updateRating(String email, int movieId, float star) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        try {
+            int userId = UtilDB.getUserId(email);
+            c = DbDataSource.getConnection();
+
+            String q = "UPDATE review (rating) values (?) WHERE movie_id=? AND user_id=?;";
+            s = c.prepareStatement(q);
+            s.setFloat(1, star);
+            s.setInt(2, movieId);
+            s.setInt(3, userId);
+
+            s.executeUpdate();
+
+            try {
+                MovieDb.updateRating(movieId);
+            } catch (Exception e){}
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return;
+	}
+
+    /**
+     * 
+     * @param email the users email
+     * @param movieId the movie id
+     * @param comment empty string if no comment to insert i.e. ""
+     * @throws SQLException if error occurs in database
+     */
+	public static void updateReview(String email, int movieId, String comment) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        try {
+            int userId = UtilDB.getUserId(email);
+            c = DbDataSource.getConnection();
+
+            String q = "UPDATE review (review) values (?) WHERE movie_id=? AND user_id=?;";
+            s = c.prepareStatement(q);
+            s.setString(1, comment);
+            s.setInt(2, movieId);
+            s.setInt(3, userId);
+
+            s.executeUpdate();
+
+            try {
+                MovieDb.updateRating(movieId);
+            } catch (Exception e){}
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } catch (NotFoundException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return;
+    }
 
     /**
      * Check if the review exists for email movieId combo
