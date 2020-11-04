@@ -68,7 +68,7 @@ export default function Account() {
               <h1>Welcome User</h1>
             </header>
             <Container component="main" maxWidth="lg">
-              <Dashboard dashboardData={dashboardData}/>
+              <Dashboard dashboardData={dashboardData} reloadDashboardData={fetchDashboardData.run}/>
             </Container>
           </React.Fragment>
         )}
@@ -125,27 +125,37 @@ function Dashboard(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
+  const toggleTab = (event, newValue) => {
     setValue(newValue);
   };
 
   const { wishlist, watchlist, recommendations, reviews } = props.dashboardData;
 
-    const Wishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
-      return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
-    });
+  const Wishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
+    return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+  });
 
-    const Watchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
-      return <WatchlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
-    });
+  const Watchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
+    return <WatchlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+  });
 
-    const Recommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
-      return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
-    });
+  const Recommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
+    return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+  });
 
-    const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, userId }) => {
-      return <PrivateReview title={movieName} text={comment} rating={rating} postDate={post_date} user={userId} movieId={movieId}/>;
-    });
+  const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, userId }) => {
+
+
+    return <PrivateReview 
+      title={movieName}
+      text={comment}
+      rating={rating}
+      postDate={post_date}
+      user={userId}
+      movieId={movieId}
+      onChange={props.reloadDashboardData}
+    />;
+  });
 
 
   return (
@@ -153,7 +163,7 @@ function Dashboard(props) {
       <AppBar position="static" color="default">
         <Tabs
           value={value}
-          onChange={handleChange}
+          onChange={toggleTab}
           variant="fullWidth"
           indicatorColor="primary"
           textColor="primary"
