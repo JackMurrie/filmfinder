@@ -107,7 +107,7 @@ export default function Header(props) {
     navRef.current = navBackground
     useEffect(() => {
         const handleScroll = () => {
-            const show = window.scrollY > 200
+            const show = window.scrollY > 100
             if (show) {
                 setNavBackground('primary')
             } else {

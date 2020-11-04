@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
+    backgroundColor: "#505050",
   },
   fixedHeight: {
     height: 770,
@@ -72,6 +73,13 @@ const useStyles = makeStyles((theme) => ({
   },
   flexGrow: {
     flexGrow: 1,
+  },
+  background: {
+    backgroundColor: "#282828",
+  },
+  largeIcon: {
+    width: 40,
+    height: 40,
   },
 }));
 
@@ -186,6 +194,7 @@ export default function Movie() {
   return (
     <React.Fragment>
       <CssBaseline />
+      <div className={classes.background}>
       <Header />
       <IfFulfilled state={movieData}>
         { ({ movie, reviews }) => 
@@ -209,9 +218,7 @@ export default function Movie() {
                     <MoviePoster movie={movie} />
                     <div className="title">
                       <FormControlLabel
-                        control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
-                        label="Wishlist"
-                        labelPlacement="start"
+                        control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
                       />
                     </div>
                   </Paper>
@@ -258,18 +265,19 @@ export default function Movie() {
           </div>
         }
       </IfFulfilled>
+      </div>
     </React.Fragment>
   );
 }
 
 function MoviePoster(props) {
   return (
-    <Card style={{width: 350, margin: 20}}>
+    <Card style={{width: 350, margin: 20, backgroundColor: "#282828"}}>
       <CardActionArea>
         <CardMedia style={{height: 500}} image={props.movie.imageUrl}/>
         <CardContent>
           <div className='title'>
-            <Box component="fieldset" mb={3} borderColor="transparent">
+            <Box component="fieldset" mb={-1} borderColor="transparent">
               <Rating name="read-only" precision={0.5} value={props.movie.rating} readOnly/>
             </Box>
             {props.movie.genres.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
@@ -320,7 +328,7 @@ function ReviewButton(props) {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={openReviewDialogBox}>
+      <Button variant="outlined" color="white" onClick={openReviewDialogBox}>
         Leave a Review
       </Button>
       <Dialog fullwidth open={open} onClose={closeReviewDialogBox} aria-labelledby="form-dialog-title">
