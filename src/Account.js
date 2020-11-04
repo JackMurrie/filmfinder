@@ -35,11 +35,14 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#282828", //theme.palette.background.paper,
   },
   right: {
     textAlign: "right",
-  }  
+  },
+  background: {
+    backgroundColor: "#282828",
+  },
 }));
   
 export default function Account() {
@@ -56,6 +59,7 @@ export default function Account() {
   return (
     <React.Fragment>
       <CssBaseline />
+      <div className={classes.background}>
       <IfFulfilled state={fetchDashboardData}>
         { dashboardData => (
           <React.Fragment>
@@ -79,6 +83,7 @@ export default function Account() {
           {/* TODO: Page to show/ go to if something went wrong or you're not logged in yet */}
         </React.Fragment>
       </IfRejected>
+      </div>
     </React.Fragment>
   );
 }
