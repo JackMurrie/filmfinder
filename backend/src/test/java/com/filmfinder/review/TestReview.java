@@ -91,5 +91,31 @@ public class TestReview {
             assertTrue(false);
         }
     }
+    @Test
+    public void testRatingOnEmpytReview() {
+        String review = "This is a comprehensive test review";
+        try {
+            int userId = 5;
+            String email = "asdf";
+            int movieId = 11;
+
+            // ReviewDB.removeReview(email, movieId);
+            // ReviewDB.removeReview(email, movieId2);
+
+            // testing no rating
+            // ReviewDB.removeReview(email, movieId);
+            // ReviewDB.removeReview(email, movieId2);
+
+            System.out.println("Starting tests");
+            ReviewDB.updateRating(email, movieId, (float)1.3);
+
+            Review r = ReviewDB.getReview(movieId, userId);
+            System.out.println(r);
+            assertEquals(r.getComment(), "");
+            assertTrue(r.getRating()>=0);
+        } catch (Exception e) {
+            
+        }
+    }
     
 }

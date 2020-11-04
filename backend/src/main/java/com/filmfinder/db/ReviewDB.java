@@ -69,7 +69,12 @@ public class ReviewDB {
         Connection c = null;
         PreparedStatement s = null;
         String reviewString = comment;
-        float insertStar = 0;
+        float insertStar;
+        if (star < 0) {
+            insertStar = 0;
+        } else {
+            insertStar = star;
+        }
         try {
             int userId = UtilDB.getUserId(email);
             c = DbDataSource.getConnection();
@@ -81,9 +86,7 @@ public class ReviewDB {
                 }
                 if (star < 0) {
                     insertStar = r.getRating();
-                } else {
-                    insertStar = star;
-                }
+                } 
             } catch (Exception e) {}
             String q = "REPLACE INTO review(movie_id, user_id, review, rating) values (?, ?, ?, ?);";
             s = c.prepareStatement(q);
