@@ -119,6 +119,12 @@ export default function Header(props) {
             document.removeEventListener('scroll', handleScroll)
         }
     }, [])
+
+    const avatar = (
+      <IconButton aria-label="account" href="/Account">
+        <PersonPinIcon style={{fill: "white"}}/>
+      </IconButton>
+    );
     
     return (
         <AppBar position="sticky" color={navRef.current} elevation={0}>
@@ -145,9 +151,7 @@ export default function Header(props) {
                     </form>
                 </div>
                 {headerButtons}
-                <IconButton aria-label="account" href="/Account">
-                  <PersonPinIcon style={{fill: "white"}}/>
-                </IconButton>
+                {props.isLoggedIn && avatar}
             </Toolbar>
          </AppBar>
     );
