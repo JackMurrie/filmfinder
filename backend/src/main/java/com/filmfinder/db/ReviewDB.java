@@ -79,17 +79,16 @@ public class ReviewDB {
 	public static void putReview(String email, int movieId, String comment, float star) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
-        String reviewString = "";
+        String reviewString = comment;
         try {
             int userId = UtilDB.getUserId(email);
             c = DbDataSource.getConnection();
             try {
                 Review r = getReview(movieId, userId);
                 String oldReview = r.getComment();
-                if (!oldReview.equals("")) {
+                if (!oldReview.equals("") && comment.equals("")) {
                     reviewString = oldReview;
                 }
-                reviewString = comment;
             } catch (Exception e) {}
             String q = "REPLACE INTO review(movie_id, user_id, review, rating) values (?, ?, ?, ?);";
             s = c.prepareStatement(q);
