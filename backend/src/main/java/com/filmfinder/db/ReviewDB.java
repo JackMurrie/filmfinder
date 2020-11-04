@@ -89,6 +89,7 @@ public class ReviewDB {
                 if (!oldReview.equals("")) {
                     reviewString = oldReview;
                 }
+                reviewString = comment;
             } catch (Exception e) {}
             String q = "REPLACE INTO review(movie_id, user_id, review, rating) values (?, ?, ?, ?);";
             s = c.prepareStatement(q);
