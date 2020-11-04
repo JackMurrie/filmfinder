@@ -1,6 +1,7 @@
 import Header from './components/Header';
 import MovieCard from './components/MovieCard';
 import WishlistItem from './components/WishlistItem';
+import WatchlistItem from './components/WatchlistItem';
 
 import './css/Account.css';
 
@@ -116,7 +117,7 @@ function TabButtons() {
 
   const displayWatchlist = ({ watchlist }) => {
     const componentWatchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
-      return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+      return <WatchlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
     });
     return componentWatchlist;
   };
