@@ -19,7 +19,7 @@ import com.filmfinder.templates.MovieIdTemplate;
 import com.filmfinder.movieLists.Watchlist;
 import com.filmfinder.db.UtilDB;
 
-@Path("user/")
+@Path("user/dashboard/")
 public class ResourceDashboard {
     
     @CookieParam("auth_token")
