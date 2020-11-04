@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header() {
+export default function Header(props) {
     const classes = useStyles();
     const [search, setSearch] = React.useState('');
     const history = useHistory();
@@ -83,12 +83,27 @@ export default function Header() {
       };
       history.push("/SearchResults", data);
     }; 
+
+    let headerButtons;
+    if (props.isLoggedIn) {
+      headerButtons = (
+        <Button href={`/Logout`} color="primary" variant="outlined" className={classes.link}>
+          Logout
+        </Button>
+      );
+    } else {
+      headerButtons = ['Login', 'Signup'].map(buttonName => (
+        <Button href={`/${buttonName}`} color="primary" variant="outlined" className={classes.link}>
+          {buttonName}
+        </Button>
+      ));
+    }
     
     return (
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
                 <Button href="/" color="primary" className={classes.link}>
-                    FilmFinder
+                  FilmFinder
                 </Button>
                 <div className={classes.toolbarTitle}></div>
                 <div className={classes.search}>
@@ -108,12 +123,7 @@ export default function Header() {
                       />
                     </form>
                 </div>
-                <Button href="/Login" color="primary" variant="outlined" className={classes.link}>
-                  Login
-                </Button>
-                <Button href="/SignUp" color="primary" variant="outlined" className={classes.link}>
-                  Sign Up
-                </Button>
+                {headerButtons}
                 <IconButton aria-label="account" color="inherit" href="/Account">
                   <PersonPinIcon />
                 </IconButton>
