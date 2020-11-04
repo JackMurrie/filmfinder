@@ -65,10 +65,11 @@ public class ReviewDB {
      * @param star negative value if no start given
      * @throws SQLException if error occurs in database
      */
-	public static void putReview(String email, int movieId, String comment, float star) throws SQLException {
+	private static void putReviewMaster(String email, int movieId, String comment, float star) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
         String reviewString = comment;
+        float insertStar = 0;
         try {
             int userId = UtilDB.getUserId(email);
             c = DbDataSource.getConnection();
@@ -78,13 +79,18 @@ public class ReviewDB {
                 if (!oldReview.equals("") && comment.equals("")) {
                     reviewString = oldReview;
                 }
+                if (star < 0) {
+                    insertStar = r.getRating();
+                } else {
+                    insertStar = star;
+                }
             } catch (Exception e) {}
             String q = "REPLACE INTO review(movie_id, user_id, review, rating) values (?, ?, ?, ?);";
             s = c.prepareStatement(q);
             s.setInt(1, movieId);
             s.setInt(2, userId);
             s.setString(3, reviewString);
-            s.setFloat(4, star);
+            s.setFloat(4, insertStar);
 
             s.executeUpdate();
 
@@ -117,38 +123,7 @@ public class ReviewDB {
      * @throws SQLException if error occurs in database
      */
 	public static void updateRating(String email, int movieId, float star) throws SQLException {
-        Connection c = null;
-        PreparedStatement s = null;
-        try {
-            int userId = UtilDB.getUserId(email);
-            c = DbDataSource.getConnection();
-
-            String q = "UPDATE review (rating) values (?) WHERE movie_id=? AND user_id=?;";
-            s = c.prepareStatement(q);
-            s.setFloat(1, star);
-            s.setInt(2, movieId);
-            s.setInt(3, userId);
-
-            s.executeUpdate();
-
-            try {
-                MovieDb.updateRating(movieId);
-            } catch (Exception e){}
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            throw e;
-        } catch (NotFoundException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (c != null) c.close();
-                if (s != null) s.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        return;
+        putReviewMaster(email, movieId, "", star);
 	}
 
     /**
@@ -159,39 +134,17 @@ public class ReviewDB {
      * @throws SQLException if error occurs in database
      */
 	public static void updateReview(String email, int movieId, String comment) throws SQLException {
-        Connection c = null;
-        PreparedStatement s = null;
-        try {
-            int userId = UtilDB.getUserId(email);
-            c = DbDataSource.getConnection();
-
-            String q = "UPDATE review (review) values (?) WHERE movie_id=? AND user_id=?;";
-            s = c.prepareStatement(q);
-            s.setString(1, comment);
-            s.setInt(2, movieId);
-            s.setInt(3, userId);
-
-            s.executeUpdate();
-
-            try {
-                MovieDb.updateRating(movieId);
-            } catch (Exception e){}
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            throw e;
-        } catch (NotFoundException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (c != null) c.close();
-                if (s != null) s.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        return;
+        putReviewMaster(email, movieId, comment, -1);
     }
+
+    public static void postRating(String email, int movieId, float star) throws SQLException {
+        putReviewMaster(email, movieId, "", star);
+	}
+
+    public static void postReview(String email, int movieId, String comment) throws SQLException {
+        putReviewMaster(email, movieId, comment, -1);
+    }
+
 
     /**
      * Check if the review exists for email movieId combo
