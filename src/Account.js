@@ -1,6 +1,8 @@
 import Header from './components/Header';
 import MovieCard from './components/MovieCard';
 import WishlistItem from './components/WishlistItem';
+import WatchlistItem from './components/WatchlistItem';
+import PrivateReview from './components/PrivateReview';
 
 import './css/Account.css';
 
@@ -116,7 +118,7 @@ function TabButtons() {
 
   const displayWatchlist = ({ watchlist }) => {
     const componentWatchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
-      return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+      return <WatchlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
     });
     return componentWatchlist;
   };
@@ -130,7 +132,7 @@ function TabButtons() {
 
   const displayReviews = ({ reviews }) => {
     const componentReviews = reviews.map(({ movieName, movieId, comment, rating, post_date, userId }) => {
-      return <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />;
+      return <PrivateReview title={movieName} text={comment} rating={rating} postDate={post_date} user={userId} movieId={movieId}/>;
     });
     return componentReviews;
   };

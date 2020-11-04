@@ -1,6 +1,7 @@
 import Header from './components/Header';
 import Drawer from './components/FilterDrawer';
 import MovieCard from './components/MovieCard';
+import './css/Home.css';
 
 import React, { useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,7 +16,7 @@ const useStyles = makeStyles({
     },
     center: {
         textAlign: "center",
-      }
+      },
 });
 
 export default function SearchResults() {
@@ -49,14 +50,14 @@ export default function SearchResults() {
             <Container component="main" maxWidth="lg">
                 <div className={classes.center}>
                     <h1>Results for "{title}"</h1>
-                    <h1>
+                    <div className={classes.right}>
+                        <Drawer title={title}/>
+                    </div>
+                    <div className="container">
                     <IfRejected state={state}>Error...</IfRejected>
                     <IfPending state={state}>Loading...</IfPending>
                     <IfFulfilled state={state}>{handleResults}</IfFulfilled>
-                    </h1>
-                </div>
-                <div className={classes.right}>
-                    <Drawer title={title}/>
+                    </div>
                 </div>
             </Container>
         </React.Fragment>

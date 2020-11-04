@@ -7,6 +7,7 @@ import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
+import Switch from '@material-ui/core/Switch';
 import { useAsync, useFetch, IfFulfilled } from 'react-async';
 
 const requestOptions = {
@@ -36,27 +37,27 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function WishlistItem(props) {
+export default function WatchlistItem(props) {
     const classes = useStyles();
 
-    const [wished, setWished] = useState(true);
+    const [watched, setWatched] = useState(true);
 
-    const updateWishlist = useFetch('/rest/user/wishlist', requestOptions, { defer: true });
+    const updateWatchlist = useFetch('/rest/user/watchedlist', requestOptions, { defer: true });
 
-    const toggleWishlist = (event) => {
-        if (wished) {
-          updateWishlist.run({
+    const toggleWatchlist = (event) => {
+        if (watched) {
+            updateWatchlist.run({
             method: 'DELETE',
             body: JSON.stringify({ movieId: props.movieId})
           });
         } else {
-          updateWishlist.run({
+            updateWatchlist.run({
             method: 'POST',
             body: JSON.stringify({ movieId: props.movieId})
           });
         };
     
-        setWished(wished => !wished);
+        setWatched(watched => !watched);
       };
 
     return (
@@ -65,9 +66,7 @@ export default function WishlistItem(props) {
           title={<Link href={`/Movie/${props.movieId}`} color="primary" className={classes.link} style={{ fontSize: '30px' }}> {props.title} </Link>}
           action={
             <FormControlLabel
-                control={<Checkbox checked={wished} 
-                onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} 
-                checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
+                control={<Switch checked={watched} onChange={toggleWatchlist} name="seen" color="primary"/>}
             />
           }>
           </CardHeader>
