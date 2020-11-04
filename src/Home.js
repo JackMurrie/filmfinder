@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
       listStyle: 'none',
     },
   },
+  background: {
+    backgroundColor: "	#282828",
+  }
 }));
 
 
@@ -29,6 +32,7 @@ export default function Home() {
     <React.Fragment>
       <CssBaseline />
       <Header/ >
+      <div className={classes.background}>
         <header className="App-header">
           <h1>FilmFinder</h1>
           <Button href="/SignUp" color="white" variant="contained">
@@ -64,6 +68,7 @@ export default function Home() {
           </Async.Rejected>
         </Async>
       </Container>
+      </div>
     </React.Fragment>
   );
 }

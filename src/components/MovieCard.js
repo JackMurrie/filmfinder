@@ -5,7 +5,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
-
+import Typography from '@material-ui/core/Typography';
+import '../css/Home.css';
 import React from 'react';
 import { useHistory } from "react-router-dom";
 
@@ -23,14 +24,19 @@ export default function MovieCard(props) {
   }; 
 
   return (
-    <Card style={{width: 268, margin: 20}}>
+    <Card style={{width: 268, margin: 20, backgroundColor: "#505050"}}>
       <CardActionArea onClick = {handleClick}>
         <CardMedia style={{height: 320}} image={props.imageUrl}/>
         <CardContent>
           <div className='title'>
-            <Box component="fieldset" mb={3} borderColor="transparent">
+            <Box component="fieldset" mb={-2} borderColor="transparent">
               <Rating name="read-only" precision={0.5} value={4.5} readOnly size="large"/>
             </Box>
+          </div>
+          <div className="text">
+              <Typography color="inherit" variant="body1">
+                {props.title}
+              </Typography>
           </div>
         </CardContent>
       </CardActionArea>
