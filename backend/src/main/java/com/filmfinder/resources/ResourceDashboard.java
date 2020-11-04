@@ -19,18 +19,38 @@ import com.filmfinder.templates.MovieIdTemplate;
 import com.filmfinder.movieLists.Watchlist;
 import com.filmfinder.db.UtilDB;
 
-@Path("user/dashboard/")
+@Path("user/")
 public class ResourceDashboard {
     
     @CookieParam("auth_token")
     private String token;
 
     @GET
+    @Path("dashboard")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserDashboard() {
         int userId;
         try {
             userId = UtilDB.getUserId(CredentialHandler.decodeToken(token));
+        } catch (Exception e) {
+            return Response.status(400).entity("invalid token").build();
+        }
+        
+        try {
+            Dashboard d = new Dashboard(userId);
+            return Response.status(200).entity(d.toJson()).build();
+        } catch (Exception e) {
+            return Response.status(400).entity("Could not get dashboard data\n").build();
+        }
+    }
+
+    @GET
+    @Path("{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAnotherUserDashboard(@PathParam("userId") int userId) {
+        
+        try {
+            CredentialHandler.decodeToken(token);
         } catch (Exception e) {
             return Response.status(400).entity("invalid token").build();
         }
