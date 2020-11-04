@@ -25,6 +25,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import ThumbUp from '@material-ui/icons/ThumbUp';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import Box from '@material-ui/core/Box';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -51,6 +52,10 @@ const useStyles = makeStyles((theme) => ({
 export default function PublicProfile() {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const location = useLocation();
+    const userId = parseInt(location.pathname.split('/').pop(), 10);
+
+    console.log(userId);
 
     const [state, setState] = React.useState({
         following: false,
