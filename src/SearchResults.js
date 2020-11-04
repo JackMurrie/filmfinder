@@ -16,6 +16,10 @@ const useStyles = makeStyles({
     },
     center: {
         textAlign: "center",
+        color: "white",
+      },
+    background: {
+        backgroundColor: "	#282828",
       },
 });
 
@@ -46,6 +50,7 @@ export default function SearchResults() {
     return (
         <React.Fragment>
             <CssBaseline />
+            <div className={classes.background}>
             <Header />
             <Container component="main" maxWidth="lg">
                 <div className={classes.center}>
@@ -60,6 +65,7 @@ export default function SearchResults() {
                     </div>
                 </div>
             </Container>
+            </div>
         </React.Fragment>
     )
 }

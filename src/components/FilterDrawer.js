@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
     fullList: {
         width: 'auto',
     },
+    text: {
+      color:"white",
+    }
 }));
 
 const WhiteCheckbox = withStyles({
@@ -219,7 +222,7 @@ export default function Drawer(props) {
   
     return (
           <React.Fragment key={'right'}>
-            <Button onClick={toggleDrawer('right', true)}>{'Filter'}</Button>
+            <Button className={classes.text} onClick={toggleDrawer('right', true)}>{'Filter'} </Button>
             <SwipeableDrawer
               anchor={'right'}
               open={state['right']}
