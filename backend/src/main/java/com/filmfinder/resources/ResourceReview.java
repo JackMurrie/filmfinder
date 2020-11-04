@@ -36,7 +36,7 @@ public class ResourceReview {
         String comment = review.getComment();
         try {
             if (!ReviewDB.exists(email, movieId)) {
-                ReviewDB.putReview(email, movieId, comment);
+                ReviewDB.postReview(email, movieId, comment);
                 return Response.status(200).entity("Review added").build();     
             } else {
                 return Response.status(400).entity("Review already exists").build();     
@@ -62,7 +62,7 @@ public class ResourceReview {
         
         try {
             if (ReviewDB.exists(email, movieId)) {
-                ReviewDB.editReview(email, movieId, comment);
+                ReviewDB.updateReview(email, movieId, comment);
                 return Response.status(200).entity("Review edited").build();     
             } else {
                 return Response.status(400).entity("Review does not exist").build();     

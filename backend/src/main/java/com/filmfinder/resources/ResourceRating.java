@@ -33,10 +33,10 @@ public class ResourceRating {
             return Response.status(400).entity("invalid token.").build();
         }
         
-        double star = rating.getRating();
+        float star = rating.getRating();
         try {
             if (!ReviewDB.exists(email, movieId)) {
-                ReviewDB.putRating(email, movieId, star);
+                ReviewDB.postRating(email, movieId, star);
                 return Response.status(200).entity("Star rating added").build();     
             } else {
                 return Response.status(400).entity("Star rating already exists").build();     
@@ -58,11 +58,11 @@ public class ResourceRating {
             return Response.status(400).entity("invalid token.").build();
         }
 
-        double star = rating.getRating();
+        float star = rating.getRating();
         
         try {
             if (ReviewDB.exists(email, movieId)) {
-                ReviewDB.editRating(email, movieId, comment, star);
+                ReviewDB.updateRating(email, movieId, star);
                 return Response.status(200).entity("Star rating edited").build();     
             } else {
                 return Response.status(400).entity("Star rating does not exist").build();     
@@ -85,7 +85,7 @@ public class ResourceRating {
 
         try {
             if (ReviewDB.exists(email, movieId)) {
-                ReviewDB.removeRating(email, movieId);
+                ReviewDB.removeReview(email, movieId);
                 return Response.status(200).entity("Star rating removed.").build();
             } else {
                 return Response.status(400).entity("Star rating does not exist").build();     

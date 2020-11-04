@@ -5,13 +5,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class RatingTemplate {
     
-    private double rating;
+    private float rating;
 
-    public double getRating() {
+    public float getRating() {
         return this.rating;
     }
 
-    public void setRating(double rating) {
-        this.rating = rating;
+    public void setRating(float rating) {
+        if (rating > 5) {
+            this.rating = 5;
+        } else if (rating < 0) {
+            this.rating = 0;
+        } else {
+            this.rating = rating;
+        }
     }
 }
