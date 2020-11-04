@@ -45,7 +45,7 @@ function App() {
             <Route path="/Account">
                 <Account />
             </Route>
-            <Route path="/PublicProfile">
+            <Route exact path="/user/:userId">
                 <PublicProfile />
             </Route>
             <Route path="/SearchResults">

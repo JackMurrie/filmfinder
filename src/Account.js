@@ -23,7 +23,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
-import PublicReview from './components/PublicReview';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -36,26 +35,55 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#282828", //theme.palette.background.paper,
   },
   right: {
     textAlign: "right",
-  }  
+  },
+  background: {
+    backgroundColor: "#282828",
+  },
 }));
   
 export default function Account() {
   const classes = useStyles();
 
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' },
+  };
+
+  const fetchDashboardData = useFetch('/rest/user', requestOptions, {defer: true});
+  useEffect(fetchDashboardData.run, []);
+  
   return (
     <React.Fragment>
       <CssBaseline />
-        <Header />
-        <header className="Account-header">
-          <h1>Welcome User</h1>
-        </header>
-      <Container component="main" maxWidth="lg">
-        <TabButtons />
-      </Container>
+      <div className={classes.background}>
+      <IfFulfilled state={fetchDashboardData}>
+        { dashboardData => (
+          <React.Fragment>
+            <Header isLoggedIn={true}/>
+            <header className="Account-header">
+              <h1>Welcome User</h1>
+            </header>
+            <Container component="main" maxWidth="lg">
+              <Dashboard dashboardData={dashboardData}/>
+            </Container>
+          </React.Fragment>
+        )}
+      </IfFulfilled>
+      <IfPending state={fetchDashboardData}>
+        {/* TODO: Put loading screen elements here */}
+        Loading...
+      </IfPending>
+      <IfRejected state={fetchDashboardData}>
+        <React.Fragment>
+          <Header isLoggedIn={false}/>
+          {/* TODO: Page to show/ go to if something went wrong or you're not logged in yet */}
+        </React.Fragment>
+      </IfRejected>
+      </div>
     </React.Fragment>
   );
 }
@@ -93,7 +121,7 @@ function a11yProps(index) {
   };
 }
 
-function TabButtons() {
+function Dashboard(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -101,41 +129,23 @@ function TabButtons() {
     setValue(newValue);
   };
 
-  const requestOptions = {
-    method: 'GET',
-    headers: { 'Accept': 'application/json' },
-  };
+  const { wishlist, watchlist, recommendations, reviews } = props.dashboardData;
 
-  const dashboardData = useFetch('/rest/user', requestOptions, {defer: true});
-  useEffect(dashboardData.run, []);
-
-  const displayWishlist = ({ wishlist }) => {
-    const componentWishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
+    const Wishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
       return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
     });
-    return componentWishlist;
-  };
 
-  const displayWatchlist = ({ watchlist }) => {
-    const componentWatchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
+    const Watchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
       return <WatchlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
     });
-    return componentWatchlist;
-  };
 
-  const displayRecommendations = ({ recommendations }) => {
-    const componentRecommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
+    const Recommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
       return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
     });
-    return componentRecommendations;
-  };
 
-  const displayReviews = ({ reviews }) => {
-    const componentReviews = reviews.map(({ movieName, movieId, comment, rating, post_date, userId }) => {
+    const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, userId }) => {
       return <PrivateReview title={movieName} text={comment} rating={rating} postDate={post_date} user={userId} movieId={movieId}/>;
     });
-    return componentReviews;
-  };
 
 
   return (
@@ -158,23 +168,16 @@ function TabButtons() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <IfRejected state={dashboardData}>No results found</IfRejected>
-        <IfPending state={dashboardData}>Loading...</IfPending>
-        <IfFulfilled state={dashboardData}>{displayWishlist}</IfFulfilled>
+        {Wishlist}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <IfRejected state={dashboardData}>No results found</IfRejected>
-        <IfPending state={dashboardData}>Loading...</IfPending>
-        <IfFulfilled state={dashboardData}>{displayRecommendations}</IfFulfilled>
+        {Recommendations}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <IfRejected state={dashboardData}>No results found</IfRejected>
-        <IfPending state={dashboardData}>Loading...</IfPending>
-        <IfFulfilled state={dashboardData}>{displayWatchlist}</IfFulfilled>
+        {Watchlist}
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <IfPending state={dashboardData}>Loading...</IfPending>
-        <IfFulfilled state={dashboardData}>{displayReviews}</IfFulfilled>
+        {Reviews}
       </TabPanel>
       <TabPanel value={value} index={4}>
         Account Settings

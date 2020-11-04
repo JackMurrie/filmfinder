@@ -1,4 +1,4 @@
-import Header from './components/Header';
+import StaticHeader from './components/StaticHeader';
 
 import React from 'react';
 import Button from '@material-ui/core/Button';
@@ -35,8 +35,8 @@ export default function SignUp() {
   
     return (
         <React.Fragment>
-            <Header/ >
-            <SignUpScreen/ >
+            <StaticHeader />
+            <SignUpScreen />
         </React.Fragment>    
 
     );

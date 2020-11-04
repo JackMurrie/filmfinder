@@ -36,7 +36,7 @@ export default function PrivateReview(props) {
   
     return (
         <Grid item xs={12}>
-            <Card style={{width: 1150, margin: 10}}>
+            <Card style={{width: 1150, margin: 10, backgroundColor: "DarkGrey"}}>
             <CardHeader
           title={<Link href={`/Movie/${props.movieId}`} color="primary" className={classes.link} style={{ fontSize: '30px' }}> {props.title} </Link>}
           action={
