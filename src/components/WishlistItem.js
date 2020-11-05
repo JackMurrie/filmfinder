@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Favorite from '@material-ui/icons/Favorite';
@@ -62,13 +60,14 @@ export default function WishlistItem(props) {
       };
 
     return (
-      <Paper style={{width: 1150, margin: 10, height: 50, backgroundColor: "DarkGrey"}}>
-            <Link href="/" color="primary" className={classes.link} style={{ fontSize: '17px' } }> {props.title} </Link>
+      <Paper style={{width: 1150, margin: 10, height: 60, backgroundColor: "DarkGrey"}}>
             <FormControlLabel
                 control={<Checkbox checked={wished} 
                 onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} 
                 checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
+                className={classes.link}
             />
+            <Link href="/" color="primary" className={classes.link} style={{ fontSize: '17px' } }> {props.title} </Link>
           </Paper>
     );
 }

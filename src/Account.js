@@ -42,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
   },
   background: {
     backgroundColor: "#282828",
+    height: "1000px",
+    overflow: "auto",
   },
 }));
   
@@ -65,7 +67,6 @@ export default function Account() {
           <React.Fragment>
             <Header isLoggedIn={true}/>
             <header className="Account-header">
-              <h1>Welcome User</h1>
             </header>
             <Container component="main" maxWidth="lg">
               <Dashboard dashboardData={dashboardData}/>
