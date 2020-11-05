@@ -67,7 +67,7 @@ export default function WishlistItem(props) {
                 checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
                 className={classes.link}
             />
-            <Link href="/" color="primary" className={classes.link} style={{ fontSize: '17px' } }> {props.title} </Link>
+            <Link href={`/Movie/${props.movieId}`} color="primary" className={classes.link} style={{ fontSize: '17px' } }> {props.title} </Link>
           </Paper>
     );
 }

@@ -64,7 +64,7 @@ export default function WatchlistItem(props) {
                 control={<Switch checked={watched} onChange={toggleWatchlist} name="seen" color="primary"/>}
                 className={classes.link}
             />
-            <Link href="/" color="primary" className={classes.link} style={{ fontSize: '17px' } }> {props.title} </Link>
+            <Link href={`/Movie/${props.movieId}`} color="primary" className={classes.link} style={{ fontSize: '17px' } }> {props.title} </Link>
         </Paper>
     );
 }
