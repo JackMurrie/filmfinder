@@ -43,8 +43,8 @@ export default function Home() {
             Sign Up
           </Button>
         </header>
-        <div className="text">
-          <h6>Trending</h6>
+        <div className="title">
+          <h2>Trending</h2>
         </div>
       {/* Display Movies */}
       <Container component="main" maxWidth="lg">
