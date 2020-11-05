@@ -24,7 +24,7 @@ export default function MovieCard(props) {
   }; 
 
   return (
-    <Card style={{width: 268, margin: 20, backgroundColor: "#505050"}}>
+    <Card style={{width: 268, margin: 20, backgroundColor: "#404040"}} elevation={24}>
       <CardActionArea onClick = {handleClick}>
         <CardMedia style={{height: 320}} image={props.imageUrl}/>
         <CardContent>

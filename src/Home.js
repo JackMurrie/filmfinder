@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   background: {
-    backgroundColor: "	#282828",
+    backgroundColor: "	#202020",
   },
   header: {
     backgroundColor: "black",
