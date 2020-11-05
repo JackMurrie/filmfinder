@@ -8,6 +8,7 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import { useAsync, useFetch, IfFulfilled } from 'react-async';
+import Paper from '@material-ui/core/Paper';
 
 const requestOptions = {
     method: 'GET',
@@ -29,10 +30,11 @@ const useStyles = makeStyles((theme) => ({
     },
     link: {
         margin: theme.spacing(1, 1.5),
+        color: "white",
     },
     largeIcon: {
-        width: 40,
-        height: 40,
+        width: 30,
+        height: 30,
     },
 }));
 
@@ -60,17 +62,13 @@ export default function WishlistItem(props) {
       };
 
     return (
-      <Card style={{width: 1150, margin: 10, backgroundColor: "DarkGrey"}}>
-          <CardHeader
-          title={<Link href={`/Movie/${props.movieId}`} color="primary" className={classes.link} style={{ fontSize: '30px' }}> {props.title} </Link>}
-          action={
+      <Paper style={{width: 1150, margin: 10, height: 50, backgroundColor: "DarkGrey"}}>
+            <Link href="/" color="primary" className={classes.link} style={{ fontSize: '17px' } }> {props.title} </Link>
             <FormControlLabel
                 control={<Checkbox checked={wished} 
                 onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} 
                 checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
             />
-          }>
-          </CardHeader>
-      </Card>
+          </Paper>
     );
 }
