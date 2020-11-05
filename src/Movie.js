@@ -220,23 +220,23 @@ export default function Movie() {
                       <FormControlLabel
                         control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
                       />
+                      <FormControlLabel
+                        control={<Switch checked={watched} onChange={toggleWatched} name="seen" color="primary"/>}
+                        label="Seen"
+                      />
                     </div>
                   </Paper>
                 </Grid>
                 {/* Information */}
                 <Grid item xs={8} >
                   <Paper className={fixedHeightPaper}>
-                    <Typography variant="h4">
-                      Movie Details
-                    </Typography>
-                    <Typography variant="body1" paragraph={true} >
-                      {movie.description}
-                    </Typography>
+                  <div className="heading">
+                    Movie Details
+                  </div>
+                  <div className="text">
+                    {movie.description}
+                  </div>
                     <div className="right">
-                      <FormControlLabel
-                        control={<Switch checked={watched} onChange={toggleWatched} name="seen" color="primary"/>}
-                        label="Seen"
-                      />
                       <ReviewButton movieId={movieId} rating={rating} setComment={setComment} hasReview={hasReview} reloadMovieData={movieData} />  
                     </div>
                   </Paper>
@@ -245,7 +245,6 @@ export default function Movie() {
                 <Container component="main" maxWidth="lg">
                   <Grid item xs={12}>
                     <Paper className={fixedHeightPaperReview} variant="outlined">
-                        <h1> Reviews </h1>
                         <Grid container spacing={1}>
                           {reviews.map(({ comment, rating, post_date, userId }) => 
                             <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />
@@ -257,7 +256,7 @@ export default function Movie() {
               </Grid>
             </Container>
 
-            <div className="text">
+            <div className="title">
               <h1>Similar Movies</h1>
             </div>
             <Container component="main" maxWidth="lg">   
