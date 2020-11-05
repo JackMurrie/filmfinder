@@ -33,10 +33,8 @@ export default function MovieCard(props) {
               <Rating name="read-only" precision={0.5} value={4.5} readOnly size="large"/>
             </Box>
           </div>
-          <div className="text">
-              <Typography color="inherit" variant="body1">
+          <div className="movieTitle">
                 {props.title}
-              </Typography>
           </div>
         </CardContent>
       </CardActionArea>

@@ -44,7 +44,7 @@ export default function Home() {
           </Button>
         </header>
         <div className="text">
-          <h1>Trending</h1>
+          <h6>Trending</h6>
         </div>
       {/* Display Movies */}
       <Container component="main" maxWidth="lg">
