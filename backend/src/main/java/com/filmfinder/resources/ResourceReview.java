@@ -11,6 +11,9 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
 
+import java.sql.SQLException;
+import javassist.NotFoundException;
+
 import com.filmfinder.auth.CredentialHandler;
 import com.filmfinder.db.ReviewDB;
 import com.filmfinder.templates.ReviewTemplate;
@@ -42,7 +45,13 @@ public class ResourceReview {
                 return Response.status(400).entity("Review already exists").build();     
             }
         } catch (Exception e) {
-            return Response.status(400).entity("Failed to add review").build();        
+            String msg = "Failed to add review";
+            if (e.getClass() == SQLException.class) {
+                msg = "SQL error";
+            } else if (e.getClass() == NotFoundException.class) {
+                msg = "Not found error";
+            }
+            return Response.status(400).entity(msg).build();        
         }
     }
 
@@ -68,7 +77,13 @@ public class ResourceReview {
                 return Response.status(400).entity("Review does not exist").build();     
             }
         } catch (Exception e) {
-            return Response.status(400).entity("Failed to edit review").build();     
+            String msg = "Failed to edit review";
+            if (e.getClass() == SQLException.class) {
+                msg = "SQL error";
+            } else if (e.getClass() == NotFoundException.class) {
+                msg = "Not found error";
+            }
+            return Response.status(400).entity(msg).build();       
         }
     }
 
@@ -90,7 +105,13 @@ public class ResourceReview {
                 return Response.status(400).entity("Review does not exist").build();     
             }
         } catch (Exception e) {
-            return Response.status(400).entity("Failed to remove review").build();     
+            String msg = "Failed to remove review";
+            if (e.getClass() == SQLException.class) {
+                msg = "SQL error";
+            } else if (e.getClass() == NotFoundException.class) {
+                msg = "Not found error";
+            }
+            return Response.status(400).entity(msg).build();         
         }        
     }
 
