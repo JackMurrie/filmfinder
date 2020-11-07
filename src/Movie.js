@@ -60,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
-    backgroundColor: "#505050",
   },
   fixedHeight: {
     height: 770,
@@ -73,9 +72,6 @@ const useStyles = makeStyles((theme) => ({
   },
   flexGrow: {
     flexGrow: 1,
-  },
-  background: {
-    backgroundColor: "#282828",
   },
   largeIcon: {
     width: 40,
@@ -273,7 +269,7 @@ function MoviePoster(props) {
   return (
     <Card style={{width: 350, margin: 20, backgroundColor: "#282828"}}>
       <CardActionArea>
-        <CardMedia style={{height: 500}} image={props.movie.imageUrl}/>
+        <CardMedia style={{height: 480}} image={props.movie.imageUrl}/>
         <CardContent>
           <div className='title'>
             <Box component="fieldset" mb={-1} borderColor="transparent">

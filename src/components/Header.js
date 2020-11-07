@@ -89,13 +89,13 @@ export default function Header(props) {
     let headerButtons;
     if (props.isLoggedIn) {
       headerButtons = (
-        <Button href={`/Logout`} color="primary" variant="outlined" className={classes.link}>
+        <Button href={`/Logout`} color="primary" className={classes.link}>
           Logout
         </Button>
       );
     } else {
       headerButtons = ['Login', 'Signup'].map(buttonName => (
-        <Button href={`/${buttonName}`} color="primary" variant="outlined" className={classes.link}>
+        <Button href={`/${buttonName}`} color="primary" className={classes.link}>
           {buttonName}
         </Button>
       ));

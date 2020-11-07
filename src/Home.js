@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   background: {
-    backgroundColor: "	#202020",
+    backgroundColor: theme.palette.background.default,
   },
   header: {
     backgroundColor: "black",

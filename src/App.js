@@ -13,10 +13,29 @@ import Account from './Account';
 import PublicProfile from './PublicProfile';
 import SearchResults from './SearchResults';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 function App() {
+
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+    const theme = React.useMemo(
+    () =>
+        createMuiTheme({
+        palette: {
+            type: 'dark',
+            secondary: {
+                main: "#aa647b",
+            }
+        },
+        }),
+    [prefersDarkMode],
+    );
+
   return (
     <Router>
+        <ThemeProvider theme={theme}>
         <Switch>
             <Route path="/Login">
                 <Login />
@@ -55,6 +74,7 @@ function App() {
                 <Home />
             </Route>
         </Switch>
+        </ThemeProvider>
     </Router>
   );
 }

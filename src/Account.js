@@ -35,15 +35,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     width: '100%',
-    backgroundColor: "#282828", //theme.palette.background.paper,
   },
   right: {
     textAlign: "right",
   },
   background: {
-    backgroundColor: "#282828",
-    height: "1000px",
-    overflow: "auto",
+    backgroundColor: "#aa647b"
   },
 }));
   
@@ -61,11 +58,12 @@ export default function Account() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <div className={classes.background}>
       <IfFulfilled state={fetchDashboardData}>
         { dashboardData => (
           <React.Fragment>
+            <div className={classes.background}>
             <Header isLoggedIn={true}/>
+            </div>
             <header className="Account-header">
             </header>
             <Container component="main" maxWidth="lg">
@@ -84,7 +82,6 @@ export default function Account() {
           {/* TODO: Page to show/ go to if something went wrong or you're not logged in yet */}
         </React.Fragment>
       </IfRejected>
-      </div>
     </React.Fragment>
   );
 }
@@ -156,8 +153,8 @@ function Dashboard(props) {
           value={value}
           onChange={handleChange}
           variant="fullWidth"
-          indicatorColor="primary"
-          textColor="primary"
+          indicatorColor="secondary"
+          textColor="secondary"
           aria-label="Buton Tabs"
         >
           <Tab label="Wishlist" icon={<FavoriteIcon />} {...a11yProps(1)} />

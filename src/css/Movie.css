@@ -2,7 +2,6 @@
     font-size: calc(6px + 2vmin);
     font-family: 'Montserrat', sans-serif;
     line-height: 2;
-    color: white;
   }
   
 .container {
@@ -13,7 +12,6 @@
 .title {
     text-align: center;
     font-size: calc(6px + 2vmin);
-    color: white;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -25,7 +23,6 @@
     font-size: calc(2px + 2vmin);
     font-family: 'Montserrat', sans-serif;
     line-height: 1.2;
-    color: white;
     text-align: left;
   }
 
@@ -33,6 +30,5 @@
     font-size: calc(4px + 2vmin);
     font-family: 'Montserrat', sans-serif;
     line-height: 1.2;
-    color: white;
     text-align: center;
   }
