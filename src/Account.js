@@ -5,6 +5,8 @@ import WatchlistItem from './components/WatchlistItem';
 import PrivateReview from './components/PrivateReview';
 import Footer from './components/Footer';
 import './css/Account.css';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
@@ -46,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
   background: {
     backgroundColor: "#aa647b"
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
   
 export default function Account() {
@@ -58,7 +64,7 @@ export default function Account() {
 
   const fetchDashboardData = useFetch('/rest/user', requestOptions, {defer: true});
   useEffect(fetchDashboardData.run, []);
-  
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -78,7 +84,10 @@ export default function Account() {
       </IfFulfilled>
       <IfPending state={fetchDashboardData}>
         {/* TODO: Put loading screen elements here */}
-        Loading...
+        load
+        <Backdrop className={classes.backdrop} open={true}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </IfPending>
       <IfRejected state={fetchDashboardData}>
         <React.Fragment>
