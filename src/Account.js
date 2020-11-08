@@ -3,11 +3,14 @@ import MovieCard from './components/MovieCard';
 import WishlistItem from './components/WishlistItem';
 import WatchlistItem from './components/WatchlistItem';
 import PrivateReview from './components/PrivateReview';
-
+import Footer from './components/Footer';
 import './css/Account.css';
 
 import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import LockIcon from '@material-ui/icons/Lock';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -21,6 +24,7 @@ import ThumbUp from '@material-ui/icons/ThumbUp';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
 import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 
@@ -82,6 +86,7 @@ export default function Account() {
           {/* TODO: Page to show/ go to if something went wrong or you're not logged in yet */}
         </React.Fragment>
       </IfRejected>
+      <Footer />
     </React.Fragment>
   );
 }
@@ -178,7 +183,16 @@ function Dashboard(props) {
         {Reviews}
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Account Settings
+        Delete Account 
+        <IconButton color="primary" component="span">
+              <DeleteIcon />
+        </IconButton>
+        <Divider />
+        Reset Password
+        <IconButton color="secondary" component="span" href="/"> 
+              <LockIcon />
+        </IconButton>
+        <Divider />
       </TabPanel>
     </div>
   );

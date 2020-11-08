@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(4),
     background: theme.palette.background.default,
-    color: theme.palette.contrastText
+    color: theme.palette.contrastText,
   },
   copyright: {
     marginTop: theme.spacing(2),
