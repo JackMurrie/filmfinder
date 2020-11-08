@@ -25,7 +25,7 @@ public class CredentialHandler {
     
     static {
         key = "SECRETSECRETSECRETSECRETSECRETSECRET".getBytes();
-        VALID_LOGIN_DURATION = 30;
+        VALID_LOGIN_DURATION = 60;
     }
 
     static public String authenticate(String firstName, String lastName, String email, String password) throws SQLException, NotFoundException, Exception {
