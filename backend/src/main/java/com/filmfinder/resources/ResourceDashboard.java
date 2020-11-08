@@ -13,9 +13,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.DELETE;
 
 import com.filmfinder.auth.CredentialHandler;
+import com.filmfinder.blacklist.Blacklist;
 import com.filmfinder.dashboard.Dashboard;
 import com.filmfinder.movieLists.Wishlist;
 import com.filmfinder.templates.MovieIdTemplate;
+import com.filmfinder.templates.UserIdTemplate;
 import com.filmfinder.movieLists.Watchlist;
 import com.filmfinder.db.UtilDB;
 
@@ -137,5 +139,38 @@ public class ResourceDashboard {
             return Response.status(400).entity("failed to delete from user watched list").build();
         }
     }
+
+    @POST
+    @Path("blacklist")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addToBlacklist(UserIdTemplate data) {
+
+        int userId = data.getUserId();
+        try {
+            Blacklist bl = new Blacklist(userId);
+            bl.add(userId);
+            bl.refresh();
+            return Response.status(200).entity("user blacklisted").build();
+        } catch (Exception e) {
+            return Response.status(400).entity("failed to blacklist user").build();
+        }
+    }
+
+    @DELETE
+    @Path("blacklist")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response removeFromBlacklist(UserIdTemplate data) {
+
+        int userId = data.getUserId();
+        try {
+            Blacklist bl = new Blacklist(userId);
+            bl.remove(userId);
+            bl.refresh();
+            return Response.status(200).entity("user unblacklisted").build();
+        } catch (Exception e) {
+            return Response.status(400).entity("failed to unblacklist user").build();
+        }
+    }
+
 
 }
