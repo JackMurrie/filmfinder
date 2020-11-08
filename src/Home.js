@@ -2,6 +2,7 @@ import './css/Home.css';
 import Header from './components/Header';
 import MovieCard from './components/MovieCard';
 import { getMovies } from './services/getMovies';
+import Footer from './components/Footer';
 
 import React from 'react';
 import Button from '@material-ui/core/Button';
@@ -89,7 +90,7 @@ export default function Home() {
           </Async.Rejected>
         </Async>
       </Container>
-
+      <Footer />
     </React.Fragment>
   );
 }

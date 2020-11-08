@@ -206,7 +206,7 @@ export default function Movie() {
               size="large" 
               onChange={changeRating}/>
             </Box>
-            <Container component="main" maxWidth="xl">
+            <Container component="main" maxWidth="lg">
               <Grid container spacing={3}>
                 {/* Movie Card */}
                 <Grid item>
@@ -224,7 +224,7 @@ export default function Movie() {
                   </Paper>
                 </Grid>
                 {/* Information */}
-                <Grid item xs={8} >
+                <Grid item xs={7} >
                   <Paper className={fixedHeightPaper}>
                   <div className="heading">
                     Movie Details
@@ -238,7 +238,7 @@ export default function Movie() {
                   </Paper>
                 </Grid>
                 {/* Reviews */}
-                <Container component="main" maxWidth="lg">
+                <Container component="main" maxWidth="md">
                   <Grid item xs={12}>
                     <Paper className={fixedHeightPaperReview} variant="outlined">
                         <Grid container spacing={1}>
