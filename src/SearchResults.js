@@ -1,11 +1,14 @@
 import Header from './components/Header';
 import Drawer from './components/FilterDrawer';
+import MovieCard from './components/MovieCard';
+import './css/Home.css';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useLocation } from "react-router-dom";
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
+import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 
 const useStyles = makeStyles({
     right: {
@@ -13,44 +16,56 @@ const useStyles = makeStyles({
     },
     center: {
         textAlign: "center",
-      }
+        color: "white",
+      },
+    background: {
+        backgroundColor: "	#282828",
+      },
 });
 
 export default function SearchResults() {
     const classes = useStyles();
     const location = useLocation();
     const title = location.state.title;
-    const filters = location.state.filters;
 
-    function handleGet() {
-        if (filters === undefined) {
-            console.log("GET movies titled ", title)
-        } 
-        else {
-            const data = {
-                title: title,
-                filters: filters,
-            }
-            console.log("GET movies titled ", title)
-            console.log("and filtered by: ", filters)
-        }
-    }
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({searchString: title})
+    };
+    const state = useFetch('/rest/search', requestOptions);
+
+    useEffect(state.run, [title]);
+
+    const handleResults = ({ movies }) => {
+        const searchResults = movies.map(({ movieId, name, year, imageUrl }) => {
+            return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>
+        });
+        return searchResults;
+    };
 
     return (
         <React.Fragment>
             <CssBaseline />
+            <div className={classes.background}>
             <Header />
             <Container component="main" maxWidth="lg">
                 <div className={classes.center}>
                     <h1>Results for "{title}"</h1>
+                    <div className={classes.right}>
+                        <Drawer title={title}/>
+                    </div>
+                    <div className="container">
+                    <IfRejected state={state}>Error...</IfRejected>
+                    <IfPending state={state}>Loading...</IfPending>
+                    <IfFulfilled state={state}>{handleResults}</IfFulfilled>
+                    </div>
                 </div>
-                <div className={classes.right}>
-                    <Drawer title={title}/>
-                </div>
-                {/* Call get from API */}
-                {handleGet()}
-                
             </Container>
+            </div>
         </React.Fragment>
     )
 }

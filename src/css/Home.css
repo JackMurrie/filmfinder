@@ -1,5 +1,17 @@
 .text {
   text-align: center;
+  color: white;
+  font-size: 3rem;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 0;
+}
+
+.movieTitle {
+  text-align: center;
+  color: white;
+  font-size: 1.2rem;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.2;
 }
 
 .container {
@@ -8,9 +20,10 @@
 }
 
 .App-header {
-  background-color: #455166;
+  background-image: url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80");
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  font-family: 'Montserrat', sans-serif;
 }

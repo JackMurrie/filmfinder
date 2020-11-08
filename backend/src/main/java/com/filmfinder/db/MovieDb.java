@@ -46,6 +46,34 @@ public class MovieDb {
         }
     }
 
+    public static void putMovie(int movieId, String name) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "INSERT INTO movie (id, name)" +
+                       "VALUES" +
+                       "(?, ?);";
+            s = c.prepareStatement(q);
+            s.setInt(1, movieId);
+            s.setString(2, name);
+
+            s.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return;
+    }
+
     public static void putGenre(String name, int movieId) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
@@ -262,7 +290,42 @@ public class MovieDb {
             s.setInt(1, movieId);
             s.setInt(2, movieId);
 
+            s.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+    }
+
+    // hey, sorry if i missed if there is something functionally identical to this !
+    //
+    public static ArrayList<Integer> getMovies() throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT id mId FROM movie";
+            s = c.prepareStatement(q);
+
             rs = s.executeQuery();
+            
+            while (rs.next()) {
+                list.add(rs.getInt("mId"));
+            };
+
+            return list;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());

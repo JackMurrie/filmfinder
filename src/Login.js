@@ -1,4 +1,4 @@
-import Header from './components/Header';
+import StaticHeader from './components/StaticHeader';
 
 import React from 'react';
 import Button from '@material-ui/core/Button';
@@ -38,7 +38,7 @@ export default function Login() {
   
     return (
         <React.Fragment>
-            <Header/ >
+            <StaticHeader />
             <LoginScreen/ >
         </React.Fragment>
         

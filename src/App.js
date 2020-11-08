@@ -27,7 +27,7 @@ function App() {
             <Route path="/AccountConf">
                 <AccountConf />
             </Route>
-            <Route path="/Movie">
+            <Route exact path="/Movie/:MovieID">
                 <Movie />
             </Route>
             <Route path="/ForgotPass">
@@ -45,7 +45,7 @@ function App() {
             <Route path="/Account">
                 <Account />
             </Route>
-            <Route path="/PublicProfile">
+            <Route exact path="/user/:userId">
                 <PublicProfile />
             </Route>
             <Route path="/SearchResults">

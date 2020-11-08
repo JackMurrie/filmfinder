@@ -1,10 +1,7 @@
-import MovieCard from './components/MovieCard';
 import Header from './components/Header';
 import PublicReview from './components/PublicReview'
 import './css/Movie.css';
-import { getMovies } from './services/getMovies';
 
-import React from 'react';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -33,259 +30,334 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Switch from '@material-ui/core/Switch';
-import Async from 'react-async';
-import { useLocation } from "react-router-dom";
+
+import React, { useEffect, useState } from 'react';
+import { useAsync, useFetch, IfFulfilled } from 'react-async';
+import { useHistory, useLocation } from 'react-router-dom';
+
+import _, { set } from 'lodash';
 
 
 const useStyles = makeStyles((theme) => ({
-    '@global': {
-      ul: {
-        margin: 0,
-        padding: 0,
-        listStyle: 'none',
-      },
+  '@global': {
+    ul: {
+      margin: 0,
+      padding: 0,
+      listStyle: 'none',
     },
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        '& > *': {
-          margin: theme.spacing(1),
-          width: theme.spacing(16),
-          height: theme.spacing(16),
-        },
-      },
-      paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        overflow: 'auto',
-        flexDirection: 'column',
-      },
-      fixedHeight: {
-        height: 770,
-      },
-      fixedHeightReviews: {
-        height: 500,
-      },
-      reviewPlace: {
-        flexGrow: 1,
-      },
-      flexGrow: {
-        flexGrow: 1,
-      },
-  }));
+  },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(1),
+      width: theme.spacing(16),
+      height: theme.spacing(16),
+    },
+  },
+  paper: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+    backgroundColor: "#505050",
+  },
+  fixedHeight: {
+    height: 770,
+  },
+  fixedHeightReviews: {
+    height: 500,
+  },
+  reviewPlace: {
+    flexGrow: 1,
+  },
+  flexGrow: {
+    flexGrow: 1,
+  },
+  background: {
+    backgroundColor: "#282828",
+  },
+  largeIcon: {
+    width: 40,
+    height: 40,
+  },
+}));
 
+const requestOptions = {
+  method: 'GET',
+  headers: { 
+    'Accept': 'application/json',
+    'Content-Type': 'application/json' 
+  }
+};
 
 export default function Movie() {
-    const classes = useStyles();
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    const fixedHeightPaperReview = clsx(classes.paper, classes.fixedHeightReviews);
-    const location = useLocation();
+  const classes = useStyles();
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const fixedHeightPaperReview = clsx(classes.paper, classes.fixedHeightReviews);
+  const location = useLocation();
+  const movieId = parseInt(location.pathname.split('/').pop(), 10);
 
-    const props = location.state;
 
-    {/* Call GET */} //data = GET(props.title)
-    {console.log("GET Movie Info: ", props.title)}
 
-    const [state, setState] = React.useState({
-      seen: false,
-      wishlist: false,
-    });
-  
-    const handleChange = (event) => {
-      setState({ ...state, [event.target.name]: event.target.checked });
+  const [watched, setWatched] = useState(false);
+  const [wished, setWished] = useState(false);
+  const [hasReview, setHasReview] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
 
-      {/* Call POST to API */}
-      const data = {
-        [event.target.name]: event.target.checked
-      };
-      {console.log("POST: ", data)}
+  const movieData = useFetch(`/rest/movies/${movieId}`, requestOptions, { defer: true });
+  useEffect(movieData.run, []);
+
+  const loadUserData = async () => {
+    const userDataResponse = await fetch('/rest/user', requestOptions);
+    const { reviews, watchlist, wishlist } = await userDataResponse.json();
+    const myReview = _.find(reviews, review => review.movieId === movieId);
+    if (myReview) {
+      setRating(myReview.rating);
+      setComment(myReview.comment);
+      setHasReview(true);
     };
 
-    const [rating, setRating] = React.useState(0); //React.useState(user.movie.rating);
-
-    const handleRatingChange = (event, newRating) => {
-      setRating(newRating);
-
-      {/* Call POST to API */}
-      const data = {
-        rating: newRating,
-      };
-      {console.log("POST Rating: ", data)}
+    const inWishlist = _.find(wishlist.movies, movie => movie.movieId === movieId);
+    if (inWishlist) {
+      setWished(true);
     };
 
-    return (
-      <React.Fragment>
-        <CssBaseline />
-            <Header />
+    const inWatchlist = _.find(watchlist.movies, movie => movie.movieId === movieId);
+    if (inWatchlist) {
+      setWatched(true);
+    };
+  };
+  const userData = useAsync({ deferFn: loadUserData });
+  useEffect(userData.run, []);
+
+  const updateWishlist = useFetch('/rest/user/wishlist', requestOptions, { defer: true });
+  const updateWatchlist = useFetch('/rest/user/watchedlist', requestOptions, { defer: true });
+  const updateRating = useFetch(`/rest/review/${movieId}`, requestOptions, { defer: true });
+
+
+  const toggleWishlist = (event) => {
+    if (wished) {
+      updateWishlist.run({
+        method: 'DELETE',
+        body: JSON.stringify({ movieId: movieId })
+      });
+    } else {
+      updateWishlist.run({
+        method: 'POST',
+        body: JSON.stringify({ movieId: movieId })
+      });
+    };
+
+    setWished(wished => !wished);
+  };
+
+  const toggleWatched = (event) => {
+    if (watched) {
+      updateWatchlist.run({
+        method: 'DELETE',
+        body: JSON.stringify({ movieId: movieId })
+      });
+    } else {
+      updateWatchlist.run({
+        method: 'POST',
+        body: JSON.stringify({ movieId: movieId })
+      });
+    };
+
+    setWatched(watched => !watched);
+  }
+
+  const changeRating = (event, newRating) => {
+    if (hasReview) {
+      updateRating.run({
+        method: 'PUT',
+        body: JSON.stringify({
+          comment: comment,
+          star: newRating
+        })
+      });
+    } else {
+      updateRating.run({
+        method: 'POST',
+        body: JSON.stringify({
+          comment: comment,
+          star: newRating
+        })
+      });
+    }
+
+    setRating(newRating);
+  };
+
+  return (
+    <React.Fragment>
+      <CssBaseline />
+      <div className={classes.background}>
+      <Header />
+      <IfFulfilled state={movieData}>
+        { ({ movie, reviews }) => 
+          <div>
             <div className="title">
-                <h1>{props.title}</h1>
+              <h1>{movie.name}</h1>
             </div>
             <Box className="title" component="fieldset" mb={3} borderColor="transparent">
-                <Rating 
-                name="rating" 
-                precision={0.5} 
-                value={rating} 
-                size="large" 
-                onChange={handleRatingChange}/>
+              <Rating 
+              name="rating" 
+              precision={0.5} 
+              value={rating} 
+              size="large" 
+              onChange={changeRating}/>
             </Box>
-            
             <Container component="main" maxWidth="xl">
-                <Grid container spacing={3}>
-                    {/* Movie Card */}
-                    <Grid item xs={2.5}>
-                        <Paper className={fixedHeightPaper}>
-                            <LargeMovieCard  imageURL={props.imageURL}/>
-                            <div className="title">
-                              <FormControlLabel
-                                  control={<Checkbox checked={state.wishlist} onChange={handleChange} icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="wishlist" />}
-                                  label="Wishlist"
-                                  labelPlacement="start"
-                                />
-                              </div>
-                        </Paper>
-                    </Grid>
-                    {/* Information */}
-                    <Grid item xs={8} >
-                        <Paper className={fixedHeightPaper}>
-                            <h1> Movie Details </h1>
-                            <div className={classes.flexGrow}></div>
-                            <div className="right">
-                                <FormControlLabel
-                                  control={<Switch checked={state.seen} onChange={handleChange} name="seen" color="primary"/>}
-                                  label="Seen"
-                                 />
-                                <ReviewButton />  
-                            </div>
-                        </Paper>
-                    </Grid>
-                    {/* Reviews */}
-                    <Container component="main" maxWidth="lg">
-                      <Grid item xs={12}>
-                          <Paper className={fixedHeightPaperReview} variant="outlined">
-                              <h1> Reviews </h1>
-                              <Grid container spacing={1}>
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview /> 
-                                  <PublicReview />
-                              </Grid>
-                          </Paper>
-                       </Grid>
-                    </Container>
+              <Grid container spacing={3}>
+                {/* Movie Card */}
+                <Grid item>
+                  <Paper className={fixedHeightPaper}>
+                    <MoviePoster movie={movie} />
+                    <div className="title">
+                      <FormControlLabel
+                        control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
+                      />
+                      <FormControlLabel
+                        control={<Switch checked={watched} onChange={toggleWatched} name="seen" color="primary"/>}
+                        label="Seen"
+                      />
+                    </div>
+                  </Paper>
                 </Grid>
+                {/* Information */}
+                <Grid item xs={8} >
+                  <Paper className={fixedHeightPaper}>
+                  <div className="heading">
+                    Movie Details
+                  </div>
+                  <div className="text">
+                    {movie.description}
+                  </div>
+                    <div className="right">
+                      <ReviewButton movieId={movieId} rating={rating} setComment={setComment} hasReview={hasReview} reloadMovieData={movieData} />  
+                    </div>
+                  </Paper>
+                </Grid>
+                {/* Reviews */}
+                <Container component="main" maxWidth="lg">
+                  <Grid item xs={12}>
+                    <Paper className={fixedHeightPaperReview} variant="outlined">
+                        <Grid container spacing={1}>
+                          {reviews.map(({ comment, rating, post_date, userId }) => 
+                            <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />
+                          )}
+                        </Grid>
+                    </Paper>
+                  </Grid>
+                </Container>
+              </Grid>
             </Container>
 
-            <div className="text">
-                <h1>Similar Movies</h1>
+            <div className="title">
+              <h1>Similar Movies</h1>
             </div>
-            {/* Display Movies */}
             <Container component="main" maxWidth="lg">   
-                <Async promiseFn={getMovies}>
-                <Async.Loading>Loading...</Async.Loading>
-                <Async.Fulfilled>
-                    {data => {
-                    return(
-                            <div className="container">
-                              {data.movies.map((movie, index) => (
-                              <MovieCard 
-                              key={index} 
-                              title={movie.title}
-                              yearReleased={movie.yearReleased}
-                              imageURL={movie.imageURL}
-                              />
-                              ))} 
-                            </div> 
-                    )
-                    }}
-                </Async.Fulfilled>
-                <Async.Rejected>
-                    Something went wrong.
-                </Async.Rejected>
-                </Async>
             </Container>
-      </React.Fragment>
-    );
+          </div>
+        }
+      </IfFulfilled>
+      </div>
+    </React.Fragment>
+  );
 }
 
-function LargeMovieCard(props) {
-    return (
-      <Card style={{width: 350, margin: 20}}>
-        <CardActionArea href="/Movie">
-          <CardMedia style={{height: 500}} image={props.imageURL}/>
-          <CardContent>
-            <div className='title'>
-                <Box component="fieldset" mb={3} borderColor="transparent">
-                    <Rating name="read-only" precision={0.5} value={5} readOnly/>
-                </Box>
-                             
-                  <Chip label={'Drama'} style={{margin: 5}}/>
-                  <Chip label={'Adventure'} style={{margin: 5}}/>
-                  <Chip label={'Action'} style={{margin: 5}}/>
-            </div>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    );
-  }
+function MoviePoster(props) {
+  return (
+    <Card style={{width: 350, margin: 20, backgroundColor: "#282828"}}>
+      <CardActionArea>
+        <CardMedia style={{height: 500}} image={props.movie.imageUrl}/>
+        <CardContent>
+          <div className='title'>
+            <Box component="fieldset" mb={-1} borderColor="transparent">
+              <Rating name="read-only" precision={0.5} value={props.movie.rating} readOnly/>
+            </Box>
+            {props.movie.genres.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
+          </div>
+        </CardContent>
+      </CardActionArea>
+    </Card>
+  );
+}
 
-  function ReviewButton() {
-    const [open, setOpen] = React.useState(false);
-    const [review, setReview] = React.useState('');
-  
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
+function ReviewButton(props) {
+  const [open, setOpen] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const history = useHistory();
 
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      const data = {
-        new_review: review,
-      };
-      {/* Call POST to API */}
-      {console.log("POST Review: ", review)}
-    }; 
-  
-    return (
-      <div>
-        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-          Leave a Review
-        </Button>
-        <Dialog fullwidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-          <form onSubmit={handleSubmit}>
-            <DialogTitle id="form-dialog-title">Review</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Leave a review for The Lord of the Rings: The Fellowship of the Ring below 
-              </DialogContentText>
-              <TextField
-                autoFocus
-                multiline
-                rowsMax={10}
-                margin="dense"
-                id="review"
-                label=""
-                fullWidth
-                onChange={(event) => setReview(event.target.value)}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={handleClose} color="primary" type="submit">
-                Leave Review
-              </Button>
-            </DialogActions>
-          </form>
-        </Dialog>
-      </div>
-    );
-  }
+  const openReviewDialogBox = () => {
+    setOpen(true);
+  };
+
+  const closeReviewDialogBox = () => {
+    setOpen(false);
+  };
+
+  const updateReview = useFetch(`/rest/review/${props.movieId}`, requestOptions, { defer: true });
+
+  const submitReview = (event) => {
+    event.preventDefault();
+    if (props.hasReview) {
+      updateReview.run({
+        method: 'PUT',
+        body: JSON.stringify({
+          comment: newComment,
+          star: props.rating
+        })
+      });
+    } else {
+      updateReview.run({
+        method: 'POST',
+        body: JSON.stringify({
+          comment: newComment,
+          star: props.rating
+        })
+      });
+    }
+
+    props.reloadMovieData.run();
+  }; 
+
+  return (
+    <div>
+      <Button variant="outlined" color="white" onClick={openReviewDialogBox}>
+        Leave a Review
+      </Button>
+      <Dialog fullwidth open={open} onClose={closeReviewDialogBox} aria-labelledby="form-dialog-title">
+        <form onSubmit={submitReview}>
+          <DialogTitle id="form-dialog-title">Review</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Enter your review here...
+            </DialogContentText>
+            <TextField
+              autoFocus
+              multiline
+              rowsMax={10}
+              margin="dense"
+              id="review"
+              label=""
+              fullWidth
+              onChange={(event) => setNewComment(event.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeReviewDialogBox} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={closeReviewDialogBox} color="primary" type="submit">
+              Leave Review
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </div>
+  );
+}

@@ -19,6 +19,12 @@ const useStyles = makeStyles((theme) => ({
       listStyle: 'none',
     },
   },
+  background: {
+    backgroundColor: "	#202020",
+  },
+  header: {
+    backgroundColor: "black",
+  }
 }));
 
 
@@ -28,44 +34,46 @@ export default function Home() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Header/ >
+      <div className={classes.header}>
+      <Header />
+      <div className={classes.background}>
         <header className="App-header">
-            <h1>FilmFinder</h1>
-            <Button href="/SignUp" color="white" variant="contained">
-                Sign Up
+          <h1>FilmFinder</h1>
+          <Button href="/SignUp" color="white" variant="contained">
+            Sign Up
           </Button>
         </header>
-        <div className="text">
-                <h1>Trending</h1>
-            </div>
+        <div className="title">
+          <h2>Trending</h2>
+        </div>
       {/* Display Movies */}
       <Container component="main" maxWidth="lg">
-
-          <Async promiseFn={getMovies}>
-            <Async.Loading>Loading...</Async.Loading>
-            <Async.Fulfilled>
-              {data => {
-                return(
-                      <div className="container">
-                      {data.movies.map((movie, index) => (
-                        <MovieCard 
-                        key={index} 
-                        title={movie.title}
-                        yearReleased={movie.yearReleased}
-                        imageURL={movie.imageURL}
-                        />
-                      ))} 
-                      </div> 
-                )
-              }}
-            </Async.Fulfilled>
-            <Async.Rejected>
-              Something went wrong.
-            </Async.Rejected>
-          </Async>
-        
+        <Async promiseFn={getMovies}>
+          <Async.Loading>Loading...</Async.Loading>
+          <Async.Fulfilled>
+            {data => {
+              return(
+                <div className="container">
+                  {data.movies.map((movie, index) => (
+                    <MovieCard 
+                    key={index}
+                    movieId={index}
+                    title={movie.title}
+                    yearReleased={movie.yearReleased}
+                    imageUrl={movie.imageURL}
+                    />
+                  ))} 
+                </div> 
+              )
+            }}
+          </Async.Fulfilled>
+          <Async.Rejected>
+            Something went wrong.
+          </Async.Rejected>
+        </Async>
       </Container>
-
+      </div>
+      </div>
     </React.Fragment>
   );
 }

@@ -134,11 +134,7 @@ You will need `node` and `npm` installed globally on your machine.
  Visit https://www.npmjs.com/get-npm and click “Download Node.js and npm”. 
 
 Run:<br />
-`npm install`<br />
-`npm install @material-ui/core`<br />
-`npm install @material-ui/icons`<br />
-`npm install @material-ui/lab`<br />
-`npm install react-router-dom` <br />
+`npm ci`<br />
 
 To Start Server:
 

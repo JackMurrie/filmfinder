@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.DELETE;
 
 import com.filmfinder.auth.CredentialHandler;
 import com.filmfinder.dashboard.Dashboard;
@@ -18,19 +19,18 @@ import com.filmfinder.templates.MovieIdTemplate;
 import com.filmfinder.movieLists.Watchlist;
 import com.filmfinder.db.UtilDB;
 
-@Path("users/")
+@Path("user/")
 public class ResourceDashboard {
     
     @CookieParam("auth_token")
     private String token;
 
     @GET
-    @Path("{user_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserDashboard(@PathParam("user_id") int userId) {
-
+    public Response getUserDashboard() {
+        int userId;
         try {
-            CredentialHandler.decodeToken(token);
+            userId = UtilDB.getUserId(CredentialHandler.decodeToken(token));
         } catch (Exception e) {
             return Response.status(400).entity("invalid token").build();
         }
@@ -44,9 +44,9 @@ public class ResourceDashboard {
     }
 
     @POST
-    @Path("add_wishlist")
+    @Path("wishlist")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addWishlist(MovieIdTemplate data) {
+    public Response addToWishlist(MovieIdTemplate data) {
 
         String email = null;
         int movieId = data.getMovieId();
@@ -67,10 +67,34 @@ public class ResourceDashboard {
         }
     }
 
-    @POST
-    @Path("add_watchedlist")
+    @DELETE
+    @Path("wishlist")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addWatchedlist(MovieIdTemplate data) {
+    public Response removeFromWishList(MovieIdTemplate data) {
+        
+        int movieId = data.getMovieId();
+        int userId;
+        String email = null;
+        try {
+            email = CredentialHandler.decodeToken(token);
+            userId = UtilDB.getUserId(email);
+        } catch (Exception e) {
+            return Response.status(400).entity("invalid token").build();
+        }  
+
+        try {
+            Wishlist list = new Wishlist(userId);
+            list.deleteMovie(movieId);
+            return Response.status(200).entity("deleted from user wishlist.").build();
+        } catch (Exception e) {
+            return Response.status(400).entity("failed to delete from user wishlist").build();
+        }
+    }
+
+    @POST
+    @Path("watchedlist")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addToWatchedlist(MovieIdTemplate data) {
 
         String email = null;
         int movieId = data.getMovieId();
@@ -90,4 +114,28 @@ public class ResourceDashboard {
             return Response.status(400).entity("failed to add to watch history").build();
         }
     }
+    @DELETE
+    @Path("watchedlist")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response removeFromWatchedList(MovieIdTemplate data) {
+        
+        int movieId = data.getMovieId();
+        int userId;
+        String email = null;
+        try {
+            email = CredentialHandler.decodeToken(token);
+            userId = UtilDB.getUserId(email);
+        } catch (Exception e) {
+            return Response.status(400).entity("invalid token").build();
+        }  
+
+        try {
+            Watchlist list = new Watchlist(userId);
+            list.deleteMovie(movieId);
+            return Response.status(200).entity("deleted from user watched list.").build();
+        } catch (Exception e) {
+            return Response.status(400).entity("failed to delete from user watched list").build();
+        }
+    }
+
 }

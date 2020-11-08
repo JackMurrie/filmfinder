@@ -10,7 +10,7 @@ public class TestMoviePopulation {
         System.out.println("Testing get pop movie data");
         
         try {
-            PopMovieData target = PopMovieData.getPopMovieData(2);
+            PopMovieData target = PopMovieData.getPopMovieData(105800);
 
             System.out.println(target.toString());
         } catch (Exception e) {

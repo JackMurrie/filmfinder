@@ -2,7 +2,6 @@ package com.filmfinder.movie.movieCombo;
 
 import java.sql.SQLException;
 
-import com.filmfinder.db.ReviewDB;
 import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movie;
 import com.filmfinder.review.Reviews;
@@ -21,6 +20,6 @@ public class MovieCombo extends frontendObject {
 
     public MovieCombo(int movieId) throws NotFoundException, SQLException {
         movie = Movie.getMovie(movieId);
-        reviews = ReviewDB.getReviews(movieId);
+        reviews = Reviews.getReviewsByMovieId(movieId);
     }
 }
