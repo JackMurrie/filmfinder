@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     margin: theme.spacing(1, 1.5),
-    color: "white",
+    color: `${theme.palette.text.primary}`,
   },
   search: {
     position: 'relative',
@@ -69,7 +69,6 @@ const useStyles = makeStyles((theme) => ({
         width: '20ch',
       },
     },
-    color:"white",
   },
 }));
 
@@ -109,7 +108,7 @@ export default function Header(props) {
         const handleScroll = () => {
             const show = window.scrollY > 100
             if (show) {
-                setNavBackground('primary')
+                setNavBackground('secondary')
             } else {
                 setNavBackground('transparent')
             }
@@ -122,7 +121,7 @@ export default function Header(props) {
 
     const avatar = (
       <IconButton aria-label="account" href="/Account">
-        <PersonPinIcon style={{fill: "white"}}/>
+        <PersonPinIcon style={{fill: "primary"}}/>
       </IconButton>
     );
     

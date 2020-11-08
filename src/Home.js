@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     ul: {
       margin: 0,
       padding: 0,
-      listStyle: 'none',
+      listStyle: 'none', 
     },
   },
   background: {
@@ -24,7 +24,14 @@ const useStyles = makeStyles((theme) => ({
   },
   header: {
     backgroundColor: "black",
-  }
+  },
+  AppHeader: {
+    backgroundImage: "url(https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80)",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "calc(10px + 2vmin)",
+    fontFamily: ['Montserrat', "sans-serif"],
+  },
 }));
 
 
@@ -43,7 +50,7 @@ export default function Home() {
             Sign Up
           </Button>
         </header>
-        <div className="title">
+        <div class="title">
           <h2>Trending</h2>
         </div>
       {/* Display Movies */}
