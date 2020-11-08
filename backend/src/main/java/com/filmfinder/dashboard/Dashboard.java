@@ -31,8 +31,8 @@ public class Dashboard extends frontendObject {
     public Dashboard(int userId) throws NotFoundException, SQLException {
         watchlist = new Watchlist(userId);
         wishlist = new Wishlist(userId);
-        recommedations = new Movies();
-        reviews = Reviews.getReviews(userId);
+        recommendations = new Movies();
+        reviews = Reviews.getReviewsByUserId(userId);
         blacklisted = new Blacklist(userId);
         recommendations = new Movies();
     }
