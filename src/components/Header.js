@@ -9,6 +9,7 @@ import InputBase from '@material-ui/core/InputBase';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import IconButton from '@material-ui/core/IconButton';
 import { useHistory } from "react-router-dom";
+import { useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -99,7 +100,7 @@ export default function Header(props) {
         </Button>
       ));
     }
-
+    const theme = useTheme();
     //Scrollable Header
     const [navBackground, setNavBackground] = useState('transparent')
     const navRef = React.useRef()
