@@ -284,7 +284,7 @@ public class MovieDb {
         try {
             c = DbDataSource.getConnection();
             String q = "UPDATE movie " +
-                       "SET rating=(SELECT avg(rating) from review where movie_id=?) " +
+                       "SET rating=(SELECT IFNULL(avg(rating),0) from review where movie_id=?) " +
                        "WHERE id=?;";
             s = c.prepareStatement(q);
             s.setInt(1, movieId);
