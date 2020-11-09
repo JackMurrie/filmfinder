@@ -45,12 +45,16 @@ const useStyles = makeStyles((theme) => ({
   right: {
     textAlign: "right",
   },
-  background: {
-    backgroundColor: "#aa647b"
-  },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
+  },
+  image: {
+    backgroundImage: "url(https://images.unsplash.com/photo-1521967906867-14ec9d64bee8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80)",
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    textAlign: "center",
+    height: 400,
   },
 }));
   
@@ -71,11 +75,9 @@ export default function Account() {
       <IfFulfilled state={fetchDashboardData}>
         { dashboardData => (
           <React.Fragment>
-            <div className={classes.background}>
+            <div className={classes.image}>
             <Header isLoggedIn={true}/>
             </div>
-            <header className="Account-header">
-            </header>
             <Container component="main" maxWidth="lg">
               <Dashboard dashboardData={dashboardData}/>
             </Container>
@@ -84,7 +86,6 @@ export default function Account() {
       </IfFulfilled>
       <IfPending state={fetchDashboardData}>
         {/* TODO: Put loading screen elements here */}
-        load
         <Backdrop className={classes.backdrop} open={true}>
           <CircularProgress color="inherit" />
         </Backdrop>
@@ -193,12 +194,12 @@ function Dashboard(props) {
       </TabPanel>
       <TabPanel value={value} index={4}>
         Delete Account 
-        <IconButton color="primary" component="span">
+        <IconButton color="secondary" component="span">
               <DeleteIcon />
         </IconButton>
         <Divider />
         Reset Password
-        <IconButton color="secondary" component="span" href="/"> 
+        <IconButton color="primary" component="span" href="/"> 
               <LockIcon />
         </IconButton>
         <Divider />

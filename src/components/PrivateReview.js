@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
       right: {
         textAlign: 'right',
       },
+      title: {
+        color: theme.palette.text.primary,
+      }
     }));
 
 export default function PrivateReview(props) {
@@ -38,9 +41,9 @@ export default function PrivateReview(props) {
         <Grid item xs={12}>
             <Card style={{width: 1150, margin: 10, backgroundColor: "DarkGrey"}}>
             <CardHeader
-          title={<Link href={`/Movie/${props.movieId}`} color="primary" className={classes.link} style={{ fontSize: '30px' }}> {props.title} </Link>}
+          title={<Link href={`/Movie/${props.movieId}`} color="secondary" className={classes.title} style={{ fontSize: '30px' }}> {props.title} </Link>}
           action={
-            <IconButton color="primary" aria-label="upload picture" component="span">
+            <IconButton color="secondary" component="span">
                 <DeleteIcon />
             </IconButton>
           }>
@@ -48,7 +51,7 @@ export default function PrivateReview(props) {
           <CardContent>
               {props.text}
               <div className="right">
-                <IconButton color="primary" aria-label="upload picture" component="span">
+                <IconButton color="primary" component="span">
                     <EditIcon />
                 </IconButton>
               </div>
