@@ -25,7 +25,7 @@ export default function Footer() {
         &copy; Lol i dunno 2020 |{' '} CSE Capstone Project
       </Typography>
       <Typography variant="caption">
-        Powered by The Movie DB |{' '} This product uses the TMDb API but is not endorsed or certified by TMDb.
+        Powered by The Movie DB and Material-UI |{' '} This product uses the TMDb API but is not endorsed or certified by TMDb.
         <Paper style={{width: 268, margin: 20}}>
             <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_long_2-9665a76b1ae401a510ec1e0ca40ddcb3b0cfe45f1d51b77a308fea0845885648.svg" />
         </Paper>
