@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     textAlign: "center",
-    height: 900,
+    height: "100vh",
   },
   space: {
     lineHeight: 10,
