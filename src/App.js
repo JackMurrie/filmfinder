@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from "react";
 import './css/App.css';
 import Home from './Home';
 import Login from './Login';
@@ -18,20 +18,33 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 function App() {
 
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const [darkMode, setDarkMode] = useState(useMediaQuery('(prefers-color-scheme: dark)'));
 
     const theme = React.useMemo(
     () =>
         createMuiTheme({
         palette: {
-            type: 'dark',
+            type: darkMode ? 'dark' : 'light',
+            primary: {
+                main: '#42a5f5',
+              },
             secondary: {
                 main: "#aa647b",
             }
         },
         }),
-    [prefersDarkMode],
+    [darkMode],
     );
+
+    const handleThemeChange = useCallback( 
+        event => {
+          event.preventDefault();
+          setDarkMode(!darkMode);
+          console.log(theme.palette.type);
+        },
+        [darkMode]
+    );
+
 
   return (
     <Router>
@@ -71,7 +84,7 @@ function App() {
                 <SearchResults />
             </Route>
             <Route path="/">
-                <Home />
+                <Home darkMode={darkMode} handleThemeChange={handleThemeChange}/>
             </Route>
         </Switch>
         </ThemeProvider>

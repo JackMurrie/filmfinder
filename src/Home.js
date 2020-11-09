@@ -12,6 +12,8 @@ import Container from '@material-ui/core/Container';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Async from 'react-async';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -49,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Home() {
+export default function Home({darkMode, handleThemeChange}) {
   const classes = useStyles();
 
   return (
@@ -60,6 +62,11 @@ export default function Home() {
             <div className={classes.space}>
               <h1>FilmFinder</h1>
             </div>
+            <FormControlLabel
+              control={<Switch checked={darkMode} onChange={handleThemeChange} name="Dark Mode" color="primary"/>}
+              label="Dark Mode"
+              labelPlacement="bottom"
+              />
           </div>
         <div class="title">
           <h2>Trending</h2>

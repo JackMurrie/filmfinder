@@ -26,6 +26,7 @@ import ThumbUp from '@material-ui/icons/ThumbUp';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import Box from '@material-ui/core/Box';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -54,14 +55,13 @@ export default function PublicProfile() {
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const location = useLocation();
     const userId = parseInt(location.pathname.split('/').pop(), 10);
-
-    console.log(userId);
+    const theme = useTheme();
 
     const [state, setState] = React.useState({
         following: false,
       });
-    
-      const handleChange = (event) => {
+
+    const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
         {/* Call POST to API */}
         const data = {
@@ -141,13 +141,6 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
-function a11yProps(index) {
-    return {
-        id: `full-width-tab-${index}`,
-        'aria-controls': `full-width-tabpanel-${index}`,
-    };
-}
-
 function TabButtons() {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
@@ -163,13 +156,13 @@ function TabButtons() {
             value={value}
             onChange={handleChange}
             variant="fullWidth"
-            indicatorColor="primary"
-            textColor="primary"
+            indicatorColor="secondary"
+            textColor="secondary"
             aria-label="Buton Tabs"
           >
-            <Tab label="Wishlist" icon={<FavoriteIcon />} {...a11yProps(1)} />
-            <Tab label="Seen" icon={<VisibilityIcon />} {...a11yProps(2)} />
-            <Tab label="Reviews" icon={<RateReviewIcon />} {...a11yProps(3)} />
+            <Tab label="Wishlist" icon={<FavoriteIcon />}/>
+            <Tab label="Seen" icon={<VisibilityIcon />}/>
+            <Tab label="Reviews" icon={<RateReviewIcon />}/>
             
           </Tabs>
         </AppBar>
