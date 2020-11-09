@@ -165,6 +165,9 @@ export default function Header(props) {
                       />
                     </form>
                 </div>
+                <Button href="/FilmPoker" color="primary" variant="outlined" className={classes.link}>
+                  Play FilmPoker
+                </Button>
                 {headerButtons}
                 {props.isLoggedIn && avatar}
             </Toolbar>
