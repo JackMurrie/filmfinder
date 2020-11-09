@@ -12,6 +12,10 @@ import NewPassConf from './NewPassConf';
 import Account from './Account';
 import PublicProfile from './PublicProfile';
 import SearchResults from './SearchResults';
+import FilmPoker from './FilmPoker/FilmPoker';
+import CreateGame from './FilmPoker/CreateGame';
+import JoinGame from './FilmPoker/JoinGame';
+import PlayFilmPoker from './FilmPoker/PlayFilmPoker';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -83,7 +87,18 @@ function App() {
             <Route path="/SearchResults">
                 <SearchResults />
             </Route>          
-            
+            <Route path="/FilmPoker">
+                <FilmPoker />
+            </Route>
+            <Route path="/CreateGame">
+                <CreateGame />
+            </Route>
+            <Route path="/JoinGame">
+                <JoinGame />
+            </Route>
+            <Route exact path="/PlayFilmPoker/:GameID">
+                <PlayFilmPoker />
+            </Route>  
             <Route path="/">
                 <Home darkMode={darkMode} handleThemeChange={handleThemeChange}/>
             </Route>
