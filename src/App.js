@@ -82,7 +82,8 @@ function App() {
             </Route>
             <Route path="/SearchResults">
                 <SearchResults />
-            </Route>
+            </Route>          
+            
             <Route path="/">
                 <Home darkMode={darkMode} handleThemeChange={handleThemeChange}/>
             </Route>
