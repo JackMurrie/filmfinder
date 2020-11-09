@@ -1,8 +1,10 @@
 import Header from '../components/Header';
 import MovieCard from '../components/MovieCard';
 import Footer from '../components/Footer';
+import PersonCard from './components/personCard';
+import PokerCard from './components/pokerCard';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -10,15 +12,12 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useLocation } from "react-router-dom";
-import Paper from '@material-ui/core/Paper';
-import PersonIcon from '@material-ui/icons/Person';
 import Async from 'react-async';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import ThumbUp from '@material-ui/icons/ThumbUp';
 import Box from '@material-ui/core/Box';
@@ -27,6 +26,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
+import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -86,19 +88,30 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1)
     },
+    container: {
+      display: "flex",
+      flexWrap: "wrap",
+    },
+    right: {
+      textAlign: "right",
+    },
+    center: {
+        textAlign: "center",
+        alignItems: 'center',
+      },
 }));
 
 export default function PlayFilmPoker() {
     const classes = useStyles();
     const location = useLocation();
-    const GameID = location.state.GameID;
+    const GameID = parseInt(location.pathname.split('/').pop(), 10);
     const nickname = location.state.nickname;
 
     return (
         <React.Fragment>
         <CssBaseline />
             <Header />
-            <Container component="main" maxWidth="md" >
+            <Container component="main" maxWidth="lg" >
                     <Typography component="h1" variant="h4" className={classes.headText}>
                         Hello {nickname}! Invite others to join with your code: {GameID}
                     </Typography>
@@ -146,9 +159,29 @@ function a11yProps(index) {
 function TabButtons() {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
+    const [title, setSearch] = React.useState('');
 
     const handleChange = (event, newValue) => {
     setValue(newValue);
+    };
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({searchString: title})
+    };
+    const state = useFetch('/rest/search', requestOptions);
+
+    useEffect(state.run, [title]);
+
+    const handleResults = ({ movies }) => {
+        const searchResults = movies.map(({ movieId, name, year, imageUrl }) => {
+            return <PokerCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>
+        });
+        return searchResults;
     };
 
     return (
@@ -169,10 +202,13 @@ function TabButtons() {
         </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
+          <PokerCard title={"A Movie"}/>
         </TabPanel>
         <TabPanel value={value} index={1}>
+          <PokerCard title={"A Movie"}/>
         </TabPanel>
         <TabPanel value={value} index={2}>
+            <div className={classes.center}>
             <TextField
                 variant="outlined"
                 margin="normal"
@@ -181,6 +217,7 @@ function TabButtons() {
                 placeholder="Search Movies"
                 name="search"
                 size='large'
+                onChange={(event) => setSearch(event.target.value)}
                 InputProps={{
                     classes: {
                         input: classes.resize,
@@ -188,6 +225,14 @@ function TabButtons() {
                     }}
                     className={classes.textField}
             />
+            </div>
+              <div className={classes.container}>
+                <IfRejected state={state}>Error...</IfRejected>
+                <IfPending state={state}>
+                </IfPending>
+                <IfFulfilled state={state}>{handleResults}</IfFulfilled>
+              </div>
+
         </TabPanel>
     </div>
     );
@@ -228,14 +273,7 @@ function GetStepContent(step) {
         <React.Fragment>
         <Grid container spacing={3} >
             {names.map((name) => (
-                <Paper className={classes.paper}>
-                    <PersonIcon 
-                        className={classes.largeIcon}
-                    />
-                    <Typography component={'span'}>
-                        {name}
-                    </Typography>
-                </Paper>
+                <PersonCard name={name}/>
             ))}
         </Grid>
     </React.Fragment>
@@ -262,6 +300,32 @@ function HorizontalLinearStepper() {
 
   return (
     <div className={classes.root}>
+        <div>
+          <Button
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            className={classes.button}
+          >
+            Back
+          </Button>
+          {activeStep === steps.length - 1 ? 
+          (<Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            href="/"
+          >
+            Finish
+          </Button>
+          ) : (<Button
+            variant="contained"
+            color="primary"
+            onClick={handleNext}
+            className={classes.button}
+          >
+            Next
+          </Button>)}
+      </div>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps = {};
