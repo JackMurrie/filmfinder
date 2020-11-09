@@ -9,6 +9,7 @@ import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movies;
 import com.filmfinder.movieLists.Watchlist;
 import com.filmfinder.movieLists.Wishlist;
+import com.filmfinder.recommender.Recommender;
 import com.filmfinder.review.Reviews;
 import com.filmfinder.user.User;
 import com.filmfinder.user.Users;
@@ -34,7 +35,7 @@ public class Dashboard extends frontendObject {
         recommendations = new Movies();
         reviews = Reviews.getReviewsByUserId(userId);
         blacklisted = new Blacklist(userId);
-        recommendations = new Movies();
+        recommendations = Recommender.getRecommendedMovies(userId, 5);
     }
 
 }

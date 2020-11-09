@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.ws.rs.CookieParam;
 import com.filmfinder.db.UtilDB;
+import com.filmfinder.movie.Movies;
 import com.filmfinder.recommender.Recommender;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -30,15 +31,17 @@ public class ResourceRecommend {
         int userId = 1;
         try {
             //userId = UtilDB.getUserId(CredentialHandler.decodeToken(token));
+            Movies movies = Recommender.getRecommendedMovies(userId, 10);
+            return Response.status(200).entity(movies.toJson()).build();
         } catch (Exception e) {
             return Response.status(400).entity("invalid token").build();
         }
 
-        ArrayList<Integer> movieIds = Recommender.getRecommendedMovies(userId, 5);
-        JsonObject returnData = new JsonObject();
-        Gson gson = new Gson();
-        JsonArray jsonMatches = gson.toJsonTree(movieIds).getAsJsonArray();
-        returnData.add("recommended", jsonMatches);
-        return Response.status(200).entity(gson.toJson(returnData)).build();
+        // ArrayList<Integer> movieIds = Recommender.getRecommendedMovies(userId, 5);
+        // JsonObject returnData = new JsonObject();
+        // Gson gson = new Gson();
+        // JsonArray jsonMatches = gson.toJsonTree(movieIds).getAsJsonArray();
+        // returnData.add("recommended", jsonMatches);
+        // return Response.status(200).entity(movies.toJson()).build();
     }
 }

@@ -237,8 +237,7 @@ public class MovieDb {
     public static DBMovieData getDBMovie(int movieID) throws NotFoundException, SQLException {
         DBMovieData movie = new DBMovieData();
         if (!checkMovie(movieID)) throw new NotFoundException("Movie not found");
-        //TODO implement this function
-        movie.setAverageRating(0);
+        movie.setAverageRating(getRating(movieID));
         movie.setGenres(getGenres(movieID));
         movie.setDirectors(getDirectors(movieID));
         return movie;

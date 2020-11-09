@@ -8,6 +8,8 @@
 
 SELECT * from user;
 
+-- INSERT INTO user (first_name, last_name, email, hash) VALUES ("TMDb", "Bot", "tmdb@bot", 1);
+
 SELECT * from review;
 SELECT * FROM similarity;
 

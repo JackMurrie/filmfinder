@@ -94,11 +94,11 @@ public class Recommender {
 
     // TODO: Get user ratings on movies, find their most liked genre and suggest movies
     // of that genre and rating
-    public static ArrayList<Integer> getGenericRecommendations() {
-        return new ArrayList<Integer>();
+    public static Movies getGenericRecommendations() {
+        return new Movies();
     }
 
-    public static ArrayList<Integer> getRecommendedMovies(int userId, int count) throws SQLException,
+    public static Movies getRecommendedMovies(int userId, int count) throws SQLException,
             NotFoundException {
 
 
@@ -112,9 +112,9 @@ public class Recommender {
             predictedValues.add(new PredictedMoviePair(movieId, getPredictedValue(movieId, userId)));
         }
         predictedValues.sort(new SortByPredictedRating());
-        ArrayList<Integer> movies = new ArrayList<Integer>();
+        Movies movies = new Movies();
         for (int i = 0; i < Math.min(predictedValues.size(), count); i++) {
-            movies.add(predictedValues.get(i).getMovieId());
+            movies.add(Movie.getMovie(predictedValues.get(i).getMovieId()));
         }
         return movies;
     }
