@@ -43,7 +43,7 @@ export default function PokerCard(props) {
 
     const [added, setAdded] = useState(false);
 
-    const updateMovies = useFetch('/rest/', requestOptions, { defer: true });
+    const updateMovies = useFetch('/rest/', requestOptions, { defer: true }); // /rest/filmPoker/add remove selection
 
     const toggleAdded = (event) => {
         if (added) {
