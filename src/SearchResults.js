@@ -9,6 +9,8 @@ import { useLocation } from "react-router-dom";
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles({
     right: {
@@ -16,6 +18,9 @@ const useStyles = makeStyles({
     },
     center: {
         textAlign: "center",
+      },
+    background: {
+        backgroundColor: "	#282828",
       },
 });
 
@@ -55,7 +60,11 @@ export default function SearchResults() {
                     </div>
                     <div className="container">
                     <IfRejected state={state}>Error...</IfRejected>
-                    <IfPending state={state}>Loading...</IfPending>
+                    <IfPending state={state}>
+                        <Backdrop className={classes.backdrop} open={true}>
+                            <CircularProgress color="inherit" />
+                        </Backdrop>
+                    </IfPending>
                     <IfFulfilled state={state}>{handleResults}</IfFulfilled>
                     </div>
                 </div>

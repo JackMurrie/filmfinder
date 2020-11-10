@@ -21,5 +21,6 @@ public class MovieCombo extends frontendObject {
     public MovieCombo(int movieId) throws NotFoundException, SQLException {
         movie = Movie.getMovie(movieId);
         reviews = Reviews.getReviewsByMovieId(movieId);
+        rating = movie.getAverageRating();
     }
 }

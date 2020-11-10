@@ -17,6 +17,7 @@ import com.filmfinder.db.AuthDB;
 // Need to return/handle any of the above errors and pass correctly to front end
 /**
  * CredentialHandler class that autheticate and authorise users. 
+ * Token is saved and held in the browser as a Cookie.
  */
 public class CredentialHandler {
 
@@ -25,7 +26,7 @@ public class CredentialHandler {
     
     static {
         key = "SECRETSECRETSECRETSECRETSECRETSECRET".getBytes();
-        VALID_LOGIN_DURATION = 30;
+        VALID_LOGIN_DURATION = 60;
     }
 
     static public String authenticate(String firstName, String lastName, String email, String password) throws SQLException, NotFoundException, Exception {

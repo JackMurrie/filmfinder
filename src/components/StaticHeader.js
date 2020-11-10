@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,7 +9,6 @@ import InputBase from '@material-ui/core/InputBase';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import IconButton from '@material-ui/core/IconButton';
 import { useHistory } from "react-router-dom";
-import { useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -100,34 +99,15 @@ export default function Header(props) {
         </Button>
       ));
     }
-    const theme = useTheme();
-    //Scrollable Header
-    const [navBackground, setNavBackground] = useState('transparent')
-    const navRef = React.useRef()
-    navRef.current = navBackground
-    useEffect(() => {
-        const handleScroll = () => {
-            const show = window.scrollY > 100
-            if (show) {
-                setNavBackground('secondary')
-            } else {
-                setNavBackground('transparent')
-            }
-        }
-        document.addEventListener('scroll', handleScroll)
-        return () => {
-            document.removeEventListener('scroll', handleScroll)
-        }
-    }, [])
 
     const avatar = (
       <IconButton aria-label="account" href="/Account">
-        <PersonPinIcon style={{fill: "primary"}}/>
+        <PersonPinIcon style={{fill: "white"}}/>
       </IconButton>
     );
     
     return (
-        <AppBar position="sticky" color={navRef.current} elevation={0}>
+        <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
                 <Button href="/" color="primary" className={classes.link}>
                   FilmFinder
@@ -140,7 +120,7 @@ export default function Header(props) {
                     <form onSubmit={handleSearch}>
                       <InputBase
                         id="search"
-                        placeholder="Search…"
+                        placeholder="Search?"
                         onChange={(event) => setSearch(event.target.value)}
                         classes={{
                           root: classes.inputRoot,

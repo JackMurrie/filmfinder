@@ -3,11 +3,16 @@ import MovieCard from './components/MovieCard';
 import WishlistItem from './components/WishlistItem';
 import WatchlistItem from './components/WatchlistItem';
 import PrivateReview from './components/PrivateReview';
-
+import Footer from './components/Footer';
 import './css/Account.css';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import LockIcon from '@material-ui/icons/Lock';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -21,9 +26,9 @@ import ThumbUp from '@material-ui/icons/ThumbUp';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
 import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
-import PublicReview from './components/PublicReview';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -36,26 +41,69 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
   },
   right: {
     textAlign: "right",
-  }  
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+  image: {
+    backgroundImage: "url(https://images.unsplash.com/photo-1521967906867-14ec9d64bee8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80)",
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    textAlign: "center",
+    height: 400,
+  },
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
+    marginLeft: "10%",
+  }
 }));
   
 export default function Account() {
   const classes = useStyles();
 
+  const requestOptions = {
+    method: 'POST',
+    headers: { 
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ limit: 10 })
+  };
+
+  const fetchDashboardData = useFetch('/rest/user/dashboard', requestOptions, {defer: true});
+  useEffect(fetchDashboardData.run, []);
+
   return (
     <React.Fragment>
       <CssBaseline />
-        <Header />
-        <header className="Account-header">
-          <h1>Welcome User</h1>
-        </header>
-      <Container component="main" maxWidth="lg">
-        <TabButtons />
-      </Container>
+      <IfFulfilled state={fetchDashboardData}>
+        { dashboardData => (
+          <React.Fragment>
+            <div className={classes.image}>
+            <Header isLoggedIn={true}/>
+            </div>
+            <Container component="main" maxWidth="lg">
+              <Dashboard dashboardData={dashboardData} reloadDashboardData={fetchDashboardData.run}/>
+            </Container>
+          </React.Fragment>
+        )}
+      </IfFulfilled>
+      <IfPending state={fetchDashboardData}>
+        <Backdrop className={classes.backdrop} open={true}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </IfPending>
+      <IfRejected state={fetchDashboardData}>
+        <React.Fragment>
+          <Header isLoggedIn={false}/>
+        </React.Fragment>
+      </IfRejected>
+      <Footer />
     </React.Fragment>
   );
 }
@@ -93,49 +141,41 @@ function a11yProps(index) {
   };
 }
 
-function TabButtons() {
+function Dashboard(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
+  const toggleTab = (event, newValue) => {
     setValue(newValue);
   };
 
-  const requestOptions = {
-    method: 'GET',
-    headers: { 'Accept': 'application/json' },
-  };
+  const { wishlist, watchlist, recommendations, reviews } = props.dashboardData;
 
-  const dashboardData = useFetch('/rest/user/dashboard', requestOptions, {defer: true});
-  useEffect(dashboardData.run, []);
+  const Wishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
+    return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+  });
 
-  const displayWishlist = ({ wishlist }) => {
-    const componentWishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
-      return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
-    });
-    return componentWishlist;
-  };
+  const Watchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
+    return <WatchlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+  });
 
-  const displayWatchlist = ({ watchlist }) => {
-    const componentWatchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
-      return <WatchlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
-    });
-    return componentWatchlist;
-  };
+  const Recommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
+    return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+  });
 
-  const displayRecommendations = ({ recommendations }) => {
-    const componentRecommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
-      return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
-    });
-    return componentRecommendations;
-  };
+  const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, userId }) => {
 
-  const displayReviews = ({ reviews }) => {
-    const componentReviews = reviews.map(({ movieName, movieId, comment, rating, post_date, userId }) => {
-      return <PrivateReview title={movieName} text={comment} rating={rating} postDate={post_date} user={userId} movieId={movieId}/>;
-    });
-    return componentReviews;
-  };
+
+    return <PrivateReview 
+      title={movieName}
+      text={comment}
+      rating={rating}
+      postDate={post_date}
+      user={userId}
+      movieId={movieId}
+      onChange={props.reloadDashboardData}
+    />;
+  });
 
 
   return (
@@ -143,10 +183,10 @@ function TabButtons() {
       <AppBar position="static" color="default">
         <Tabs
           value={value}
-          onChange={handleChange}
+          onChange={toggleTab}
           variant="fullWidth"
-          indicatorColor="primary"
-          textColor="primary"
+          indicatorColor="secondary"
+          textColor="secondary"
           aria-label="Buton Tabs"
         >
           <Tab label="Wishlist" icon={<FavoriteIcon />} {...a11yProps(1)} />
@@ -158,26 +198,30 @@ function TabButtons() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <IfRejected state={dashboardData}>No results found</IfRejected>
-        <IfPending state={dashboardData}>Loading...</IfPending>
-        <IfFulfilled state={dashboardData}>{displayWishlist}</IfFulfilled>
+        {Wishlist}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <IfRejected state={dashboardData}>No results found</IfRejected>
-        <IfPending state={dashboardData}>Loading...</IfPending>
-        <IfFulfilled state={dashboardData}>{displayRecommendations}</IfFulfilled>
+        <div className={classes.container}>
+          {Recommendations}
+        </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <IfRejected state={dashboardData}>No results found</IfRejected>
-        <IfPending state={dashboardData}>Loading...</IfPending>
-        <IfFulfilled state={dashboardData}>{displayWatchlist}</IfFulfilled>
+        {Watchlist}
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <IfPending state={dashboardData}>Loading...</IfPending>
-        <IfFulfilled state={dashboardData}>{displayReviews}</IfFulfilled>
+        {Reviews}
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Account Settings
+        Delete Account 
+        <IconButton color="secondary" component="span">
+              <DeleteIcon />
+        </IconButton>
+        <Divider />
+        Reset Password
+        <IconButton color="primary" component="span" href="/"> 
+              <LockIcon />
+        </IconButton>
+        <Divider />
       </TabPanel>
     </div>
   );

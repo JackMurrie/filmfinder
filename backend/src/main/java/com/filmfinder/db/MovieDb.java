@@ -237,8 +237,7 @@ public class MovieDb {
     public static DBMovieData getDBMovie(int movieID) throws NotFoundException, SQLException {
         DBMovieData movie = new DBMovieData();
         if (!checkMovie(movieID)) throw new NotFoundException("Movie not found");
-        //TODO implement this function
-        movie.setAverageRating(0);
+        movie.setAverageRating(getRating(movieID));
         movie.setGenres(getGenres(movieID));
         movie.setDirectors(getDirectors(movieID));
         return movie;
@@ -284,7 +283,7 @@ public class MovieDb {
         try {
             c = DbDataSource.getConnection();
             String q = "UPDATE movie " +
-                       "SET rating=(SELECT avg(rating) from review where movie_id=?) " +
+                       "SET rating=(SELECT IFNULL(avg(rating),0) from review where movie_id=?) " +
                        "WHERE id=?;";
             s = c.prepareStatement(q);
             s.setInt(1, movieId);

@@ -32,7 +32,7 @@ export default function PublicReview(props) {
           <Paper className={classes.paper}>
             {props.text}
             <div className="right">
-            <Button href={`/user/${props.user}`} color="primary">
+            <Button href={`/user/${props.user}`} color="secondary">
                 TODO: Post date and user info
             </Button>
             </div>

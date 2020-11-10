@@ -12,6 +12,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import CardContent from '@material-ui/core/CardContent';
 
+import { useAsync } from 'react-async';
+import { CardActions } from '@material-ui/core';
+
 const useStyles = makeStyles((theme) => ({
     '@global': {
       ul: {
@@ -20,40 +23,60 @@ const useStyles = makeStyles((theme) => ({
         listStyle: 'none',
       },
     },
-      paper: {
-        padding: theme.spacing(2),
-        display: 'flex',
-        overflow: 'auto',
-        flexDirection: 'column',
-      },
-      right: {
-        textAlign: 'right',
-      },
-    }));
+    paper: {
+      padding: theme.spacing(2),
+      display: 'flex',
+      overflow: 'auto',
+      flexDirection: 'column',
+    },
+    right: {
+      textAlign: 'right',
+    },
+    title: {
+      color: theme.palette.text.primary
+    },
+    control: {
+      marginLeft: 'auto'
+    }
+  })
+);
 
 export default function PrivateReview(props) {
     const classes = useStyles();
-  
+
+    const requestOptions = {
+      method: 'DELETE',
+      headers: { 
+        'Accept': 'application/json',
+      }
+    };
+    
+    const removeReviewAndReload = async () => {
+      await fetch(`/rest/review/${props.movieId}`, requestOptions);
+
+      props.onChange();
+    };
+
+    const deleteReview = useAsync({ deferFn: removeReviewAndReload });
+
     return (
         <Grid item xs={12}>
-            <Card style={{width: 1150, margin: 10}}>
-            <CardHeader
-          title={<Link href={`/Movie/${props.movieId}`} color="primary" className={classes.link} style={{ fontSize: '30px' }}> {props.title} </Link>}
-          action={
-            <IconButton color="primary" aria-label="upload picture" component="span">
-                <DeleteIcon />
-            </IconButton>
-          }>
-          </CardHeader>
-          <CardContent>
+            <Card style={{width: 1150, margin: 10, backgroundColor: "DarkGrey"}}>
+              <CardHeader
+                title={<Link href={`/Movie/${props.movieId}`} color="primary" className={classes.title} style={{ fontSize: '30px' }}>{props.title}</Link>}
+              />
+            <CardContent>
               {props.text}
-              <div className="right">
-                <IconButton color="primary" aria-label="upload picture" component="span">
-                    <EditIcon />
-                </IconButton>
-              </div>
-          </CardContent>
-          
+            </CardContent>
+            <CardActions className={classes.action}>
+              {/* TODO: implement an edit review functionalilty from the user dashboard */}
+              <IconButton color="primary" component="span" className={classes.control}>
+                <EditIcon />
+              </IconButton>
+              <IconButton color="primary" component="span" className={classes.control} onClick={deleteReview.run}>
+                <DeleteIcon />
+              </IconButton>
+            </CardActions>
           </Card>
         </Grid>
     );

@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.filmfinder.user.User;
+
 import javassist.NotFoundException;
 
 
@@ -160,4 +162,35 @@ public class AuthDB {
         }
     }
     
+    public static User getUser(int userId) throws NotFoundException, SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT first_name first, last_name last, email, profile_image_url url FROM user WHERE id=?";
+            s = c.prepareStatement(q);
+            s.setInt(1, userId);
+
+            rs = s.executeQuery();
+            
+            if (!rs.next()) {
+                throw new NotFoundException("Email doesn't exist in database");
+            };
+            return new User(userId, rs.getString("first"), rs.getString("last"), rs.getString("email"), rs.getString("url"));
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+    }
 }
