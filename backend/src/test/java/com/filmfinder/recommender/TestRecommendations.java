@@ -31,4 +31,15 @@ public class TestRecommendations {
             e.printStackTrace();
         }
     }
+    @Test
+    public void testGenericRecommender() {
+        try {
+            Movies m = Recommender.getGenericRecommendations(10);
+            System.out.println(m);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -131,4 +131,51 @@ public class RecommenderDB {
             }
         }
     }
+
+    public static Movies getGenericRecommendations(int limit) throws SQLException, NotFoundException {
+        // Based on this Shrinkage Estimator algorithm
+        // https://stats.stackexchange.com/questions/6418/rating-system-taking-account-of-number-of-votes
+        Movies movies = new Movies();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT movie_id, (n/(n+m)*R+m/(n+m)*C) ranking "
+                        + "FROM "
+                        + "(SELECT AVG(rd1.avg_rating) C, AVG(n)+1 m FROM ( "
+                        + "    SELECT AVG(r.rating) avg_rating, COUNT(r.rating) n, r.movie_id FROM review r "
+                        + "    GROUP BY r.movie_id "
+                        + ") rd1) a_t "
+                        + "JOIN ( "
+                        + "    SELECT AVG(r.rating) R, COUNT(r.rating) n, r.movie_id FROM review r "
+                        + "    GROUP BY r.movie_id "
+                        + ") rd2 "
+                        + "ORDER BY ranking DESC LIMIT ?;";
+            s = c.prepareStatement(q);
+
+            s.setInt(1, limit);
+
+            rs = s.executeQuery();
+            
+            while (rs.next()) {
+                movies.add(Movie.getMovie(rs.getInt("movie_id")));
+            };
+
+            return movies;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                throw e;
+            }
+        }
+    }
 }

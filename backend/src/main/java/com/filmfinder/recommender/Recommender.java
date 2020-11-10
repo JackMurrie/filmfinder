@@ -94,8 +94,8 @@ public class Recommender {
 
     // TODO: Get user ratings on movies, find their most liked genre and suggest movies
     // of that genre and rating
-    public static Movies getGenericRecommendations() {
-        return new Movies();
+    public static Movies getGenericRecommendations(int limit) throws SQLException, NotFoundException {
+        return RecommenderDB.getGenericRecommendations(limit);
     }
 
     public static Movies getRecommendedMovies(int userId, int count) throws SQLException,

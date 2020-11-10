@@ -40,6 +40,20 @@ JOIN (
 ) rd2
 ORDER BY ranking DESC;
 
+-- Apply Shrinkage estimator Get generic recommendations
+-- SELECT C total_avg, R avg_rating, n numReviews, movie_id, (n/(n+m)*R+m/(n+m)*C) ranking
+SELECT movie_id, (n/(n+m)*R+m/(n+m)*C) ranking
+FROM
+(SELECT AVG(rd1.avg_rating) C, AVG(n)+1 m FROM (
+    SELECT IFNULL(AVG(r.rating),0) avg_rating, COUNT(r.rating) n, r.movie_id FROM review r
+    GROUP BY r.movie_id
+) rd1) a_t
+JOIN (
+    SELECT IFNULL(AVG(r.rating),0) R, COUNT(r.rating) n, r.movie_id FROM review r
+    GROUP BY r.movie_id
+) rd2
+ORDER BY ranking DESC;
+
 SELECT * FROM blacklist;
 
 SELECT * FROM watched;
