@@ -1,5 +1,6 @@
 package com.filmfinder.db;
 
+import java.util.Date;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -193,4 +194,34 @@ public class AuthDB {
             }
         }
     }
+
+    /**
+     * Given a 4-digit code, place it in database.
+     * @param userId userId
+     * @param code verification code
+     * @param expiryDate time the code is classified as "expired"
+     */
+    public static void putVerficationCode(int userId, String code, Date expiryDate) throws SQLException {
+
+    }
+
+    /**
+     * Given a userId and verification code, obtain expiry date of the code. If code does not exist (=invalid code), throw an error.
+     * @param userId id associated with user
+     * @param code new password to be replaced
+     * @return expiraryDate date/time which the code "expires"
+     */
+    public static Date getCodeExpiry(int userId, String code) throws Exception {
+        return new Date();
+    }
+
+    /**
+     * Given a userId, update password to new password.
+     * @param userId id associated with user
+     * @param newPassword new password to be replaced
+     */
+    public static void setPassword(int userId, String newPassword) {
+        
+    }
+
 }

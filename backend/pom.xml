@@ -146,6 +146,12 @@
       <version>3.20.0-GA</version>
     </dependency>
 
+    <!-- email regex validation https://mvnrepository.com/artifact/commons-validator/commons-validator -->
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.5.0</version>
+    </dependency>
   </dependencies>
 
   <build>

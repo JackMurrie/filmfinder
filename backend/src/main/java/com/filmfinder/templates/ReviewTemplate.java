@@ -9,8 +9,6 @@ public class ReviewTemplate {
 	private float star;
     private int reviewId;
 
-    public ReviewTemplate() {}
-
 	public String getComment() {
 		return this.comment;
 	}
