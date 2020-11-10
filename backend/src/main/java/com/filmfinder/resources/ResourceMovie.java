@@ -9,27 +9,19 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
 
 import com.filmfinder.auth.CredentialHandler;
+import com.filmfinder.movie.Movies;
 import com.filmfinder.movie.movieCombo.MovieCombo;
+import com.filmfinder.similar.SimilarMovies;
 
-@Path("movies/")
+@Path("movies/{movie_id}")
 public class ResourceMovie {
 
-    @CookieParam("auth_token")
-    private String token;
-
     @GET
-    @Path("{movie_id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMovieById(@PathParam("movie_id") int movieId) {
         
         try {
-            CredentialHandler.decodeToken(token);
-        } catch (Exception e) {
-            return Response.status(400).entity("invalid token").build();
-        }
-        try {
             MovieCombo mc = new MovieCombo(movieId);
-            // resource table wants a "MovieData" type, what is this ? discuss with FE 
             return Response.status(200).entity(mc.toJson()).build();
         } catch (Exception e) {
             return Response.status(400).entity("Failed to get movie data").build();
@@ -38,8 +30,17 @@ public class ResourceMovie {
     }
 
     @GET
-    public Response getGenericMovieList() {
-        return Response.status(200).entity("todo").build();
+    @Path("/similar")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSimilarMovie(@PathParam("movie_id") int movieId) {
+        
+        try {
+            Movies movies = SimilarMovies.getSimilarMovies(movieId, limit)
+            return Response.status(200).entity(mc.toJson()).build();
+        } catch (Exception e) {
+            return Response.status(400).entity("Failed to get movie data").build();
+        }
+        
     }
 }
 
