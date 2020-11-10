@@ -136,4 +136,15 @@ public class AuthTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testChangePw(){
+        int userId = 1;
+        int newHash = 5;
+        try {
+            AuthDB.setPassword(userId, newHash);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
