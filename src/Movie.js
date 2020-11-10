@@ -102,7 +102,7 @@ export default function Movie() {
   useEffect(movieData.run, []);
 
   const loadUserData = async () => {
-    const userDataResponse = await fetch('/rest/user', requestOptions);
+    const userDataResponse = await fetch('/rest/user/dashboard', requestOptions);
     const { reviews, watchlist, wishlist } = await userDataResponse.json();
     const myReview = _.find(reviews, review => review.movieId === movieId);
     if (myReview) {

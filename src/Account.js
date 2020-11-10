@@ -106,7 +106,7 @@ function TabButtons() {
     headers: { 'Accept': 'application/json' },
   };
 
-  const dashboardData = useFetch('/rest/user', requestOptions, {defer: true});
+  const dashboardData = useFetch('/rest/user/dashboard', requestOptions, {defer: true});
   useEffect(dashboardData.run, []);
 
   const displayWishlist = ({ wishlist }) => {
