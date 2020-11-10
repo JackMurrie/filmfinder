@@ -133,6 +133,37 @@ public class AuthDB {
         }
     }
 
+    public static String getEmailFromId(int userId) {
+        // Connection c = null;
+        // PreparedStatement s = null;
+        // ResultSet rs = null;
+        // try {
+        //     c = DbDataSource.getConnection();
+        //     String q = "SELECT email FROM user where id=?";
+        //     s = c.prepareStatement(q);
+        //     s.setInt(1, userId);
+
+        //     rs = s.executeQuery();
+            
+        //     if (!rs.next()) {
+        //         throw new NotFoundException("Email doesn't exist in database");
+        //     };
+        //     return rs.getString("email");
+
+        // } catch (SQLException e) {
+        //     System.out.println(e.getMessage());
+        //     throw e;
+        // } finally {
+        //     try {
+        //         if (c != null) c.close();
+        //         if (s != null) s.close();
+        //     } catch (Exception e) {
+        //         System.out.println(e.getMessage());
+        //     }
+        // }
+        return "email";
+    }
+
     /**
      * 
      * @param email the email of user to remove
