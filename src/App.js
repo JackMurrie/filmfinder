@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import './css/App.css';
 import Home from './Home';
 import Login from './Login';
@@ -16,9 +16,19 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
+function usePersistedState(key, defaultValue) {
+    const [state, setState] = React.useState(
+        () => JSON.parse(localStorage.getItem(key)) || defaultValue
+    );
+    useEffect(() => {
+      localStorage.setItem(key, JSON.stringify(state));
+    }, [key, state]);
+    return [state, setState];
+  }
+
 function App() {
 
-    const [darkMode, setDarkMode] = useState(useMediaQuery('(prefers-color-scheme: dark)'));
+    const [darkMode, setDarkMode] = usePersistedState(1, useMediaQuery('(prefers-color-scheme: dark)'));
 
     const theme = React.useMemo(
     () =>
@@ -40,7 +50,6 @@ function App() {
         event => {
           event.preventDefault();
           setDarkMode(!darkMode);
-          console.log(theme.palette.type);
         },
         [darkMode]
     );
