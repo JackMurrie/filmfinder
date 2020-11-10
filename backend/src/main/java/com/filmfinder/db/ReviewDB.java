@@ -17,17 +17,6 @@ import javassist.NotFoundException;
 
 public class ReviewDB {
 
-    /**
-     * 
-     * @param email the users email
-     * @param movieId the movie id
-     * @param comment empty string if no comment to insert i.e. ""
-     * @param star negative value if no start given
-     * @throws SQLException if error occurs in database
-     */
-	public static void editReview(String email, int movieId, String comment, float star) throws SQLException {
-        putReview(email, movieId, comment, star);
-	}
 
     /**
      * 
@@ -76,10 +65,16 @@ public class ReviewDB {
      * @param star negative value if no start given
      * @throws SQLException if error occurs in database
      */
-	public static void putReview(String email, int movieId, String comment, float star) throws SQLException {
+	private static void putReviewMaster(String email, int movieId, String comment, float star) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
         String reviewString = comment;
+        float insertStar;
+        if (star < 0) {
+            insertStar = 0;
+        } else {
+            insertStar = star;
+        }
         try {
             int userId = UtilDB.getUserId(email);
             c = DbDataSource.getConnection();
@@ -89,13 +84,16 @@ public class ReviewDB {
                 if (!oldReview.equals("") && comment.equals("")) {
                     reviewString = oldReview;
                 }
+                if (star < 0) {
+                    insertStar = r.getRating();
+                } 
             } catch (Exception e) {}
             String q = "REPLACE INTO review(movie_id, user_id, review, rating) values (?, ?, ?, ?);";
             s = c.prepareStatement(q);
             s.setInt(1, movieId);
             s.setInt(2, userId);
             s.setString(3, reviewString);
-            s.setFloat(4, star);
+            s.setFloat(4, insertStar);
 
             s.executeUpdate();
 
@@ -118,6 +116,38 @@ public class ReviewDB {
         }
         return;
 	}
+
+    /**
+     * 
+     * @param email the users email
+     * @param movieId the movie id
+     * @param comment empty string if no comment to insert i.e. ""
+     * @param star negative value if no start given
+     * @throws SQLException if error occurs in database
+     */
+	public static void updateRating(String email, int movieId, float star) throws SQLException {
+        putReviewMaster(email, movieId, "", star);
+	}
+
+    /**
+     * 
+     * @param email the users email
+     * @param movieId the movie id
+     * @param comment empty string if no comment to insert i.e. ""
+     * @throws SQLException if error occurs in database
+     */
+	public static void updateReview(String email, int movieId, String comment) throws SQLException {
+        putReviewMaster(email, movieId, comment, -1);
+    }
+
+    public static void postRating(String email, int movieId, float star) throws SQLException {
+        putReviewMaster(email, movieId, "", star);
+	}
+
+    public static void postReview(String email, int movieId, String comment) throws SQLException {
+        putReviewMaster(email, movieId, comment, -1);
+    }
+
 
     /**
      * Check if the review exists for email movieId combo

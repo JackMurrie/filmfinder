@@ -99,6 +99,12 @@ export default function Header(props) {
         </Button>
       ));
     }
+
+    const avatar = (
+      <IconButton aria-label="account" href="/Account">
+        <PersonPinIcon style={{fill: "white"}}/>
+      </IconButton>
+    );
     
     return (
         <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
@@ -125,9 +131,7 @@ export default function Header(props) {
                     </form>
                 </div>
                 {headerButtons}
-                <IconButton aria-label="account" color="inherit" href="/Account">
-                  <PersonPinIcon />
-                </IconButton>
+                {props.isLoggedIn && avatar}
             </Toolbar>
          </AppBar>
     );

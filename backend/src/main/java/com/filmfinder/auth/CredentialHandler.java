@@ -17,6 +17,7 @@ import com.filmfinder.db.AuthDB;
 // Need to return/handle any of the above errors and pass correctly to front end
 /**
  * CredentialHandler class that autheticate and authorise users. 
+ * Token is saved and held in the browser as a Cookie.
  */
 public class CredentialHandler {
 

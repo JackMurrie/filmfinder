@@ -27,7 +27,7 @@ public class ReviewTest {
                 AuthDB.putCredentials(first, last, email, hash);
             }
 
-            ReviewDB.putReview(email, movieID, "Test review", (float)-1);
+            ReviewDB.updateReview(email, movieID, "Test review");
 
             assertEquals(ReviewDB.exists(email, movieID), true);
 
@@ -37,8 +37,8 @@ public class ReviewTest {
             
             assertEquals(ReviewDB.exists(email, movieID), false);
 
-            ReviewDB.putReview(email, movieID, "Test review 2", (float)-1);
-            ReviewDB.putReview(email, movieID, "Test review 3", (float)-1);
+            ReviewDB.updateReview(email, movieID, "Test review 2");
+            ReviewDB.updateReview(email, movieID, "Test review 3");
 
             // Resetting DB
             // assertEquals(AuthDB.deleteUser(email), 1);

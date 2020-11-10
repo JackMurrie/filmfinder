@@ -33,9 +33,9 @@ import Switch from '@material-ui/core/Switch';
 
 import React, { useEffect, useState } from 'react';
 import { useAsync, useFetch, IfFulfilled } from 'react-async';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-import _, { set } from 'lodash';
+import _ from 'lodash';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -100,7 +100,6 @@ export default function Movie() {
   const [wished, setWished] = useState(false);
   const [hasReview, setHasReview] = useState(false);
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
 
   const movieData = useFetch(`/rest/movies/${movieId}`, requestOptions, { defer: true });
   useEffect(movieData.run, []);
@@ -116,7 +115,6 @@ export default function Movie() {
     const myReview = _.find(reviews, review => review.movieId === movieId);
     if (myReview) {
       setRating(myReview.rating);
-      setComment(myReview.comment);
       setHasReview(true);
     };
 
@@ -135,8 +133,8 @@ export default function Movie() {
 
   const updateWishlist = useFetch('/rest/user/wishlist', requestOptions, { defer: true });
   const updateWatchlist = useFetch('/rest/user/watchedlist', requestOptions, { defer: true });
-  const updateRating = useFetch(`/rest/review/${movieId}`, requestOptions, { defer: true });
-
+  const updateRating = useFetch(`/rest/rating/${movieId}`, requestOptions, { defer: true });
+  const updateReview = useFetch(`/rest/review/${movieId}`, requestOptions, { defer: true });
 
   const toggleWishlist = (event) => {
     if (wished) {
@@ -175,16 +173,14 @@ export default function Movie() {
       updateRating.run({
         method: 'PUT',
         body: JSON.stringify({
-          comment: comment,
-          star: newRating
+          rating: (newRating ? newRating : 0)
         })
       });
     } else {
       updateRating.run({
         method: 'POST',
         body: JSON.stringify({
-          comment: comment,
-          star: newRating
+          rating: (newRating ? newRating : 0)
         })
       });
     }
@@ -216,7 +212,7 @@ export default function Movie() {
                 {/* Movie Card */}
                 <Grid item>
                   <Paper className={fixedHeightPaper}>
-                    <MoviePoster movie={movie} />
+                    <MoviePoster movieGenreList={movie.genres} movieImageUrl={movie.imageUrl} movieRating={movie.averageRating} />
                     <div className="title">
                       <FormControlLabel
                         control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
@@ -238,7 +234,7 @@ export default function Movie() {
                     {movie.description}
                   </div>
                     <div className="right">
-                      <ReviewButton movieId={movieId} rating={rating} setComment={setComment} hasReview={hasReview} reloadMovieData={movieData} />  
+                      <ReviewButton movieId={movieId} hasReview={hasReview} updateReview={updateReview} reloadMovieData={movieData} />  
                     </div>
                   </Paper>
                 </Grid>
@@ -274,13 +270,13 @@ function MoviePoster(props) {
   return (
     <Card style={{width: 350, margin: 20, backgroundColor: "#282828"}}>
       <CardActionArea>
-        <CardMedia style={{height: 480}} image={props.movie.imageUrl}/>
+        <CardMedia style={{height: 480}} image={props.movieImageUrl}/>
         <CardContent>
           <div className='title'>
             <Box component="fieldset" mb={-1} borderColor="transparent">
-              <Rating name="read-only" precision={0.5} value={props.movie.rating} readOnly/>
+              <Rating name="read-only" precision={0.5} value={props.movieRating} readOnly/>
             </Box>
-            {props.movie.genres.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
+            {props.movieGenreList.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
           </div>
         </CardContent>
       </CardActionArea>
@@ -291,7 +287,6 @@ function MoviePoster(props) {
 function ReviewButton(props) {
   const [open, setOpen] = useState(false);
   const [newComment, setNewComment] = useState('');
-  const history = useHistory();
 
   const openReviewDialogBox = () => {
     setOpen(true);
@@ -301,30 +296,26 @@ function ReviewButton(props) {
     setOpen(false);
   };
 
-  const updateReview = useFetch(`/rest/review/${props.movieId}`, requestOptions, { defer: true });
-
   const submitReview = (event) => {
     event.preventDefault();
     if (props.hasReview) {
-      updateReview.run({
+      props.updateReview.run({
         method: 'PUT',
         body: JSON.stringify({
           comment: newComment,
-          star: props.rating
         })
       });
     } else {
-      updateReview.run({
+      props.updateReview.run({
         method: 'POST',
         body: JSON.stringify({
           comment: newComment,
-          star: props.rating
         })
       });
-    }
+    };
 
     props.reloadMovieData.run();
-  }; 
+  };
 
   return (
     <div>

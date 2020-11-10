@@ -5,12 +5,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.CookieParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
+
+import java.sql.SQLException;
+import javassist.NotFoundException;
 
 import com.filmfinder.auth.CredentialHandler;
 import com.filmfinder.db.ReviewDB;
@@ -35,16 +37,21 @@ public class ResourceReview {
         }
         
         String comment = review.getComment();
-        float star = review.getStar();
         try {
             if (!ReviewDB.exists(email, movieId)) {
-                ReviewDB.putReview(email, movieId, comment, star);
+                ReviewDB.postReview(email, movieId, comment);
                 return Response.status(200).entity("Review added").build();     
             } else {
                 return Response.status(400).entity("Review already exists").build();     
             }
         } catch (Exception e) {
-            return Response.status(400).entity("Failed to add review").build();        
+            String msg = "Failed to add review";
+            if (e.getClass() == SQLException.class) {
+                msg = "SQL error";
+            } else if (e.getClass() == NotFoundException.class) {
+                msg = "Not found error";
+            }
+            return Response.status(400).entity(msg).build();        
         }
     }
 
@@ -61,17 +68,22 @@ public class ResourceReview {
         }
 
         String comment = review.getComment();
-        float star = review.getStar();
         
         try {
             if (ReviewDB.exists(email, movieId)) {
-                ReviewDB.editReview(email, movieId, comment, star);
+                ReviewDB.updateReview(email, movieId, comment);
                 return Response.status(200).entity("Review edited").build();     
             } else {
                 return Response.status(400).entity("Review does not exist").build();     
             }
         } catch (Exception e) {
-            return Response.status(400).entity("Failed to edit review").build();     
+            String msg = "Failed to edit review";
+            if (e.getClass() == SQLException.class) {
+                msg = "SQL error";
+            } else if (e.getClass() == NotFoundException.class) {
+                msg = "Not found error";
+            }
+            return Response.status(400).entity(msg).build();       
         }
     }
 
@@ -93,7 +105,13 @@ public class ResourceReview {
                 return Response.status(400).entity("Review does not exist").build();     
             }
         } catch (Exception e) {
-            return Response.status(400).entity("Failed to remove review").build();     
+            String msg = "Failed to remove review";
+            if (e.getClass() == SQLException.class) {
+                msg = "SQL error";
+            } else if (e.getClass() == NotFoundException.class) {
+                msg = "Not found error";
+            }
+            return Response.status(400).entity(msg).build();         
         }        
     }
 

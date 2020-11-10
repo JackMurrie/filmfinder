@@ -1,6 +1,9 @@
 package com.filmfinder.resources;
 
 import javax.ws.rs.GET;
+import java.sql.SQLException;
+import javassist.NotFoundException;
+
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -33,7 +36,13 @@ public class ResourceLogin {
             token = CredentialHandler.authenticate(first, last, email, password);
             return Response.status(200).entity("Register successful.\n").cookie(new NewCookie("auth_token", token, "/rest/", null, null, 3600, false)).build();
         } catch (Exception e) {
-            return Response.status(400).entity("Register unsuccessful.\n").build();
+            String message = "Register unsuccessful.";
+            if (e.getClass() == SQLException.class) {
+                message = "Database error. SQL Exception";
+            } else if (e.getClass() == NotFoundException.class) {
+                message = "Data not found.";
+            }
+            return Response.status(400).entity(message).build();
         }
     }
 
@@ -47,7 +56,13 @@ public class ResourceLogin {
             String token = CredentialHandler.authorise(email, password);
             return Response.status(200).entity("Login successful\n").cookie(new NewCookie("auth_token", token, "/rest/", null, null, 3600, false)).build();
         } catch (Exception e) {
-            return Response.status(400).entity("Login unsuccessful\n").build();
+            String message = "Login unsuccessful.";
+            if (e.getClass() == SQLException.class) {
+                message = "Database error. SQL Exception";
+            } else if (e.getClass() == NotFoundException.class) {
+                message = "Data not found.";
+            }
+            return Response.status(400).entity(message).build();
         }
     }
 
