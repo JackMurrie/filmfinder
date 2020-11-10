@@ -29,13 +29,13 @@ public class Dashboard extends frontendObject {
     @Expose
     private Blacklist blacklisted;
 
-    public Dashboard(int userId) throws NotFoundException, SQLException {
+    public Dashboard(int userId, int movieLimit) throws NotFoundException, SQLException {
         watchlist = new Watchlist(userId);
         wishlist = new Wishlist(userId);
         recommendations = new Movies();
         reviews = Reviews.getReviewsByUserId(userId);
         blacklisted = new Blacklist(userId);
-        recommendations = Recommender.getRecommendedMovies2(userId, 10);
+        recommendations = Recommender.getRecommendedMovies2(userId, movieLimit);
     }
 
 }

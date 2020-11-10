@@ -17,6 +17,7 @@ import com.filmfinder.blacklist.Blacklist;
 import com.filmfinder.dashboard.Dashboard;
 import com.filmfinder.movieLists.Wishlist;
 import com.filmfinder.templates.MovieIdTemplate;
+import com.filmfinder.templates.MovieLimitTemplate;
 import com.filmfinder.templates.UserIdTemplate;
 import com.filmfinder.movieLists.Watchlist;
 import com.filmfinder.db.UtilDB;
@@ -28,8 +29,11 @@ public class ResourceDashboard {
     private String token;
 
     @GET
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserDashboard() {
+    public Response getUserDashboard(MovieLimitTemplate data) {
+
+        int limit = data.getLimit();
         int userId;
         try {
             userId = UtilDB.getUserId(CredentialHandler.decodeToken(token));
@@ -38,7 +42,7 @@ public class ResourceDashboard {
         }
         
         try {
-            Dashboard d = new Dashboard(userId);
+            Dashboard d = new Dashboard(userId, limit);
             return Response.status(200).entity(d.toJson()).build();
         } catch (Exception e) {
             return Response.status(400).entity("Could not get dashboard data\n").build();
