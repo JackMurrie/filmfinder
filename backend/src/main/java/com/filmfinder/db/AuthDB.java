@@ -22,14 +22,16 @@ public class AuthDB {
     public static void putCredentials(String firstName, String lastName, String email, int hashedPassword) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
+        String profile_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngfind.com%2Fmpng%2Fxiihwx_download-empty-profile-hd-png-download%2F&psig=AOvVaw1VVWN9WbtmA6N8D-uPlTsg&ust=1605138581663000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCNDFpquV-ewCFQAAAAAdAAAAABAO";
         try {
             c = DbDataSource.getConnection();
-            String q = "INSERT INTO film_finder.user (first_name, last_name, email, hash) VALUES (?, ?, ?, ?);";
+            String q = "INSERT INTO film_finder.user (first_name, last_name, email, hash, profile_image_url) VALUES (?, ?, ?, ?, ?);";
             s = c.prepareStatement(q);
             s.setString(1, firstName);
             s.setString(2, lastName);
             s.setString(3, email);
             s.setInt(4, hashedPassword);
+            s.setString(5, profile_url);
 
             s.executeUpdate();
 
