@@ -56,6 +56,11 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     height: 400,
   },
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
+    marginLeft: "10%",
+  }
 }));
   
 export default function Account() {
@@ -196,7 +201,9 @@ function Dashboard(props) {
         {Wishlist}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {Recommendations}
+        <div className={classes.container}>
+          {Recommendations}
+        </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
         {Watchlist}
