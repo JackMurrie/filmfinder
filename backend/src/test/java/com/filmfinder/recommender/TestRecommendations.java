@@ -19,6 +19,16 @@ public class TestRecommendations {
         } catch (NotFoundException e) {
             e.printStackTrace();
         }
-
+    }
+    @Test
+    public void testRecommender2() {
+        try {
+            Movies m = Recommender.getRecommendedMovies2(2, 10);
+            System.out.println(m);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

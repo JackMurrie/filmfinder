@@ -119,6 +119,10 @@ public class Recommender {
         return movies;
     }
 
+    public static Movies getRecommendedMovies2(int userId, int limit) throws SQLException, NotFoundException {
+        return RecommenderDB.getRecommendedMovies2(userId, limit);
+    }
+
     private static float getPredictedValue(int movieId, int userId) throws SQLException,
             NotFoundException {
         

@@ -35,7 +35,7 @@ public class Dashboard extends frontendObject {
         recommendations = new Movies();
         reviews = Reviews.getReviewsByUserId(userId);
         blacklisted = new Blacklist(userId);
-        recommendations = Recommender.getRecommendedMovies(userId, 5);
+        recommendations = Recommender.getRecommendedMovies2(userId, 10);
     }
 
 }
