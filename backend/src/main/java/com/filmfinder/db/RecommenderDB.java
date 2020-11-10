@@ -101,7 +101,6 @@ public class RecommenderDB {
                         + "    GROUP BY r.movie_id "
                         + ") rd2 "
                         + "ORDER BY ranking DESC LIMIT ?;";
-            System.out.println(q);
             s = c.prepareStatement(q);
 
             s.setInt(1, userId);
