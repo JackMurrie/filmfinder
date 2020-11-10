@@ -106,7 +106,12 @@ export default function Movie() {
   useEffect(movieData.run, []);
 
   const loadUserData = async () => {
-    const userDataResponse = await fetch('/rest/user', requestOptions);
+    const userRequestOptions = { 
+      ...requestOptions,
+      method: 'POST',
+      body: JSON.stringify({ limit: 10 }) 
+    };
+    const userDataResponse = await fetch('/rest/user', userRequestOptions);
     const { reviews, watchlist, wishlist } = await userDataResponse.json();
     const myReview = _.find(reviews, review => review.movieId === movieId);
     if (myReview) {

@@ -28,7 +28,7 @@ public class ResourceDashboard {
     @CookieParam("auth_token")
     private String token;
 
-    @GET
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserDashboard(MovieLimitTemplate data) {
