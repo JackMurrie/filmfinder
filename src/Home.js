@@ -1,7 +1,6 @@
 import './css/Home.css';
 import Header from './components/Header';
 import MovieCard from './components/MovieCard';
-import { getMovies } from './services/getMovies';
 import Footer from './components/Footer';
 
 import React from 'react';
@@ -11,9 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Async from 'react-async';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { IfFulfilled, IfPending, IfRejected, useFetch } from 'react-async';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -54,6 +53,17 @@ const useStyles = makeStyles((theme) => ({
 export default function Home({darkMode, handleThemeChange}) {
   const classes = useStyles();
 
+  const requestOptions = {
+    method: 'GET',
+    headers: { 
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const getPopularMovies = useFetch('/rest/recommend', requestOptions, {defer: true});
+  React.useEffect(getPopularMovies.run, []);
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -73,29 +83,26 @@ export default function Home({darkMode, handleThemeChange}) {
           </div>
       {/* Display Movies */}
       <Container component="main" maxWidth="lg">
-        <Async promiseFn={getMovies}>
-          <Async.Loading>Loading...</Async.Loading>
-          <Async.Fulfilled>
+          <IfPending state={getPopularMovies}>Loading...</IfPending>
+          <IfFulfilled state={getPopularMovies}>
             {data => {
               return(
                 <div className="container">
-                  {data.movies.map((movie, index) => (
+                  {data.movies.map(({ movieId, name, year, genres, imageUrl }) => (
                     <MovieCard 
-                    key={index}
-                    movieId={index}
-                    title={movie.title}
-                    yearReleased={movie.yearReleased}
-                    imageUrl={movie.imageURL}
+                      key={movieId}
+                      movieId={movieId}
+                      title={name}
+                      imageUrl={imageUrl}
                     />
                   ))} 
                 </div> 
               )
             }}
-          </Async.Fulfilled>
-          <Async.Rejected>
+          </IfFulfilled>
+          <IfRejected state={getPopularMovies}>
             Something went wrong.
-          </Async.Rejected>
-        </Async>
+          </IfRejected>
       </Container>
       <Footer />
     </React.Fragment>

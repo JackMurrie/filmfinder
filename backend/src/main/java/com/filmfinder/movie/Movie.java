@@ -134,4 +134,8 @@ public class Movie extends frontendObject {
     public ArrayList<String> getGenres() {
         return genres;
     }
+    
+    public float getAverageRating() {
+        return averageRating;
+    }
 }

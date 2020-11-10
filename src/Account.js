@@ -62,8 +62,12 @@ export default function Account() {
   const classes = useStyles();
 
   const requestOptions = {
-    method: 'GET',
-    headers: { 'Accept': 'application/json' },
+    method: 'POST',
+    headers: { 
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ limit: 10 })
   };
 
   const fetchDashboardData = useFetch('/rest/user', requestOptions, {defer: true});
@@ -85,7 +89,6 @@ export default function Account() {
         )}
       </IfFulfilled>
       <IfPending state={fetchDashboardData}>
-        {/* TODO: Put loading screen elements here */}
         <Backdrop className={classes.backdrop} open={true}>
           <CircularProgress color="inherit" />
         </Backdrop>
@@ -93,7 +96,6 @@ export default function Account() {
       <IfRejected state={fetchDashboardData}>
         <React.Fragment>
           <Header isLoggedIn={false}/>
-          {/* TODO: Page to show/ go to if something went wrong or you're not logged in yet */}
         </React.Fragment>
       </IfRejected>
       <Footer />

@@ -8,7 +8,7 @@ public class TestDashboard {
     @Test
     public void testNormal() {
         try {
-            Dashboard d = new Dashboard(5);
+            Dashboard d = new Dashboard(5, 10);
             System.out.println(d);
         } catch (Exception e) {
             System.out.println(e.getMessage());

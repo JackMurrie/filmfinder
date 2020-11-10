@@ -9,6 +9,7 @@ import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movies;
 import com.filmfinder.movieLists.Watchlist;
 import com.filmfinder.movieLists.Wishlist;
+import com.filmfinder.recommender.Recommender;
 import com.filmfinder.review.Reviews;
 import com.filmfinder.user.User;
 import com.filmfinder.user.Users;
@@ -28,13 +29,13 @@ public class Dashboard extends frontendObject {
     @Expose
     private Blacklist blacklisted;
 
-    public Dashboard(int userId) throws NotFoundException, SQLException {
+    public Dashboard(int userId, int movieLimit) throws NotFoundException, SQLException {
         watchlist = new Watchlist(userId);
         wishlist = new Wishlist(userId);
         recommendations = new Movies();
         reviews = Reviews.getReviewsByUserId(userId);
         blacklisted = new Blacklist(userId);
-        recommendations = new Movies();
+        recommendations = Recommender.getRecommendedMovies2(userId, movieLimit);
     }
 
 }
