@@ -54,14 +54,15 @@ export default function Home({darkMode, handleThemeChange}) {
   const classes = useStyles();
 
   const requestOptions = {
-    method: 'GET',
+    method: 'POST',
     headers: { 
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    }
+    },
+    body: JSON.stringify({ limit: 15 })
   };
 
-  const getPopularMovies = useFetch('/rest/recommend', requestOptions, {defer: true});
+  const getPopularMovies = useFetch('/rest/popular', requestOptions, {defer: true});
   React.useEffect(getPopularMovies.run, []);
 
   return (
