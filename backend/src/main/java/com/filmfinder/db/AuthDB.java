@@ -133,35 +133,34 @@ public class AuthDB {
         }
     }
 
-    public static String getEmailFromId(int userId) {
-        // Connection c = null;
-        // PreparedStatement s = null;
-        // ResultSet rs = null;
-        // try {
-        //     c = DbDataSource.getConnection();
-        //     String q = "SELECT email FROM user where id=?";
-        //     s = c.prepareStatement(q);
-        //     s.setInt(1, userId);
+    public static String getEmailFromId(int userId) throws NotFoundException, SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT email FROM user WHERE id=?";
+            s = c.prepareStatement(q);
+            s.setInt(1, userId);
 
-        //     rs = s.executeQuery();
+            rs = s.executeQuery();
             
-        //     if (!rs.next()) {
-        //         throw new NotFoundException("Email doesn't exist in database");
-        //     };
-        //     return rs.getString("email");
+            if (!rs.next()) {
+                throw new NotFoundException("Email doesn't exist in database");
+            };
+            return rs.getString("email");
 
-        // } catch (SQLException e) {
-        //     System.out.println(e.getMessage());
-        //     throw e;
-        // } finally {
-        //     try {
-        //         if (c != null) c.close();
-        //         if (s != null) s.close();
-        //     } catch (Exception e) {
-        //         System.out.println(e.getMessage());
-        //     }
-        // }
-        return "email";
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     /**
@@ -233,7 +232,32 @@ public class AuthDB {
      * @param expiryDate time the code is classified as "expired"
      */
     public static void putVerficationCode(int userId, String code, Date expiryDate) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(expiryDate);
+        try {
+            c = DbDataSource.getConnection();
+            String q = "REPLACE INTO access_code (user_id, code, expiry) values (?, ?, ?);";
+            s = c.prepareStatement(q);
+            s.setInt(1, userId);
+            s.setString(2, code);
+            s.setString(3, date);
 
+            s.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return;
     }
 
     /**
@@ -243,16 +267,67 @@ public class AuthDB {
      * @return expiraryDate date/time which the code "expires"
      */
     public static Date getCodeExpiry(int userId, String code) throws Exception {
-        return new Date();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT expiry FROM access_code WHERE user_id=? AND code=?";
+            s = c.prepareStatement(q);
+            s.setInt(1, userId);
+            s.setString(2, code);
+
+            rs = s.executeQuery();
+            
+            if (!rs.next()) {
+                throw new NotFoundException("Code doesn't exist");
+            };
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return sdf.parse(rs.getString("expiry"));
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     /**
      * Given a userId, update password to new password.
-     * @param userId id associated with user
-     * @param newPassword new password to be replaced
+     * 
+     * @param userId  id associated with user
+     * @param newHash hash of new password to be replaced
+     * @throws SQLException
      */
-    public static void setPassword(int userId, String newPassword) {
-        
+    public static void setPassword(int userId, int newHash) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "UPDATE user SET hash=? WHERE id=?";
+            s = c.prepareStatement(q);
+            s.setInt(1, newHash);
+            s.setInt(2, userId);
+
+            s.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return;
     }
 
 }
