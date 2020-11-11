@@ -27,12 +27,12 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default  function AccountConf() {
+export default  function AccountConf(props) {
     const classes = useStyles();
   
     return (
         <React.Fragment>
-            <Header/ >
+            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout} />
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <div className={classes.paper}>

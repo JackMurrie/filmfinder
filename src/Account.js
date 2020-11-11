@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
   
-export default function Account() {
+export default function Account(props) {
   const classes = useStyles();
 
   const requestOptions = {
@@ -85,7 +85,7 @@ export default function Account() {
         { dashboardData => (
           <React.Fragment>
             <div className={classes.image}>
-            <Header isLoggedIn={true}/>
+            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
             </div>
             <Container component="main" maxWidth="lg">
               <Dashboard dashboardData={dashboardData} reloadDashboardData={fetchDashboardData.run}/>
@@ -100,7 +100,7 @@ export default function Account() {
       </IfPending>
       <IfRejected state={fetchDashboardData}>
         <React.Fragment>
-          <Header isLoggedIn={false}/>
+          <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
         </React.Fragment>
       </IfRejected>
       <Footer />

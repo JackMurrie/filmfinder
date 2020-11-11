@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+export default function Login(props) {
     const classes = useStyles();
   
     return (
@@ -53,13 +53,13 @@ export default function Login() {
         <StaticHeader />
         <Grid container component="main" className={classes.root}> 
           <Grid item xs={false} sm={4} md={7} className={classes.image} />
-          <LoginScreen />
+          <LoginScreen handleLogin={props.handleLogin}/>
         </Grid>
       </React.Fragment>
     );
 }
 
-function LoginScreen() {
+function LoginScreen(props) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -83,6 +83,7 @@ function LoginScreen() {
     fetch('/rest/auth/login', requestOptions)
       .then(response => {
         if (response.ok) {
+          props.handleLogin()
           history.push('/Account');
         } else {
           setWrongCredentials(true);

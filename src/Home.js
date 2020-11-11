@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Home({darkMode, handleThemeChange}) {
+export default function Home({loggedIn, darkMode, handleLogout, handleThemeChange}) {
   const classes = useStyles();
 
   const requestOptions = {
@@ -69,7 +69,7 @@ export default function Home({darkMode, handleThemeChange}) {
     <React.Fragment>
       <CssBaseline />
           <div className={classes.image}>
-            <Header />
+            <Header isLoggedIn={loggedIn} handleLogout={handleLogout}/>
             <div className={classes.space}>
               <h1>FilmFinder</h1>
             </div>

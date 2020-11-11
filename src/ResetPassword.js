@@ -33,12 +33,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ResetPassword() {
+export default function ResetPassword(props) {
     const classes = useStyles();
   
     return (
         <React.Fragment>
-            <Header/ >
+            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
             <ResetPasswordScreen/ >
         </React.Fragment>
         

@@ -86,10 +86,15 @@ export default function Header(props) {
       history.push("/SearchResults", data);
     }; 
 
+    const handleLogoutRedirect = (event) => {
+      props.handleLogout();
+      history.push("/");
+    }; 
+
     let headerButtons;
     if (props.isLoggedIn) {
       headerButtons = (
-        <Button href={`/Logout`} color="primary" className={classes.link}>
+        <Button color="primary" className={classes.link} onClick={handleLogoutRedirect}>
           Logout
         </Button>
       );

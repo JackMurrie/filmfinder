@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
       },
   }));
 
-export default function PublicProfile() {
+export default function PublicProfile(props) {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const location = useLocation();
@@ -73,7 +73,7 @@ export default function PublicProfile() {
     return (
         <React.Fragment>
         <CssBaseline />
-            <Header />
+            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
             <Container component="main" maxWidth="lg">
                 <Grid container spacing={3}>
                     {/* Profile Picture */}

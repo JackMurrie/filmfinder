@@ -87,7 +87,7 @@ const requestOptions = {
   }
 };
 
-export default function Movie() {
+export default function Movie(props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const fixedHeightPaperReview = clsx(classes.paper, classes.fixedHeightReviews);
@@ -192,7 +192,7 @@ export default function Movie() {
     <React.Fragment>
       <CssBaseline />
       <div className={classes.background}>
-      <Header />
+      <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
       <IfFulfilled state={movieData}>
         { ({ movie, reviews }) => 
           <div>
