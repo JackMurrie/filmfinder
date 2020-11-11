@@ -112,7 +112,6 @@ public class CredentialHandler {
 
         try {
             sendCodeToEmail(to, code);
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -125,8 +124,8 @@ public class CredentialHandler {
     public static void resetPassword(int userId, String code, String password) throws IllegalArgumentException, Exception {
         
         Date expireDate = AuthDB.getCodeExpiry(userId, code);
-
-        if (!expireDate.before(new Date())) {
+        Date now = new Date();
+        if (!expireDate.after(now)) {
             throw new IllegalArgumentException();
         }
         AuthDB.setPassword(userId, password.hashCode());

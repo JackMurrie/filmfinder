@@ -110,8 +110,10 @@ public class ResourceLogin {
         try {
             CredentialHandler.resetPassword(userId, code, newPassword);
             return Response.status(200).entity("password was reset").build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(400).entity("timeout - verification code has expired").build();
         } catch (Exception e) {
-            return Response.status(400).entity("error resetting password").build();
+            return Response.status(400).entity("error resetting password: "+e.getMessage()).build();
         }
     }
 }
