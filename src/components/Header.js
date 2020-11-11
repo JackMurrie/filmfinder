@@ -87,8 +87,16 @@ export default function Header(props) {
     }; 
 
     const handleLogoutRedirect = (event) => {
-      props.handleLogout();
-      history.push("/");
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      };
+  
+      fetch('/rest/auth/login', requestOptions)
+        .then(response => {
+            props.handleLogout();
+            history.push("/");
+        });
     }; 
 
     let headerButtons;
