@@ -56,3 +56,55 @@ Meeting
 
 Meeting up with the talk about progress on the proposal
 Team members made a significant leap in progress on the storyboarding, and also on project management (user stories and sprint management)
+
+Week 4
+
+--
+Wednesday
+Was not available for team meeting
+
+Week 5
+Wednesday
+Participated for group demo A
+
+Thursday: Got help setting up backend with Hikari, and talked about backend structure and new objectives. Testing tools like Postman, and understanding
+the REST API, notably front end needs by and their needed endpoint
+
+Saturday: Added code to obtain movie data from the movie API
+
+Sunday
+Team meeting about the next sprint
+
+Week 6
+Monday
+Talked to Quoc about front end endpoints, the data needed for these endpoints and talked about the API query table together
+
+Wednesday meeting
+Discussed new sprint
+
+Saturday
+Pulled and looked at the backend new backend code provided by Hikari and Kristian
+Added search endpoint
+
+Week 7
+--
+
+Week 8
+Monday
+Began coding the actual implementation of the recommender system
+
+Tuesday
+Finished coding the recommender system and changed the search endpoint
+Internal discussions about small fixes with the backend and frontend sync and small
+refactoring
+A lot of quick discussions to prepare to for the demo tommorow
+
+Wednesday
+Group demo B
+
+Sunday
+Was not available for the meeting
+
+Week 9
+Monday
+Preparation for final report 
