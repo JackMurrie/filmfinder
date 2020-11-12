@@ -30,9 +30,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Switch from '@material-ui/core/Switch';
-
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import React, { useEffect, useState } from 'react';
-import { useAsync, useFetch, IfFulfilled } from 'react-async';
+import { useAsync, useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 import { useLocation } from 'react-router-dom';
 
 import _ from 'lodash';
@@ -66,12 +67,6 @@ const useStyles = makeStyles((theme) => ({
   },
   fixedHeightReviews: {
     height: 500,
-  },
-  reviewPlace: {
-    flexGrow: 1,
-  },
-  flexGrow: {
-    flexGrow: 1,
   },
   largeIcon: {
     width: 40,
@@ -249,6 +244,18 @@ export default function Movie(props) {
                   <div className="text">
                     {movie.description}
                   </div>
+                  <div className="heading">
+                    Directors
+                  </div>
+                  <div className="text">
+                    {movie.directors}
+                  </div>
+                  <div className="heading">
+                    Release Date
+                  </div>
+                  <div className="text">
+                    {movie.year}
+                  </div>
                     <div className="right">
                       <ReviewButton loggedIn={props.loggedIn} setAlertOpen={setAlertOpen} movieId={movieId} hasReview={hasReview} updateReview={updateReview} reloadMovieData={movieData} />  
                     </div>
@@ -277,6 +284,11 @@ export default function Movie(props) {
           </div>
         }
       </IfFulfilled>
+      <IfPending state={movieData}>
+        <Backdrop className={classes.backdrop} open={true}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </IfPending>
     </React.Fragment>
   );
 }
