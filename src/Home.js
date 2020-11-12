@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
   space: {
     lineHeight: 10,
+    fontFamily: ["Montserrat", "sans-serif"],
   },
   space2: {
     lineHeight: 7,

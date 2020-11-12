@@ -18,6 +18,7 @@ const useStyles = makeStyles({
     },
     center: {
         textAlign: "center",
+        fontFamily: ["Montserrat", "sans-serif"],
       },
     background: {
         backgroundColor: "	#282828",
