@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
         width: 'auto',
     },
     text: {
-      color:"white",
+      color: theme.palette.text,
     }
 }));
 
