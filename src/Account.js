@@ -5,8 +5,6 @@ import WatchlistItem from './components/WatchlistItem';
 import PrivateReview from './components/PrivateReview';
 import Footer from './components/Footer';
 import './css/Account.css';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
@@ -28,6 +26,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 
 const useStyles = makeStyles((theme) => ({
@@ -85,11 +85,12 @@ export default function Account(props) {
         { dashboardData => (
           <React.Fragment>
             <div className={classes.image}>
-            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
-            </div>
+              <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+              </div>
             <Container component="main" maxWidth="lg">
               <Dashboard dashboardData={dashboardData} reloadDashboardData={fetchDashboardData.run}/>
             </Container>
+            <Footer />
           </React.Fragment>
         )}
       </IfFulfilled>
@@ -100,10 +101,11 @@ export default function Account(props) {
       </IfPending>
       <IfRejected state={fetchDashboardData}>
         <React.Fragment>
-          <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+           <div className={classes.image}>
+              <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+            </div>
         </React.Fragment>
       </IfRejected>
-      <Footer />
     </React.Fragment>
   );
 }
@@ -218,7 +220,7 @@ function Dashboard(props) {
         </IconButton>
         <Divider />
         Reset Password
-        <IconButton color="primary" component="span" href="/"> 
+        <IconButton color="primary" component="span" href="/ForgotPass"> 
               <LockIcon />
         </IconButton>
         <Divider />

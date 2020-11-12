@@ -15,6 +15,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { IfFulfilled, IfPending, IfRejected, useFetch } from 'react-async';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -106,7 +108,11 @@ export default function Home({loggedIn, darkMode, handleLogout, handleThemeChang
           </div>
       {/* Display Movies */}
       <Container component="main" maxWidth="lg">
-          <IfPending state={getPopularMovies}>Loading...</IfPending>
+          <IfPending state={getPopularMovies}>
+            <Backdrop className={classes.backdrop} open={true}>
+              <CircularProgress color="inherit" />
+           </Backdrop>
+          </IfPending>
           <IfFulfilled state={getPopularMovies}>
             {data => {
               return(
