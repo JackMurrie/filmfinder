@@ -144,6 +144,10 @@ public class ReviewDB {
         putReviewMaster(email, movieId, comment, -1);
     }
 
+    public static void postReview(int userId, int movieId, String comment) throws SQLException {
+        String email = AuthDB.getEmail(userId);
+        putReviewMaster(email, movieId, comment, -1);
+    }
 
     /**
      * Check if the review exists for email movieId combo

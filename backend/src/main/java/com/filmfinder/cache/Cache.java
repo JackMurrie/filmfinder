@@ -7,7 +7,6 @@ import com.filmfinder.Search.SearchList;
 import com.filmfinder.blacklist.Blacklist;
 import com.filmfinder.dashboard.Dashboard;
 import com.filmfinder.db.AuthDB;
-import com.filmfinder.db.MovieDb;
 import com.filmfinder.db.ReviewDB;
 import com.filmfinder.movie.Movie;
 import com.filmfinder.movieLists.Watchlist;
@@ -64,6 +63,11 @@ public class Cache {
         return movie;
     }
 
+    public static void refreshRating(int movieId) throws NotFoundException, SQLException {
+        Movie movie = getMovie(movieId);
+        movie.refreshRating();
+    }
+
     public static void deleteMovie(int movieId) {
         movies.remove(movieId);
     }
@@ -78,11 +82,19 @@ public class Cache {
         return review;
     }
 
-    public static void putReview(Review review) {
-        int movieId = review.getMovieId();
-        int userId = review.getUserId();
+    public static void putReview(int userId, int movieId, String comment) throws SQLException, NotFoundException {
         ReviewKey rk = new ReviewKey(movieId, userId);
+        ReviewDB.postReview(userId, movieId, comment);
+        Review review = ReviewDB.getReview(movieId, userId);
         reviews.put(rk, review);
+    }
+
+    public static void editReview(int userId, int movieId, String comment) {
+
+    }
+
+    public static void editRating(int userId, int movieId, float rating) {
+
     }
 
     public static void removeReview(int userId, int movieId) throws SQLException {

@@ -65,7 +65,7 @@ public class Movie extends frontendObject {
 
     private void checkGetLocalData(int id) throws NotFoundException, SQLException {
         if (!getDBData(id)) {
-            System.out.println("Movie not in DB");
+            System.out.println("Movie not in DB: Fetching fom TMDb...");
             if (!Populate.populateDBMovieData(id)) {
                 throw new NotFoundException("Movie doesn't exist");
             }
@@ -83,6 +83,10 @@ public class Movie extends frontendObject {
         } catch (NotFoundException e) {
             return false;
         }
+    }
+
+    public void refreshRating() throws NotFoundException, SQLException {
+        this.averageRating = MovieDb.getDBMovie(this.movieId).getAverageRating();
     }
 
     private static Movie getTMDBData(int id) throws NotFoundException {
