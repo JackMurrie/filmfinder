@@ -138,14 +138,14 @@ public class AuthDB {
      * @return the number of entries deleted
      * @throws SQLException if an SQL error occurs
      */
-    public static int deleteUser(String email) throws SQLException {
+    public static int deleteUser(int userId) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
         try {
             c = DbDataSource.getConnection();
-            String q = "DELETE FROM user WHERE email=?";
+            String q = "DELETE FROM user WHERE id=?";
             s = c.prepareStatement(q);
-            s.setString(1, email);
+            s.setInt(1, userId);
 
             return s.executeUpdate();
 

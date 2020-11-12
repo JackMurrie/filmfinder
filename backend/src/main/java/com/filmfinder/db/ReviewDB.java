@@ -25,12 +25,11 @@ public class ReviewDB {
      * @return the number of entries deleted, 1 if comment existed, 0 otherwise
      * @throws SQLException if an error occured
      */
-	public static int removeReview(String email, int movieId) throws SQLException {
+	public static int removeReview(int userId, int movieId) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
         try {
             c = DbDataSource.getConnection();
-            int userId = UtilDB.getUserId(email);
             String q = "DELETE FROM review WHERE user_id=? and movie_id=?";
             s = c.prepareStatement(q);
             s.setInt(1, userId);
@@ -44,9 +43,6 @@ public class ReviewDB {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             throw e;
-        } catch (NotFoundException e) {
-            System.out.println(e.getMessage());
-            return 1;
         } finally {
             try {
                 if (c != null) c.close();
