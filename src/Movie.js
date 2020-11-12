@@ -393,7 +393,7 @@ function AlertDialog(props) {
         open={props.alertOpen}
         onClose={props.handleAlertClose}
       >
-        <DialogTitle id="alert-dialog-title">{"You must be looged in to do this"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"You must be logged in to do this"}</DialogTitle>
         <DialogActions>
           <Button onClick={props.handleAlertClose} color="primary">
             Close
