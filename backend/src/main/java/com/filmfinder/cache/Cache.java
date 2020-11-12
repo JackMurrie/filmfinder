@@ -82,21 +82,6 @@ public class Cache {
         return review;
     }
 
-    public static void putReview(int userId, int movieId, String comment) throws SQLException, NotFoundException {
-        ReviewKey rk = new ReviewKey(movieId, userId);
-        ReviewDB.postReview(userId, movieId, comment);
-        Review review = ReviewDB.getReview(movieId, userId);
-        reviews.put(rk, review);
-    }
-
-    public static void editReview(int userId, int movieId, String comment) {
-
-    }
-
-    public static void editRating(int userId, int movieId, float rating) {
-
-    }
-
     public static void removeReview(int userId, int movieId) throws SQLException {
         ReviewDB.removeReview(userId, movieId);
         reviews.remove(new ReviewKey(movieId, userId));

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import com.filmfinder.review.ReviewPair;
 import com.filmfinder.review.Review;
 import com.filmfinder.review.Reviews;
+import com.filmfinder.cache.Cache;
 import com.filmfinder.recommender.RatingSimilarityPair;
 
 import javassist.NotFoundException;
@@ -95,6 +96,7 @@ public class ReviewDB {
 
             try {
                 MovieDb.updateRating(movieId);
+                Cache.refreshRating(movieId);
             } catch (Exception e){}
 
         } catch (SQLException e) {
@@ -144,8 +146,8 @@ public class ReviewDB {
         putReviewMaster(email, movieId, comment, -1);
     }
 
-    public static void postReview(int userId, int movieId, String comment) throws SQLException {
-        String email = AuthDB.getEmail(userId);
+    public static void postReview(int userId, int movieId, String comment) throws SQLException, NotFoundException {
+        String email = AuthDB.getEmailFromId(userId);
         putReviewMaster(email, movieId, comment, -1);
     }
 
@@ -239,7 +241,7 @@ public class ReviewDB {
         ArrayList<Review> list = new ArrayList<Review>();
         try {
             c = DbDataSource.getConnection();
-            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name FROM review INNER JOIN movie ON id=movie_id WHERE user_id=?";
+            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name, date FROM review INNER JOIN movie ON id=movie_id WHERE user_id=?";
             s = c.prepareStatement(q);
 
             s.setInt(1, userId);
@@ -247,8 +249,7 @@ public class ReviewDB {
             rs = s.executeQuery();
             
             while (rs.next()) {
-                //TODO: implement Date
-                list.add(new Review(userId, rs.getInt("mId"), rs.getString("comment"), rs.getFloat("rating"), new Date(10000), rs.getString("name")));
+                list.add(new Review(userId, rs.getInt("mId"), rs.getString("comment"), rs.getFloat("rating"), rs.getDate("date"), rs.getString("name")));
             };
 
             return new Reviews(list);
@@ -345,7 +346,7 @@ public class ReviewDB {
         ResultSet rs = null;
         try {
             c = DbDataSource.getConnection();
-            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name FROM review INNER JOIN movie ON id=movie_id WHERE movie_id=? and user_id=?";
+            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name, date FROM review INNER JOIN movie ON id=movie_id WHERE movie_id=? and user_id=?";
             s = c.prepareStatement(q);
 
             s.setInt(1, movieId);
@@ -354,8 +355,7 @@ public class ReviewDB {
             rs = s.executeQuery();
             
             if (rs.next()) {
-                //TODO: implement Date
-                return new Review(rs.getInt("uId"), movieId, rs.getString("comment"), rs.getFloat("rating"), new Date(10000), rs.getString("name"));
+                return new Review(rs.getInt("uId"), movieId, rs.getString("comment"), rs.getFloat("rating"), rs.getDate("date"), rs.getString("name"));
             } else {
                 throw new NotFoundException("review for user " + userId + " does not exist");
             }
