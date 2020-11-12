@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
+import java.util.Date;
 
 import com.filmfinder.user.User;
 
@@ -107,7 +108,43 @@ public class AuthTest {
 
     }
     @Test
-    public void testAuth() {
+    public void testEmail() {
+        try {
+            String email = AuthDB.getEmailFromId(2);
+            System.out.println(email);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         assertEquals(true, true);
+    }
+
+    @Test
+    public void testAccessCode(){
+        int userId = 1;
+        String code = "1252";
+        Date d = new Date();
+        try {
+            AuthDB.putVerficationCode(userId, code, d);
+            Date d2 = AuthDB.getCodeExpiry(userId, code);
+            System.out.println(d2);
+            System.out.println(d);
+            System.out.println(d2.equals(d));
+            // assertEquals(d2, d);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testChangePw(){
+        int userId = 1;
+        int newHash = 5;
+        try {
+            AuthDB.setPassword(userId, newHash);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
