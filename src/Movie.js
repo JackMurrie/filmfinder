@@ -94,7 +94,11 @@ export default function Movie(props) {
   const location = useLocation();
   const movieId = parseInt(location.pathname.split('/').pop(), 10);
 
-
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+    window.location.reload();
+  };
 
   const [watched, setWatched] = useState(false);
   const [wished, setWished] = useState(false);
@@ -137,62 +141,74 @@ export default function Movie(props) {
   const updateReview = useFetch(`/rest/review/${movieId}`, requestOptions, { defer: true });
 
   const toggleWishlist = (event) => {
-    if (wished) {
-      updateWishlist.run({
-        method: 'DELETE',
-        body: JSON.stringify({ movieId: movieId })
-      });
-    } else {
-      updateWishlist.run({
-        method: 'POST',
-        body: JSON.stringify({ movieId: movieId })
-      });
-    };
-
-    setWished(wished => !wished);
+    if (props.loggedIn) {
+       if (wished) {
+        updateWishlist.run({
+          method: 'DELETE',
+          body: JSON.stringify({ movieId: movieId })
+        });
+      } else {
+        updateWishlist.run({
+          method: 'POST',
+          body: JSON.stringify({ movieId: movieId })
+        });
+      };
+      setWished(wished => !wished);
+    }
+    else {
+      setAlertOpen(true);
+    }
   };
 
   const toggleWatched = (event) => {
-    if (watched) {
-      updateWatchlist.run({
-        method: 'DELETE',
-        body: JSON.stringify({ movieId: movieId })
-      });
-    } else {
-      updateWatchlist.run({
-        method: 'POST',
-        body: JSON.stringify({ movieId: movieId })
-      });
-    };
-
-    setWatched(watched => !watched);
+    if (props.loggedIn) {
+      if (watched) {
+        updateWatchlist.run({
+          method: 'DELETE',
+          body: JSON.stringify({ movieId: movieId })
+        });
+      } else {
+        updateWatchlist.run({
+          method: 'POST',
+          body: JSON.stringify({ movieId: movieId })
+        });
+      };
+       setWatched(watched => !watched);
+    }
+    else {
+      setAlertOpen(true);
+    }
   }
 
   const changeRating = (event, newRating) => {
-    if (hasReview) {
-      updateRating.run({
-        method: 'PUT',
-        body: JSON.stringify({
-          rating: (newRating ? newRating : 0)
-        })
-      });
-    } else {
-      updateRating.run({
-        method: 'POST',
-        body: JSON.stringify({
-          rating: (newRating ? newRating : 0)
-        })
-      });
+    if (props.loggedIn) {
+      if (hasReview) {
+        updateRating.run({
+          method: 'PUT',
+          body: JSON.stringify({
+            rating: (newRating ? newRating : 0)
+          })
+        });
+      } else {
+        updateRating.run({
+          method: 'POST',
+          body: JSON.stringify({
+            rating: (newRating ? newRating : 0)
+          })
+        });
+      }
+      setRating(newRating);
     }
-
-    setRating(newRating);
+    else {
+      setAlertOpen(true);
+    }
   };
 
   return (
     <React.Fragment>
       <CssBaseline />
-      <div className={classes.background}>
       <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+      <AlertDialog alertOpen={alertOpen} handleAlertClose={handleAlertClose}/>
       <IfFulfilled state={movieData}>
         { ({ movie, reviews }) => 
           <div>
@@ -234,7 +250,7 @@ export default function Movie(props) {
                     {movie.description}
                   </div>
                     <div className="right">
-                      <ReviewButton movieId={movieId} hasReview={hasReview} updateReview={updateReview} reloadMovieData={movieData} />  
+                      <ReviewButton loggedIn={props.loggedIn} setAlertOpen={setAlertOpen} movieId={movieId} hasReview={hasReview} updateReview={updateReview} reloadMovieData={movieData} />  
                     </div>
                   </Paper>
                 </Grid>
@@ -261,7 +277,6 @@ export default function Movie(props) {
           </div>
         }
       </IfFulfilled>
-      </div>
     </React.Fragment>
   );
 }
@@ -298,23 +313,27 @@ function ReviewButton(props) {
 
   const submitReview = (event) => {
     event.preventDefault();
-    if (props.hasReview) {
-      props.updateReview.run({
-        method: 'PUT',
-        body: JSON.stringify({
-          comment: newComment,
-        })
-      });
-    } else {
-      props.updateReview.run({
-        method: 'POST',
-        body: JSON.stringify({
-          comment: newComment,
-        })
-      });
-    };
-
-    props.reloadMovieData.run();
+    if (props.loggedIn) {
+      if (props.hasReview) {
+        props.updateReview.run({
+          method: 'PUT',
+          body: JSON.stringify({
+            comment: newComment,
+          })
+        });
+      } else {
+        props.updateReview.run({
+          method: 'POST',
+          body: JSON.stringify({
+            comment: newComment,
+          })
+        });
+      };
+      props.reloadMovieData.run();
+    }
+    else {
+      props.setAlertOpen(true);
+    }
   };
 
   return (
@@ -349,6 +368,31 @@ function ReviewButton(props) {
             </Button>
           </DialogActions>
         </form>
+      </Dialog>
+    </div>
+  );
+}
+
+function AlertDialog(props) {
+
+  return (
+    <div>
+      <Dialog
+        open={props.alertOpen}
+        onClose={props.handleAlertClose}
+      >
+        <DialogTitle id="alert-dialog-title">{"You must be looged in to do this"}</DialogTitle>
+        <DialogActions>
+          <Button onClick={props.handleAlertClose} color="primary">
+            Close
+          </Button>
+          <Button href="/Login" color="primary" autoFocus>
+            Log In
+          </Button>
+          <Button href="/Signup" color="primary" autoFocus>
+            Sign Up
+          </Button>
+        </DialogActions>
       </Dialog>
     </div>
   );
