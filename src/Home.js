@@ -13,6 +13,8 @@ import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { IfFulfilled, IfPending, IfRejected, useFetch } from 'react-async';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -46,7 +48,14 @@ const useStyles = makeStyles((theme) => ({
   },
   space: {
     lineHeight: 10,
-  }
+  },
+  space2: {
+    lineHeight: 7,
+  },
+  largeIcon: {
+    width: 50,
+    height: 50,
+  },
 }));
 
 
@@ -65,6 +74,14 @@ export default function Home({loggedIn, darkMode, handleLogout, handleThemeChang
   const getPopularMovies = useFetch('/rest/popular', requestOptions, {defer: true});
   React.useEffect(getPopularMovies.run, []);
 
+  const handleClick = (event) => {
+    event.preventDefault();
+    window.scrollTo({
+      top: 1000,
+      behavior: 'smooth'
+    });
+  }; 
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -78,6 +95,11 @@ export default function Home({loggedIn, darkMode, handleLogout, handleThemeChang
               label="Dark Mode"
               labelPlacement="bottom"
               />
+            <div className={classes.space2}>
+              <IconButton aria-label="account" onClick={handleClick}>
+                <ArrowDropDownIcon className={classes.largeIcon} style={{fill: "white"}}/>
+              </IconButton>
+            </div>
           </div>
         <div class="title">
           <h2>Trending</h2>
