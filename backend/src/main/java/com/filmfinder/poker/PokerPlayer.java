@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 import com.filmfinder.movie.Movie;
 
+import org.eclipse.jetty.websocket.api.Session;
+
 import javassist.NotFoundException;
 
 public class PokerPlayer {
@@ -13,10 +15,13 @@ public class PokerPlayer {
     private HashMap<Integer, Movie> proposed = new HashMap<Integer, Movie>();
     private boolean submittedProposal = false;
     private boolean submittedRanking = false;
+    private Session websocketConnection;
 
-    public PokerPlayer(int userId, String nickname) {
+
+    public PokerPlayer(int userId, String nickname, Session connection) {
         this.userId = userId;
         this.nickname = nickname;
+        this.websocketConnection = connection;
     }
 
     public boolean isSubmittedRanking() {

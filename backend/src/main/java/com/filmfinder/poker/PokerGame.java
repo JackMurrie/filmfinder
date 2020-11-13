@@ -6,6 +6,8 @@ import java.util.HashMap;
 
 import com.filmfinder.movie.Movie;
 
+import org.eclipse.jetty.websocket.api.Session;
+
 import javassist.NotFoundException;
 
 public class PokerGame {
@@ -16,15 +18,23 @@ public class PokerGame {
     protected PokerGame() {
     }
 
-    public void addPlayer(int userId, String nickname) {
-        players.put(userId, new PokerPlayer(userId, nickname));
+    public ArrayList<Session> getSessions() {
+        return new ArrayList<Session>();
+    }
+
+    public void addPlayer(int userId, String nickname, Session connection) {
+        players.put(userId, new PokerPlayer(userId, nickname, connection));
+    }
+
+    public String getPlayersJson() {
+        return "All players";
     }
 
     public void removePlayer(int userId) {
         players.remove(userId);
     }
 
-    public String getNickPlayerString() {
+    public String getNickJson() {
         for (PokerPlayer p: players.values()) {
             //TODO: 
         }

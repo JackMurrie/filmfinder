@@ -2,7 +2,7 @@ package com.filmfinder.poker;
 
 import java.util.HashMap;
 
-public class PokerManagers {
+public class PokerManager {
     private static HashMap<Integer, PokerGame> games;
     
     /**
