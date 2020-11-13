@@ -56,8 +56,8 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: 7,
   },
   largeIcon: {
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
   },
 }));
 
@@ -94,13 +94,13 @@ export default function Home({loggedIn, darkMode, handleLogout, handleThemeChang
               <h1>FilmFinder</h1>
             </div>
             <FormControlLabel
-              control={<Switch checked={darkMode} onChange={handleThemeChange} name="Dark Mode" color="primary"/>}
+              control={<Switch checked={darkMode} onChange={handleThemeChange} name="Dark Mode" color="secondary"/>}
               label="Dark Mode"
               labelPlacement="bottom"
               />
             <div className={classes.space2}>
               <IconButton aria-label="account" onClick={handleClick}>
-                <ArrowDropDownIcon className={classes.largeIcon} style={{fill: "white"}}/>
+                <ArrowDropDownIcon className={classes.largeIcon} style={{fill: "pink"}}/>
               </IconButton>
             </div>
           </div>
