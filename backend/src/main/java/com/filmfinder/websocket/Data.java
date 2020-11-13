@@ -16,7 +16,7 @@ public class Data {
     private int gameId;
     private int selectedMovie = -1;
     private String nickname;
-    private ArrayList votes;
+    private ArrayList<Integer> votes;
 
     public int getCommand() {
         return this.command;
@@ -50,11 +50,11 @@ public class Data {
         this.nickname = nickname;
     }
 
-    public ArrayList getVotes() {
+    public ArrayList<Integer> getVotes() {
         return this.votes;
     }
 
-    public void setVotes(ArrayList votes) {
+    public void setVotes(ArrayList<Integer> votes) {
         this.votes = votes;
     }
 

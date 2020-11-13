@@ -8,6 +8,9 @@ import com.google.gson.Gson;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+
+import javassist.NotFoundException;
+
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -57,26 +60,33 @@ public class WebSocketFilmPoker {
         pg = PokerManager.getGame(this.gameId);
         switch (data.getCommand()) {
             case Data.GETNICK:
-                response = pg.getNickPlayerString();
+                response = pg.getPlayers().toJson();
                 break;
-            
             case Data.ADDSELECT:
-                response = pg.getSelectionsJson();
+                try {
+                    pg.addSelect(data.getNickname(), data.getSelectedMovie());
+                    response = getBoolResponse(data.getCommand(), true);
+                } catch (Exception e) {
+                    response = getBoolResponse(data.getCommand(), false);
+                }
                 break;
             case Data.REMOVESELECT:
-                // pg.removeSelect(userId, movieId);
-                response = "{command }";
+                pg.removeSelect(data.getNickname(), data.getSelectedMovie());
+                response = getBoolResponse(data.getCommand(), true);
                 break;
             case Data.GETSELECTED:
-
+                response = pg.getSelectionProgress().toJson();
                 break;
             case Data.VOTE:
-
+                response = pg.addVote(data.getNickname(), data.getVotes());
                 break;
             case Data.RESULTS:
+                // response = pg.getS
+                response = getBoolResponse(data.getCommand(), true);
                 break;
-
             case Data.DONESELECT:
+                pg.finishSelect(data.getNickname());
+                response = getBoolResponse(data.getCommand(), true);
                 break;
         }
 
@@ -84,5 +94,9 @@ public class WebSocketFilmPoker {
             session.getRemote().sendString(response);
         }
     }   
+
+    private String getBoolResponse(int commandId, boolean isSuccess) {
+        return "{command:"+commandId+", isSuccess:"+isSuccess+"}";
+    }
 
 }

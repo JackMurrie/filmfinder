@@ -1,7 +1,18 @@
 package com.filmfinder.resources;
 
+import javax.ws.rs.Path;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.CookieParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.DELETE;
+
 import com.filmfinder.templates.EndFilmpokerTemplate;
 import com.filmfinder.poker.PokerManager;
+import com.filmfinder.auth.CredentialHandler;
 
 @Path("filmpoker/")
 public class ResourceFilmPoker {
