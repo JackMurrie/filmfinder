@@ -32,4 +32,27 @@ public class User extends frontendObject {
         return AuthDB.getUser(userId);
 	}
 
+    public int getUserId() {
+        return userId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        User rev = (User) obj;
+
+        return (this.userId==rev.getUserId());
+    }
+
+    @Override
+    public int hashCode() {
+        return userId;
+    }
 }

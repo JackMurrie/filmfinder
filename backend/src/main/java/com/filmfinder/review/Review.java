@@ -28,6 +28,10 @@ public class Review extends frontendObject {
             this.movieName=movieName;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
     public int getMovieId() {
         return movieId;
     }
@@ -39,4 +43,24 @@ public class Review extends frontendObject {
 	public String getComment() {
 		return comment;
 	}
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Review rev = (Review) obj;
+
+        return (this.movieId==rev.getMovieId() && this.userId==rev.getUserId());
+    }
+
+    @Override
+    public int hashCode() {
+        return movieId*userId;
+    }
 }

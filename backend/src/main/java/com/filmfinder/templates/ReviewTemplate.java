@@ -8,8 +8,6 @@ public class ReviewTemplate {
 	private String comment;
     private int reviewId;
 
-    public ReviewTemplate() {}
-
 	public String getComment() {
 		return this.comment;
 	}
