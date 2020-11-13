@@ -18,8 +18,10 @@ import javassist.NotFoundException;
 
 public class PokerGame {
     private HashMap<String, PokerPlayer> players = new HashMap<String, PokerPlayer>();
+    private int gameId;
 
-    protected PokerGame() {
+    protected PokerGame(int gameId) {
+        this.gameId = gameId;
     }
 
     public ArrayList<Session> getSessions() {
@@ -30,10 +32,10 @@ public class PokerGame {
         return sessions;
     }
 
-    public PokerPlayer getPlayer(Session session) throws NotFoundException {
+    public PlayerData getPlayerData(Session session) throws NotFoundException {
         for (PokerPlayer p: players.values()) {
             if (p.getWebsocketConnection().equals(session)) {
-                return p;
+                return new PlayerData(gameId, p.getNickname());
             }
         }
         throw new NotFoundException("Session doesn't exist");
