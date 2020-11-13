@@ -16,21 +16,19 @@ public class PokerPlayer {
     private boolean finishedSelection = false;
     private boolean submittedRanking = false;
     private Session websocketConnection;
-    private ArrayList<Movie> votes = new ArrayList<Movie>();
+    private ArrayList<Integer> votes = new ArrayList<Integer>();
 
     public PokerPlayer(String nickname, Session connection) {
         this.nickname = nickname;
         this.setWebsocketConnection(connection);
     }
 
-    public ArrayList<Movie> getVotes() {
+    public ArrayList<Integer> getVotes() {
         return votes;
     }
 
     public void setVotes(ArrayList<Integer> votes) throws NotFoundException, SQLException {
-        for (Integer movieId: votes) {
-            this.votes.add(Movie.getMovie(movieId));
-        }
+        this.votes = votes;
     }
 
     public boolean isFinishedSelection() {

@@ -1,6 +1,7 @@
 package com.filmfinder.poker.frontendObjects;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movie;
@@ -8,8 +9,7 @@ import com.google.gson.annotations.Expose;
 
 public class SelectedMovies extends frontendObject {
     @Expose
-    //Todo: Check command number
-    private Integer command = 3;
+    private Integer command = 5;
     @Expose
     private ArrayList<Movie> selectedMovies = new ArrayList<Movie>();
 
@@ -18,5 +18,9 @@ public class SelectedMovies extends frontendObject {
             selectedMovies.add(movie);
         }
     }
+
+	public ArrayList<Movie> getMovies() {
+		return selectedMovies;
+	}
 
 }

@@ -9,6 +9,7 @@ import javax.management.InstanceAlreadyExistsException;
 import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movie;
 import com.filmfinder.poker.frontendObjects.Players;
+import com.filmfinder.poker.frontendObjects.Results;
 import com.filmfinder.poker.frontendObjects.SelectedMovies;
 import com.filmfinder.poker.frontendObjects.SelectionProgress;
 
@@ -80,7 +81,7 @@ public class PokerGame {
      * 
      * @return list of selections in json format
      */
-    public SelectedMovies getSelectionsJson() {
+    public SelectedMovies getSelections() {
         SelectedMovies sm = new SelectedMovies();
         for (PokerPlayer p: players.values()) {
             for (Movie m: p.getProposed().values()) {
@@ -90,11 +91,24 @@ public class PokerGame {
         return sm;
     }
 
-    public boolean addVote(String nickname, ArrayList<Integer> movieIds) {
-        return false;
+    public boolean addVote(String nickname, ArrayList<Integer> movieIds) throws NotFoundException, SQLException {
+        PokerPlayer p = players.get(nickname);
+        p.setVotes(movieIds);
+        p.setSubmittedRanking(true);
+        for (PokerPlayer pl: players.values()) {
+            if (!pl.isSubmittedRanking()) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public String resultJson() {
-        return "Result json";
+    public Results resultJson() throws NotFoundException, SQLException {
+        Results r = new Results(getSelections().getMovies());
+        for (PokerPlayer p: players.values()) {
+            r.addVote(p.getVotes());
+        }
+        r.countVote();
+        return r;
     }
 }

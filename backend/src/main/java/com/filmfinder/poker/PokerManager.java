@@ -3,7 +3,7 @@ package com.filmfinder.poker;
 import java.util.HashMap;
 
 public class PokerManager {
-    private static HashMap<Integer, PokerGame> games;
+    private static HashMap<Integer, PokerGame> games = new HashMap<Integer, PokerGame>();
     
     /**
      * Function gets instance of game with id gameId
