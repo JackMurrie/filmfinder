@@ -78,7 +78,11 @@ public class WebSocketFilmPoker {
                 response = pg.getSelectionProgress().toJson();
                 break;
             case Data.VOTE:
-                response = pg.addVote(data.getNickname(), data.getVotes());
+                if (!pg.addVote(data.getNickname(), data.getVotes())) {
+                    response = getBoolResponse(data.getCommand(), true);
+                } else {
+                    response = "{command:"+Data.VOTE+", isSuccess:"+true+", isLast: " +true+"}";
+                }
                 break;
             case Data.RESULTS:
                 // response = pg.getS

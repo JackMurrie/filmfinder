@@ -13,9 +13,10 @@ import javax.ws.rs.DELETE;
 import com.filmfinder.templates.EndFilmpokerTemplate;
 import com.filmfinder.poker.PokerManager;
 import com.filmfinder.auth.CredentialHandler;
+import com.filmfinder.db.UtilDB;
 
 @Path("filmpoker/")
-public class ResourceFilmPoker {
+public class ResourceFilmpoker {
     
     @CookieParam("auth_token")
     private String token;
@@ -38,7 +39,7 @@ public class ResourceFilmPoker {
             String message = "{gameId: "+gameId+"}";
             return Response.status(200).entity(gameId).build();
         } catch (Exception e) {
-            return Response.status(400).entity("unknown error").build();
+            return Response.status(400).entity(e.getMessage()).build();
         }
     }
 
