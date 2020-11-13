@@ -16,10 +16,6 @@ public class PlayerData {
         this.nickname = nickname;
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
-    }
-
     public PlayerData(int gameId, String nickname) {
         this.gameId = gameId;
         this.setNickname(nickname);
