@@ -1,13 +1,18 @@
 package com.filmfinder.review;
 
 import java.sql.Date;
+import java.sql.SQLException;
 
+import com.filmfinder.db.AuthDB;
 import com.filmfinder.frontendObject.frontendObject;
+import com.filmfinder.user.User;
 import com.google.gson.annotations.Expose;
+
+import javassist.NotFoundException;
 
 public class Review extends frontendObject {
     @Expose
-    private int userId;
+    private User user;
     @Expose
     private int movieId;
     @Expose
@@ -20,12 +25,17 @@ public class Review extends frontendObject {
     private Date post_date;
 
     public Review(int userId, int movieId, String comment, float rating, Date date, String movieName) {
-            this.userId = userId;
-            this.movieId = movieId;
-            this.comment = comment;
-            this.rating = rating;
-            this.post_date = date;
-            this.movieName=movieName;
+        try {
+            this.user = AuthDB.getUser(userId);
+        } catch (NotFoundException | SQLException e) {
+            e.printStackTrace();
+            this.user = null;
+        }
+        this.movieId = movieId;
+        this.comment = comment;
+        this.rating = rating;
+        this.post_date = date;
+        this.movieName=movieName;
     }
 
     public int getUserId() {

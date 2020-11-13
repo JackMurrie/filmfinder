@@ -79,7 +79,7 @@ export default function Account(props) {
     body: JSON.stringify({ limit: 10 })
   };
 
-  const fetchDashboardData = useFetch('/rest/user', requestOptions, {defer: true});
+  const fetchDashboardData = useFetch('/rest/user/dashboard', requestOptions, {defer: true});
   useEffect(fetchDashboardData.run, []);
 
   return (
@@ -172,7 +172,7 @@ function Dashboard(props) {
     return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
   });
 
-  const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, userId }) => {
+  const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, user }) => {
 
 
     return <PrivateReview 
@@ -180,7 +180,7 @@ function Dashboard(props) {
       text={comment}
       rating={rating}
       postDate={post_date}
-      user={userId}
+      user={user.userId}
       movieId={movieId}
       onChange={props.reloadDashboardData}
     />;

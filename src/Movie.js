@@ -110,7 +110,8 @@ export default function Movie(props) {
       method: 'POST',
       body: JSON.stringify({ limit: 10 }) 
     };
-    const userDataResponse = await fetch('/rest/user', userRequestOptions);
+    const userDataResponse = await fetch('/rest/user/dashboard', userRequestOptions);
+    
     const { reviews, watchlist, wishlist } = await userDataResponse.json();
     const myReview = _.find(reviews, review => review.movieId === movieId);
     if (myReview) {
@@ -270,11 +271,11 @@ export default function Movie(props) {
                 <Container component="main" maxWidth="md">
                   <Grid item xs={12}>
                     <Paper className={fixedHeightPaperReview} variant="outlined">
-                      <Grid container spacing={1}>
-                        {reviews.map(({ comment, rating, post_date, userId }) => 
-                          <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />
-                        )}
-                      </Grid>
+                        <Grid container spacing={1}>
+                          {reviews.map(({ comment, rating, post_date, user }) => 
+                            <PublicReview text={comment} rating={rating} postDate={post_date} user={user.userId} />
+                          )}
+                        </Grid>
                     </Paper>
                   </Grid>
                 </Container>

@@ -29,6 +29,7 @@ public class ResourceDashboard {
     private String token;
 
     @POST
+    @Path("dashboard")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserDashboard(MovieLimitTemplate data) {
@@ -43,6 +44,25 @@ public class ResourceDashboard {
         
         try {
             Dashboard d = new Dashboard(userId, limit);
+            return Response.status(200).entity(d.toJson()).build();
+        } catch (Exception e) {
+            return Response.status(400).entity("Could not get dashboard data\n").build();
+        }
+    }
+
+    @GET
+    @Path("{userId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAnotherUserDashboard(@PathParam("userId") int userId) {
+        
+        try {
+            CredentialHandler.decodeToken(token);
+        } catch (Exception e) {
+            return Response.status(400).entity("invalid token").build();
+        }
+        
+        try {
+            Dashboard d = new Dashboard(userId, 0);
             return Response.status(200).entity(d.toJson()).build();
         } catch (Exception e) {
             return Response.status(400).entity("Could not get dashboard data\n").build();

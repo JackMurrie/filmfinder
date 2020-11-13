@@ -1,7 +1,7 @@
 import Header from './components/Header';
 import PublicReview from './components/PublicReview'
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -27,6 +27,8 @@ import RateReviewIcon from '@material-ui/icons/RateReview';
 import Box from '@material-ui/core/Box';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useTheme } from '@material-ui/core/styles';
+import { IfFulfilled, useFetch } from 'react-async';
+import MovieCard from './components/MovieCard';
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -57,60 +59,63 @@ export default function PublicProfile(props) {
     const userId = parseInt(location.pathname.split('/').pop(), 10);
     const theme = useTheme();
 
-    const [state, setState] = React.useState({
-        following: false,
-      });
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+    };
+  
+    const userData = useFetch(`/rest/user/${userId}`, requestOptions, {defer: true});
+    useEffect(userData.run, []);
+  
+    const [blacklist, setBlacklist] = useState(false);
 
-    const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-        {/* Call POST to API */}
-        const data = {
-          [event.target.name]: event.target.checked
-        };
-        {console.log("POST: ", data)}
-      };
-
+    const toggleBlacklist = (event) => {
+      setBlacklist(blacklist => !blacklist);
+    };
+    
     return (
         <React.Fragment>
         <CssBaseline />
-            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+        <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+        <IfFulfilled state={userData}>
+          {({ userInfo, wishlist, watchlist, reviews }) =>
             <Container component="main" maxWidth="lg">
                 <Grid container spacing={3}>
                     {/* Profile Picture */}
                     <Grid item xs={4.5}>
                         <Paper className={fixedHeightPaper}>
                             <Card style={{width: 350, margin: 20}}>
-                                <CardMedia style={{height: 400}} image="https://support.plymouth.edu/kb_images/Yammer/default.jpeg"/>
+                                <CardMedia style={{height: 400}} image={userInfo.profilePicUrl}/>
                                 <CardContent>
                                 </CardContent>
                             </Card>
                             <div className="title">
-                              Public User
-                              </div>
+                              {`${userInfo.first} ${userInfo.last}`}
+                            </div>
                         </Paper>
                     </Grid>
                     {/* Bio */}
                     <Grid item xs={7} >
                         <Paper className={fixedHeightPaper}>
                             <Typography>
-                                This is some info about me and the movies I like
+                                TODO: Add user description
                             </Typography>
                             <div className={classes.flexGrow}></div>
                             <div className="right">
                                 <FormControlLabel
-                                  control={<Switch checked={state.seen} onChange={handleChange} name="following" color="primary"/>}
-                                  label="Following"
-                                 />
+                                  control={<Switch checked={blacklist} onChange={toggleBlacklist} name="blacklist" color="primary"/>}
+                                  label="Blacklist"
+                                />
                             </div>
                         </Paper>
                     </Grid>
                     <Grid item xs={12}>
-                        <TabButtons />
+                        <PublicDashboard wishlist={wishlist} watchlist={watchlist} reviews={reviews}/>
                     </Grid>
                 </Grid>
             </Container>
-
-
+          }
+        </IfFulfilled>
         </React.Fragment>
     )
 }
@@ -141,42 +146,66 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
-function TabButtons() {
+function PublicDashboard(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
   
-    const handleChange = (event, newValue) => {
+    const toggleTab = (event, newValue) => {
       setValue(newValue);
     };
+
+
+    const { wishlist, watchlist, reviews } = props;
+
+    const Wishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
+      return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+    });
+  
+    const Watchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
+      return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+    });
+    
+    const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, user }) => {
+      return <PublicReview 
+        title={movieName}
+        text={comment}
+        rating={rating}
+        postDate={post_date}
+        user={user.userId}
+        movieId={movieId}
+      />;
+    });
   
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="default">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            variant="fullWidth"
-            indicatorColor="secondary"
-            textColor="secondary"
-            aria-label="Buton Tabs"
-          >
-            <Tab label="Wishlist" icon={<FavoriteIcon />}/>
-            <Tab label="Seen" icon={<VisibilityIcon />}/>
-            <Tab label="Reviews" icon={<RateReviewIcon />}/>
-            
-          </Tabs>
-        </AppBar>
-        <TabPanel value={value} index={0}>
-          Wishlist
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          Seen
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <PublicReview />
-          <PublicReview />
-          <PublicReview />
-        </TabPanel>
-      </div>
+      <AppBar position="static" color="default">
+        <Tabs
+          value={value}
+          onChange={toggleTab}
+          variant="fullWidth"
+          indicatorColor="secondary"
+          textColor="secondary"
+          aria-label="Buton Tabs"
+        >
+          <Tab label="Wishlist" icon={<FavoriteIcon />}/>
+          <Tab label="Seen" icon={<VisibilityIcon />}/>
+          <Tab label="My Reviews" icon={<RateReviewIcon />}/>
+          
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>
+        <div className="container">
+          {Wishlist}
+        </div>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <div className="container">
+          {Watchlist}
+        </div>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        {Reviews}
+      </TabPanel>
+    </div>
     );
   }
