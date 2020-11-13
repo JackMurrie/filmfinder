@@ -23,11 +23,6 @@ public class ResourceMovie {
     public Response getMovieById(@PathParam("movie_id") int movieId) {
         
         try {
-            CredentialHandler.decodeToken(token);
-        } catch (Exception e) {
-            return Response.status(400).entity("invalid token").build();
-        }
-        try {
             MovieCombo mc = new MovieCombo(movieId);
             // resource table wants a "MovieData" type, what is this ? discuss with FE 
             return Response.status(200).entity(mc.toJson()).build();
