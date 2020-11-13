@@ -39,7 +39,7 @@ public class Review extends frontendObject {
     }
 
     public int getUserId() {
-        return userId;
+        return user.getUserId();
     }
 
     public int getMovieId() {
@@ -66,11 +66,11 @@ public class Review extends frontendObject {
 
         Review rev = (Review) obj;
 
-        return (this.movieId==rev.getMovieId() && this.userId==rev.getUserId());
+        return (this.movieId==rev.getMovieId() && this.user.getUserId()==rev.getUserId());
     }
 
     @Override
     public int hashCode() {
-        return movieId*userId;
+        return movieId*user.getUserId();
     }
 }
