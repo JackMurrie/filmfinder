@@ -91,7 +91,7 @@ public class PokerGame {
      * 
      * @return list of selections in json format
      */
-    public SelectedMovies getSelectionedMovies() {
+    public SelectedMovies getSelectedMovies() {
         SelectedMovies sm = new SelectedMovies();
         for (PokerPlayer p: players.values()) {
             for (Movie m: p.getProposed().values()) {
@@ -114,7 +114,7 @@ public class PokerGame {
     }
 
     public Results getResults() throws NotFoundException, SQLException {
-        Results r = new Results(getSelectionedMovies().getMovies());
+        Results r = new Results(getSelectedMovies().getMovies());
         for (PokerPlayer p: players.values()) {
             r.addVote(p.getVotes());
         }

@@ -25,7 +25,7 @@ public class Results extends frontendObject {
     private ArrayList<Integer> points;
 
     private ArrayList<Movie> movies;
-    private HashMap<Integer, Integer> votes;
+    private HashMap<Integer, Integer> votes = new HashMap<Integer, Integer>();
     private int maxVote = 0;
 
     public Results() {}
@@ -38,14 +38,20 @@ public class Results extends frontendObject {
     public void addVote(ArrayList<Integer> preferences) {
         int i = 0;
         for (Integer id : preferences) {
-            int prev = votes.get(id);
+            Integer prev = votes.get(id);
+            if (prev == null) {
+                prev = 0;
+            }
             votes.put(id, prev + i);
             i++;
         }
         for (Movie m : movies) {
             int key = m.getMovieId();
             if (!preferences.contains(key)) {
-                int prev = votes.get(key);
+                Integer prev = votes.get(key);
+                if (prev == null) {
+                    prev = 0;
+                }
                 votes.put(key, prev + maxVote);
             }
         }
@@ -74,5 +80,15 @@ public class Results extends frontendObject {
                 : o2.getValue().compareTo(o1.getValue()));
         return list.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue, (a, b) -> b, LinkedHashMap::new));
 
+    }
+
+    public String debugString() {
+        String data = "Ordered movies:\n";
+        int i = 0;
+        for (Movie m: orderedMovies) {
+            data += "\t" + m.getMovieId() +", " + points.get(i) + "\n";
+            i++;
+        }
+        return data;
     }
 }
