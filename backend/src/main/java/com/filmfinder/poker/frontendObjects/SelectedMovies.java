@@ -9,9 +9,11 @@ import com.google.gson.annotations.Expose;
 
 public class SelectedMovies extends frontendObject {
     @Expose
-    private Integer command = 5;
+    private int command = 5;
     @Expose
     private ArrayList<Movie> selectedMovies = new ArrayList<Movie>();
+
+    public SelectedMovies() {}
 
     public void addMovie(Movie movie) {
         if (!selectedMovies.contains(movie)) {

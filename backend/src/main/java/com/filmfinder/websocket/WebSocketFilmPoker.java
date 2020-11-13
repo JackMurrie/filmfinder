@@ -1,19 +1,23 @@
 package com.filmfinder.websocket;
 
+import java.util.ArrayList;
 import java.io.IOException;
+import javassist.NotFoundException;
 
-import com.filmfinder.poker.PokerGame;
-import com.filmfinder.poker.PokerManager;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
-import javassist.NotFoundException;
-
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
+
+import com.filmfinder.poker.PokerGame;
+import com.filmfinder.poker.PokerManager;
 
 @WebSocket
 public class WebSocketFilmPoker {
@@ -36,61 +40,81 @@ public class WebSocketFilmPoker {
     public void onText(Session session, String message) throws IOException {
         System.out.println("Message received:" + message);
         
-        Data data = gson.fromJson(message, Data.class);
+        JsonObject data = gson.fromJson(message, JsonObject.class);
         
-        if (data.getCommand() != Data.JOINGAME && gameId == -1) {
+        if (data.get("command").getAsInt() != Data.JOINGAME && gameId == -1) {
 
         }
         String response = null;
         PokerGame pg = null;
 
-        if (data.getCommand() == Data.JOINGAME) {
-            int gameId = data.getGameId();
+        if (data.get("command").getAsInt() == Data.JOINGAME) {
+            int gameId = data.get("gameId").getAsInt();
             pg = PokerManager.getGame(gameId);
             if (pg != null) {
-                // pg.addPlayer(userId, nickname);
-                this.gameId = gameId;
+                try {
+                    pg.addPlayer(data.get("nickname").getAsString(), session);
+                    this.gameId = gameId;
+                    response = getBoolResponse(data.get("command").getAsInt(), true);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    response = getBoolResponse(data.get("command").getAsInt(), false);
+                }
             } else {
                 // game doesn't exist.
             }
             // send message and return.
             session.getRemote().sendString(response);
+            return;
         }
 
         pg = PokerManager.getGame(this.gameId);
-        switch (data.getCommand()) {
+        switch (data.get("command").getAsInt()) {
             case Data.GETNICK:
                 response = pg.getPlayers().toJson();
                 break;
             case Data.ADDSELECT:
                 try {
-                    pg.addSelect(data.getNickname(), data.getSelectedMovie());
-                    response = getBoolResponse(data.getCommand(), true);
+                    pg.addSelect(data.get("nickname").getAsString(), data.get("selectedMovie").getAsInt());
+                    response = getBoolResponse(data.get("command").getAsInt(), true);
                 } catch (Exception e) {
-                    response = getBoolResponse(data.getCommand(), false);
+                    response = getBoolResponse(data.get("command").getAsInt(), false);
                 }
                 break;
             case Data.REMOVESELECT:
-                pg.removeSelect(data.getNickname(), data.getSelectedMovie());
-                response = getBoolResponse(data.getCommand(), true);
+                pg.removeSelect(data.get("nickname").getAsString(), data.get("selectedMovie").getAsInt());
+                response = getBoolResponse(data.get("command").getAsInt(), true);
                 break;
             case Data.GETSELECTED:
                 response = pg.getSelectionProgress().toJson();
                 break;
             case Data.VOTE:
-                if (!pg.addVote(data.getNickname(), data.getVotes())) {
-                    response = getBoolResponse(data.getCommand(), true);
-                } else {
-                    response = "{command:"+Data.VOTE+", isSuccess:"+true+", isLast: " +true+"}";
+                JsonArray jarray = data.get("votes").getAsJsonArray();
+                ArrayList<Integer> votes = new ArrayList<Integer>();
+                for (JsonElement je: jarray) {
+                    JsonObject jo = (JsonObject) je;
+                    votes.add(jo.get("movieId").getAsInt());
+                }
+                try { 
+                    if (!pg.addVote(data.get("nickname").getAsString(), votes)) {
+                        response = getBoolResponse(data.get("command").getAsInt(), true);
+                    } else {
+                        response = "{command:"+Data.VOTE+", isSuccess:"+true+", isLast: " +true+"}";
+                    }
+                } catch (Exception e) {
+                    response = getBoolResponse(data.get("command").getAsInt(), false);
                 }
                 break;
             case Data.RESULTS:
-                // response = pg.getS
-                response = getBoolResponse(data.getCommand(), true);
+                try {
+                    response = pg.getResults().toJson();
+                } catch (Exception e) {
+                    response = getBoolResponse(data.get("command").getAsInt(), false);
+                }
                 break;
             case Data.DONESELECT:
-                pg.finishSelect(data.getNickname());
-                response = getBoolResponse(data.getCommand(), true);
+                pg.finishSelect(data.get("nickname").getAsString());
+                response = getBoolResponse(data.get("command").getAsInt(), true);
                 break;
         }
 

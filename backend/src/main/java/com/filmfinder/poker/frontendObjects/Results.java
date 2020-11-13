@@ -18,7 +18,7 @@ import javassist.NotFoundException;
 
 public class Results extends frontendObject {
     @Expose
-    private Integer command = 7;
+    private int command = 7;
     @Expose
     private ArrayList<Movie> orderedMovies;
     @Expose
@@ -27,6 +27,8 @@ public class Results extends frontendObject {
     private ArrayList<Movie> movies;
     private HashMap<Integer, Integer> votes;
     private int maxVote = 0;
+
+    public Results() {}
 
     public Results(ArrayList<Movie> selectedMovies) {
         this.movies = selectedMovies;

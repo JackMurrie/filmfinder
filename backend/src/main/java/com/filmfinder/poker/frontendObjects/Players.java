@@ -11,6 +11,7 @@ public class Players extends frontendObject {
     @Expose
     private ArrayList<String> players = new ArrayList<String>();
 
+    public Players() {}
     public void addPlayer(String nickname) {
         players.add(nickname);
     }

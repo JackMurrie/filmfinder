@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
 
 public class SelectionProgress extends frontendObject {
     @Expose
-    private Integer command = 2;
+    private int command = 2;
     @Expose
     private ArrayList<String> done = new ArrayList<String>();
     @Expose

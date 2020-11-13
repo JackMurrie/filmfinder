@@ -33,11 +33,12 @@ public class ResourceFilmpoker {
         } catch (Exception e) {
             return Response.status(400).entity("invalid token").build();
         }
-
         try {
             int gameId = PokerManager.instantiate();
+            System.out.println("yes");
+
             String message = "{gameId: "+gameId+"}";
-            return Response.status(200).entity(gameId).build();
+            return Response.status(200).entity(Integer.toString(gameId)).build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();
         }

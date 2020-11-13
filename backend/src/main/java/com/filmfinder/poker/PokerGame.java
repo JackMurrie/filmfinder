@@ -18,7 +18,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import javassist.NotFoundException;
 
 public class PokerGame {
-    private HashMap<String, PokerPlayer> players;
+    private HashMap<String, PokerPlayer> players = new HashMap<String, PokerPlayer>();
 
     protected PokerGame() {
     }
