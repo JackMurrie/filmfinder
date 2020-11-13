@@ -33,9 +33,10 @@ import Switch from '@material-ui/core/Switch';
 
 import React, { useEffect, useState } from 'react';
 import { useAsync, useFetch, IfFulfilled } from 'react-async';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-import _, { set } from 'lodash';
+import _ from 'lodash';
+import MovieCard from './components/MovieCard';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -94,8 +95,6 @@ export default function Movie() {
   const location = useLocation();
   const movieId = parseInt(location.pathname.split('/').pop(), 10);
 
-
-
   const [watched, setWatched] = useState(false);
   const [wished, setWished] = useState(false);
   const [hasReview, setHasReview] = useState(false);
@@ -125,13 +124,16 @@ export default function Movie() {
       setWatched(true);
     };
   };
+
   const userData = useAsync({ deferFn: loadUserData });
   useEffect(userData.run, []);
+
+  const similarMoviesData = useFetch(`/rest/movies/${movieId}/similar`, requestOptions, { defer: true });
+  useEffect(similarMoviesData.run, []);
 
   const updateWishlist = useFetch('/rest/user/wishlist', requestOptions, { defer: true });
   const updateWatchlist = useFetch('/rest/user/watchedlist', requestOptions, { defer: true });
   const updateRating = useFetch(`/rest/review/${movieId}`, requestOptions, { defer: true });
-
 
   const toggleWishlist = (event) => {
     if (wished) {
@@ -191,75 +193,94 @@ export default function Movie() {
     <React.Fragment>
       <CssBaseline />
       <div className={classes.background}>
-      <Header />
-      <IfFulfilled state={movieData}>
-        { ({ movie, reviews }) => 
-          <div>
-            <div className="title">
-              <h1>{movie.name}</h1>
-            </div>
-            <Box className="title" component="fieldset" mb={3} borderColor="transparent">
-              <Rating 
-              name="rating" 
-              precision={0.5} 
-              value={rating} 
-              size="large" 
-              onChange={changeRating}/>
-            </Box>
-            <Container component="main" maxWidth="lg">
-              <Grid container spacing={3}>
-                {/* Movie Card */}
-                <Grid item>
-                  <Paper className={fixedHeightPaper}>
-                    <MoviePoster movie={movie} />
-                    <div className="title">
-                      <FormControlLabel
-                        control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
-                      />
-                      <FormControlLabel
-                        control={<Switch checked={watched} onChange={toggleWatched} name="seen" color="primary"/>}
-                        label="Seen"
-                      />
-                    </div>
-                  </Paper>
-                </Grid>
-                {/* Information */}
-                <Grid item xs={7} >
-                  <Paper className={fixedHeightPaper}>
-                  <div className="heading">
-                    Movie Details
-                  </div>
-                  <div className="text">
-                    {movie.description}
-                  </div>
-                    <div className="right">
-                      <ReviewButton movieId={movieId} rating={rating} setComment={setComment} hasReview={hasReview} reloadMovieData={movieData} />  
-                    </div>
-                  </Paper>
-                </Grid>
-                {/* Reviews */}
-                <Container component="main" maxWidth="md">
-                  <Grid item xs={12}>
-                    <Paper className={fixedHeightPaperReview} variant="outlined">
-                        <Grid container spacing={1}>
-                          {reviews.map(({ comment, rating, post_date, userId }) => 
-                            <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />
-                          )}
-                        </Grid>
-                    </Paper>
-                  </Grid>
-                </Container>
-              </Grid>
-            </Container>
-
-            <div className="title">
-              <h1>Similar Movies</h1>
-            </div>
-            <Container component="main" maxWidth="lg">   
-            </Container>
+        <Header />
+        <div>            
+          <div className="title">
+            <IfFulfilled state={movieData}>
+              { ({ movie }) => 
+                <h1>{movie.name}</h1>
+              }
+            </IfFulfilled>
           </div>
-        }
-      </IfFulfilled>
+          <Box className="title" component="fieldset" mb={3} borderColor="transparent">
+            <Rating 
+            name="rating" 
+            precision={0.5} 
+            value={rating} 
+            size="large" 
+            onChange={changeRating}/>
+          </Box>
+          <Container component="main" maxWidth="lg">
+            <Grid container spacing={3}>
+              {/* Movie Card */}
+              <Grid item>
+                <Paper className={fixedHeightPaper}>
+                  <IfFulfilled state={movieData}>
+                    { ({ movie }) =>
+                      <MoviePoster movie={movie} />
+                    }
+                  </IfFulfilled>
+                  <div className="title">
+                    <FormControlLabel
+                      control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
+                    />
+                    <FormControlLabel
+                      control={<Switch checked={watched} onChange={toggleWatched} name="seen" color="primary"/>}
+                      label="Seen"
+                    />
+                  </div>
+                </Paper>
+              </Grid>
+              {/* Information */}
+              <Grid item xs={7} >
+                <Paper className={fixedHeightPaper}>
+                <div className="heading">
+                  Movie Details
+                </div>
+                  <IfFulfilled state={movieData}>
+                    { ({ movie }) =>
+                      <div className="text">
+                        {movie.description}
+                      </div>
+                    }
+                  </IfFulfilled>
+                  <div className="right">
+                    <ReviewButton movieId={movieId} rating={rating} setComment={setComment} hasReview={hasReview} reloadMovieData={movieData} />  
+                  </div>
+                </Paper>
+              </Grid>
+              {/* Reviews */}
+              <Container component="main" maxWidth="md">
+                <Grid item xs={12}>
+                  <Paper className={fixedHeightPaperReview} variant="outlined">
+                      <Grid container spacing={1}>
+                        <IfFulfilled state={movieData}>
+                          { ({ reviews }) =>
+                            {reviews.map(({ comment, rating, post_date, userId }) => 
+                              <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />
+                            )}
+                          }
+                        </IfFulfilled>
+                      </Grid>
+                  </Paper>
+                </Grid>
+              </Container>
+            </Grid>
+          </Container>
+
+          <div className="title">
+            <h1>Similar Movies</h1>
+            <IfFulfilled state={similarMoviesData}>
+              { ({ movies }) =>
+                <div>
+                  {movies.map(({ movieId, name, year, imageUrl }) => 
+                    <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>
+                  )}
+                </div>
+              }
+            </IfFulfilled>
+          </div>
+        </div>
       </div>
     </React.Fragment>
   );
@@ -286,7 +307,6 @@ function MoviePoster(props) {
 function ReviewButton(props) {
   const [open, setOpen] = useState(false);
   const [newComment, setNewComment] = useState('');
-  const history = useHistory();
 
   const openReviewDialogBox = () => {
     setOpen(true);
