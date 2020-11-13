@@ -60,7 +60,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexWrap: "wrap",
     marginLeft: "10%",
-  }
+  },
+  centerText: {
+    textAlign: "center",
+    fontFamily: ["Montserrat", "sans-serif"],
+  },
 }));
   
 export default function Account(props) {
@@ -103,6 +107,9 @@ export default function Account(props) {
         <React.Fragment>
            <div className={classes.image}>
               <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+            </div>
+            <div className={classes.centerText}>
+              <h1>Log in to view your account </h1>
             </div>
         </React.Fragment>
       </IfRejected>
