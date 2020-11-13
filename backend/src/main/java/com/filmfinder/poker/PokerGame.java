@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import javax.management.InstanceAlreadyExistsException;
 
-import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movie;
 import com.filmfinder.poker.frontendObjects.Players;
 import com.filmfinder.poker.frontendObjects.Results;
@@ -29,6 +28,15 @@ public class PokerGame {
             sessions.add(pl.getWebsocketConnection());
         }
         return sessions;
+    }
+
+    public PokerPlayer getPlayer(Session session) throws NotFoundException {
+        for (PokerPlayer p: players.values()) {
+            if (p.getWebsocketConnection().equals(session)) {
+                return p;
+            }
+        }
+        throw new NotFoundException("Session doesn't exist");
     }
 
     public void addPlayer(String nickname, Session connection) throws InstanceAlreadyExistsException {
