@@ -15,6 +15,7 @@ import SearchResults from './SearchResults';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { useHistory, withRouter } from "react-router-dom";
 
 function usePersistedState(key, defaultValue) {
     const [state, setState] = React.useState(
@@ -27,8 +28,23 @@ function usePersistedState(key, defaultValue) {
   }
 
 function App() {
+    const [loggedIn, setLoggedIn] = usePersistedState(1, false);
 
-    const [darkMode, setDarkMode] = usePersistedState(1, useMediaQuery('(prefers-color-scheme: dark)'));
+    const handleLogin = useCallback( 
+        event => {
+          setLoggedIn(true);
+        },
+        [loggedIn]
+    );
+
+    const handleLogout = useCallback( 
+        event => {
+          setLoggedIn(false);
+        },
+        [loggedIn]
+    );
+
+    const [darkMode, setDarkMode] = usePersistedState(2, useMediaQuery('(prefers-color-scheme: dark)'));
 
     const theme = React.useMemo(
     () =>
@@ -60,40 +76,40 @@ function App() {
         <ThemeProvider theme={theme}>
         <Switch>
             <Route path="/Login">
-                <Login />
+                <Login handleLogin={handleLogin}/>
             </Route>
             <Route path="/Signup">
-                <SignUp />
+                <SignUp handleLogin={handleLogin}/>
             </Route>
             <Route path="/AccountConf">
-                <AccountConf />
+                <AccountConf loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route exact path="/Movie/:MovieID">
-                <Movie />
+                <Movie loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/ForgotPass">
-                <ForgotPass />
+                <ForgotPass loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/verification">
-                <Verification />
+                <Verification loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/ResetPassword">
-                <ResetPassword />
+                <ResetPassword loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/NewPassConf">
-                <NewPassConf />
+                <NewPassConf loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/Account">
-                <Account />
+                <Account loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route exact path="/user/:userId">
-                <PublicProfile />
+                <PublicProfile loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/SearchResults">
-                <SearchResults />
+                <SearchResults loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/">
-                <Home darkMode={darkMode} handleThemeChange={handleThemeChange}/>
+                <Home loggedIn={loggedIn} darkMode={darkMode} handleLogout={handleLogout} handleThemeChange={handleThemeChange}/>
             </Route>
         </Switch>
         </ThemeProvider>

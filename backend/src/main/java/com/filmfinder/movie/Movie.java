@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.filmfinder.cache.Cache;
 import com.filmfinder.db.MovieDb;
 import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.population.DBMovieData;
@@ -52,6 +53,10 @@ public class Movie extends frontendObject {
     private Movie() {}
 
     public static Movie getMovie(int id) throws NotFoundException, SQLException {
+        return Cache.getMovie(id);
+    }
+
+    public static Movie getMovieFromDB(int id) throws NotFoundException, SQLException {
         Movie movie = getTMDBData(id);
         movie.checkGetLocalData(id);
         movie.movieId = id;
@@ -60,7 +65,7 @@ public class Movie extends frontendObject {
 
     private void checkGetLocalData(int id) throws NotFoundException, SQLException {
         if (!getDBData(id)) {
-            System.out.println("Movie not in DB");
+            System.out.println("Movie not in DB: Fetching fom TMDb...");
             if (!Populate.populateDBMovieData(id)) {
                 throw new NotFoundException("Movie doesn't exist");
             }
@@ -78,6 +83,10 @@ public class Movie extends frontendObject {
         } catch (NotFoundException e) {
             return false;
         }
+    }
+
+    public void refreshRating() throws NotFoundException, SQLException {
+        this.averageRating = MovieDb.getDBMovie(this.movieId).getAverageRating();
     }
 
     private static Movie getTMDBData(int id) throws NotFoundException {
@@ -123,6 +132,10 @@ public class Movie extends frontendObject {
         // return "Movie: " + this.name + "\n Description: " + this.description + "\n Director: " + this.director + "\n Image URL: " + this.imageUrl;
     }
 
+    public int getMovieId() {
+        return movieId;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -137,5 +150,25 @@ public class Movie extends frontendObject {
     
     public float getAverageRating() {
         return averageRating;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Movie rev = (Movie) obj;
+
+        return this.movieId==rev.getMovieId();
+    }
+
+    @Override
+    public int hashCode() {
+        return movieId;
     }
 }

@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.filmfinder.auth.CredentialHandler;
 import com.filmfinder.db.ReviewDB;
+import com.filmfinder.db.UtilDB;
 import com.filmfinder.templates.RatingTemplate;
 
 @Path("rating/{movie_id}")
@@ -77,15 +78,17 @@ public class ResourceRating {
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeReview( @PathParam("movie_id") int movieId, RatingTemplate rating) {
         String email = null;
+        int userId = 0;
         try {
             email = CredentialHandler.decodeToken(token);
+            userId = UtilDB.getUserId(email);
         } catch (Exception e) {
             return Response.status(400).entity("invalid token.").build();
         }
 
         try {
             if (ReviewDB.exists(email, movieId)) {
-                ReviewDB.removeReview(email, movieId);
+                ReviewDB.removeReview(userId, movieId);
                 return Response.status(200).entity("Star rating removed.").build();
             } else {
                 return Response.status(400).entity("Star rating does not exist").build();     

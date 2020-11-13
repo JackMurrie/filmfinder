@@ -18,13 +18,14 @@ const useStyles = makeStyles({
     },
     center: {
         textAlign: "center",
+        fontFamily: ["Montserrat", "sans-serif"],
       },
     background: {
         backgroundColor: "	#282828",
       },
 });
 
-export default function SearchResults() {
+export default function SearchResults(props) {
     const classes = useStyles();
     const location = useLocation();
     const title = location.state.title;
@@ -51,7 +52,7 @@ export default function SearchResults() {
     return (
         <React.Fragment>
             <CssBaseline />
-            <Header />
+            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
             <Container component="main" maxWidth="lg">
                 <div className={classes.center}>
                     <h1>Results for "{title}"</h1>

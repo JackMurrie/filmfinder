@@ -33,12 +33,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NewPassConf() {
+export default function NewPassConf(props) {
     const classes = useStyles();
   
     return (
         <React.Fragment>
-            <Header/ >
+            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
             <NewPassConfScreen/ >
         </React.Fragment>
         

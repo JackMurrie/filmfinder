@@ -14,7 +14,6 @@ public class MovieCombo extends frontendObject {
     private Movie movie;
     @Expose
     private Reviews reviews;
-    //TODO implement rating function
     @Expose
     private float rating = 0;
 

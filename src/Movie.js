@@ -30,9 +30,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Switch from '@material-ui/core/Switch';
-
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import React, { useEffect, useState } from 'react';
-import { useAsync, useFetch, IfFulfilled } from 'react-async';
+import { useAsync, useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 import { useLocation } from 'react-router-dom';
 
 import _ from 'lodash';
@@ -67,12 +68,6 @@ const useStyles = makeStyles((theme) => ({
   fixedHeightReviews: {
     height: 500,
   },
-  reviewPlace: {
-    flexGrow: 1,
-  },
-  flexGrow: {
-    flexGrow: 1,
-  },
   largeIcon: {
     width: 40,
     height: 40,
@@ -87,14 +82,18 @@ const requestOptions = {
   }
 };
 
-export default function Movie() {
+export default function Movie(props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const fixedHeightPaperReview = clsx(classes.paper, classes.fixedHeightReviews);
   const location = useLocation();
   const movieId = parseInt(location.pathname.split('/').pop(), 10);
 
-
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+    window.location.reload();
+  };
 
   const [watched, setWatched] = useState(false);
   const [wished, setWished] = useState(false);
@@ -137,62 +136,74 @@ export default function Movie() {
   const updateReview = useFetch(`/rest/review/${movieId}`, requestOptions, { defer: true });
 
   const toggleWishlist = (event) => {
-    if (wished) {
-      updateWishlist.run({
-        method: 'DELETE',
-        body: JSON.stringify({ movieId: movieId })
-      });
-    } else {
-      updateWishlist.run({
-        method: 'POST',
-        body: JSON.stringify({ movieId: movieId })
-      });
-    };
-
-    setWished(wished => !wished);
+    if (props.loggedIn) {
+       if (wished) {
+        updateWishlist.run({
+          method: 'DELETE',
+          body: JSON.stringify({ movieId: movieId })
+        });
+      } else {
+        updateWishlist.run({
+          method: 'POST',
+          body: JSON.stringify({ movieId: movieId })
+        });
+      };
+      setWished(wished => !wished);
+    }
+    else {
+      setAlertOpen(true);
+    }
   };
 
   const toggleWatched = (event) => {
-    if (watched) {
-      updateWatchlist.run({
-        method: 'DELETE',
-        body: JSON.stringify({ movieId: movieId })
-      });
-    } else {
-      updateWatchlist.run({
-        method: 'POST',
-        body: JSON.stringify({ movieId: movieId })
-      });
-    };
-
-    setWatched(watched => !watched);
+    if (props.loggedIn) {
+      if (watched) {
+        updateWatchlist.run({
+          method: 'DELETE',
+          body: JSON.stringify({ movieId: movieId })
+        });
+      } else {
+        updateWatchlist.run({
+          method: 'POST',
+          body: JSON.stringify({ movieId: movieId })
+        });
+      };
+       setWatched(watched => !watched);
+    }
+    else {
+      setAlertOpen(true);
+    }
   }
 
   const changeRating = (event, newRating) => {
-    if (hasReview) {
-      updateRating.run({
-        method: 'PUT',
-        body: JSON.stringify({
-          rating: (newRating ? newRating : 0)
-        })
-      });
-    } else {
-      updateRating.run({
-        method: 'POST',
-        body: JSON.stringify({
-          rating: (newRating ? newRating : 0)
-        })
-      });
+    if (props.loggedIn) {
+      if (hasReview) {
+        updateRating.run({
+          method: 'PUT',
+          body: JSON.stringify({
+            rating: (newRating ? newRating : 0)
+          })
+        });
+      } else {
+        updateRating.run({
+          method: 'POST',
+          body: JSON.stringify({
+            rating: (newRating ? newRating : 0)
+          })
+        });
+      }
+      setRating(newRating);
     }
-
-    setRating(newRating);
+    else {
+      setAlertOpen(true);
+    }
   };
 
   return (
     <React.Fragment>
       <CssBaseline />
-      <div className={classes.background}>
-      <Header />
+      <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+      <AlertDialog alertOpen={alertOpen} handleAlertClose={handleAlertClose}/>
       <IfFulfilled state={movieData}>
         { ({ movie, reviews }) => 
           <div>
@@ -233,8 +244,20 @@ export default function Movie() {
                   <div className="text">
                     {movie.description}
                   </div>
+                  <div className="heading">
+                    Directors
+                  </div>
+                  <div className="text">
+                    {movie.directors}
+                  </div>
+                  <div className="heading">
+                    Release Date
+                  </div>
+                  <div className="text">
+                    {movie.year}
+                  </div>
                     <div className="right">
-                      <ReviewButton movieId={movieId} hasReview={hasReview} updateReview={updateReview} reloadMovieData={movieData} />  
+                      <ReviewButton loggedIn={props.loggedIn} setAlertOpen={setAlertOpen} movieId={movieId} hasReview={hasReview} updateReview={updateReview} reloadMovieData={movieData} />  
                     </div>
                   </Paper>
                 </Grid>
@@ -261,7 +284,11 @@ export default function Movie() {
           </div>
         }
       </IfFulfilled>
-      </div>
+      <IfPending state={movieData}>
+        <Backdrop className={classes.backdrop} open={true}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </IfPending>
     </React.Fragment>
   );
 }
@@ -298,23 +325,27 @@ function ReviewButton(props) {
 
   const submitReview = (event) => {
     event.preventDefault();
-    if (props.hasReview) {
-      props.updateReview.run({
-        method: 'PUT',
-        body: JSON.stringify({
-          comment: newComment,
-        })
-      });
-    } else {
-      props.updateReview.run({
-        method: 'POST',
-        body: JSON.stringify({
-          comment: newComment,
-        })
-      });
-    };
-
-    props.reloadMovieData.run();
+    if (props.loggedIn) {
+      if (props.hasReview) {
+        props.updateReview.run({
+          method: 'PUT',
+          body: JSON.stringify({
+            comment: newComment,
+          })
+        });
+      } else {
+        props.updateReview.run({
+          method: 'POST',
+          body: JSON.stringify({
+            comment: newComment,
+          })
+        });
+      };
+      props.reloadMovieData.run();
+    }
+    else {
+      props.setAlertOpen(true);
+    }
   };
 
   return (
@@ -349,6 +380,31 @@ function ReviewButton(props) {
             </Button>
           </DialogActions>
         </form>
+      </Dialog>
+    </div>
+  );
+}
+
+function AlertDialog(props) {
+
+  return (
+    <div>
+      <Dialog
+        open={props.alertOpen}
+        onClose={props.handleAlertClose}
+      >
+        <DialogTitle id="alert-dialog-title">{"You must be logged in to do this"}</DialogTitle>
+        <DialogActions>
+          <Button onClick={props.handleAlertClose} color="primary">
+            Close
+          </Button>
+          <Button href="/Login" color="primary" autoFocus>
+            Log In
+          </Button>
+          <Button href="/Signup" color="primary" autoFocus>
+            Sign Up
+          </Button>
+        </DialogActions>
       </Dialog>
     </div>
   );

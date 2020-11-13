@@ -2,6 +2,7 @@ import React from 'react';
 import { Divider, Typography, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
   copyright: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(0.5)
+  },
+  grow: {
+    minHeight: "20vh",
   }
 }));
 
@@ -19,6 +23,8 @@ export default function Footer() {
   const classes = useStyles();
   
   return (
+    <Container component="main" maxWidth="xl">
+    <div className={classes.grow}></div>
     <div className={classes.root}>
       <Divider />
       <Typography className={classes.copyright} variant="body1">
@@ -31,5 +37,6 @@ export default function Footer() {
         </Paper>
       </Typography>
     </div>
+    </Container>
   );
 }

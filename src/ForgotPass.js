@@ -33,13 +33,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ForgotPass() {
+export default function ForgotPass(props) {
     const classes = useStyles();
   
     return (
         <React.Fragment>
-            <Header/ >
-            <ForgotPassScreen/ >
+            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+            <ForgotPassScreen />
         </React.Fragment>
         
 

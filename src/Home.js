@@ -13,6 +13,10 @@ import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { IfFulfilled, IfPending, IfRejected, useFetch } from 'react-async';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -46,11 +50,19 @@ const useStyles = makeStyles((theme) => ({
   },
   space: {
     lineHeight: 10,
-  }
+    fontFamily: ["Montserrat", "sans-serif"],
+  },
+  space2: {
+    lineHeight: 7,
+  },
+  largeIcon: {
+    width: 50,
+    height: 50,
+  },
 }));
 
 
-export default function Home({darkMode, handleThemeChange}) {
+export default function Home({loggedIn, darkMode, handleLogout, handleThemeChange}) {
   const classes = useStyles();
 
   const requestOptions = {
@@ -65,11 +77,19 @@ export default function Home({darkMode, handleThemeChange}) {
   const getPopularMovies = useFetch('/rest/popular', requestOptions, {defer: true});
   React.useEffect(getPopularMovies.run, []);
 
+  const handleClick = (event) => {
+    event.preventDefault();
+    window.scrollTo({
+      top: 1000,
+      behavior: 'smooth'
+    });
+  }; 
+
   return (
     <React.Fragment>
       <CssBaseline />
           <div className={classes.image}>
-            <Header />
+            <Header isLoggedIn={loggedIn} handleLogout={handleLogout}/>
             <div className={classes.space}>
               <h1>FilmFinder</h1>
             </div>
@@ -78,13 +98,22 @@ export default function Home({darkMode, handleThemeChange}) {
               label="Dark Mode"
               labelPlacement="bottom"
               />
+            <div className={classes.space2}>
+              <IconButton aria-label="account" onClick={handleClick}>
+                <ArrowDropDownIcon className={classes.largeIcon} style={{fill: "white"}}/>
+              </IconButton>
+            </div>
           </div>
         <div class="title">
           <h2>Trending</h2>
           </div>
       {/* Display Movies */}
       <Container component="main" maxWidth="lg">
-          <IfPending state={getPopularMovies}>Loading...</IfPending>
+          <IfPending state={getPopularMovies}>
+            <Backdrop className={classes.backdrop} open={true}>
+              <CircularProgress color="inherit" />
+           </Backdrop>
+          </IfPending>
           <IfFulfilled state={getPopularMovies}>
             {data => {
               return(

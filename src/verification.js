@@ -33,12 +33,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Verification() {
+export default function Verification(props) {
     const classes = useStyles();
   
     return (
         <React.Fragment>
-            <Header/ >
+            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
             <VerificationScreen/ >
         </React.Fragment>
         

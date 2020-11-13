@@ -1,5 +1,6 @@
 package com.filmfinder.db;
 
+import java.util.Date;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -132,20 +133,50 @@ public class AuthDB {
         }
     }
 
+    public static String getEmailFromId(int userId) throws NotFoundException, SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT email FROM user WHERE id=?";
+            s = c.prepareStatement(q);
+            s.setInt(1, userId);
+
+            rs = s.executeQuery();
+            
+            if (!rs.next()) {
+                throw new NotFoundException("Email doesn't exist in database");
+            };
+            return rs.getString("email");
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     /**
      * 
      * @param email the email of user to remove
      * @return the number of entries deleted
      * @throws SQLException if an SQL error occurs
      */
-    public static int deleteUser(String email) throws SQLException {
+    public static int deleteUser(int userId) throws SQLException {
         Connection c = null;
         PreparedStatement s = null;
         try {
             c = DbDataSource.getConnection();
-            String q = "DELETE FROM user WHERE email=?";
+            String q = "DELETE FROM user WHERE id=?";
             s = c.prepareStatement(q);
-            s.setString(1, email);
+            s.setInt(1, userId);
 
             return s.executeUpdate();
 
@@ -193,4 +224,110 @@ public class AuthDB {
             }
         }
     }
+
+    /**
+     * Given a 4-digit code, place it in database.
+     * @param userId userId
+     * @param code verification code
+     * @param expiryDate time the code is classified as "expired"
+     */
+    public static void putVerficationCode(int userId, String code, Date expiryDate) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(expiryDate);
+        try {
+            c = DbDataSource.getConnection();
+            String q = "REPLACE INTO access_code (user_id, code, expiry) values (?, ?, ?);";
+            s = c.prepareStatement(q);
+            s.setInt(1, userId);
+            s.setString(2, code);
+            s.setString(3, date);
+
+            s.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return;
+    }
+
+    /**
+     * Given a userId and verification code, obtain expiry date of the code. If code does not exist (=invalid code), throw an error.
+     * @param userId id associated with user
+     * @param code new password to be replaced
+     * @return expiraryDate date/time which the code "expires"
+     */
+    public static Date getCodeExpiry(int userId, String code) throws Exception {
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "SELECT expiry FROM access_code WHERE user_id=? AND code=?";
+            s = c.prepareStatement(q);
+            s.setInt(1, userId);
+            s.setString(2, code);
+
+            rs = s.executeQuery();
+            
+            if (!rs.next()) {
+                throw new NotFoundException("Code doesn't exist");
+            };
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return sdf.parse(rs.getString("expiry"));
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Given a userId, update password to new password.
+     * 
+     * @param userId  id associated with user
+     * @param newHash hash of new password to be replaced
+     * @throws SQLException
+     */
+    public static void setPassword(int userId, int newHash) throws SQLException {
+        Connection c = null;
+        PreparedStatement s = null;
+        try {
+            c = DbDataSource.getConnection();
+            String q = "UPDATE user SET hash=? WHERE id=?";
+            s = c.prepareStatement(q);
+            s.setInt(1, newHash);
+            s.setInt(2, userId);
+
+            s.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            try {
+                if (c != null) c.close();
+                if (s != null) s.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return;
+    }
+
 }

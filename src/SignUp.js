@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function SignUp() {
+export default function SignUp(props) {
     const classes = useStyles();
   
     return (
@@ -50,14 +50,14 @@ export default function SignUp() {
         <StaticHeader />
         <Grid container component="main" className={classes.root}> 
           <Grid item xs={false} sm={4} md={7} className={classes.image} />
-          <SignUpScreen />
+          <SignUpScreen handleLogin={props.handleLogin}/>
         </Grid>
       </React.Fragment>
     );
 }
 
 
-function SignUpScreen() {
+function SignUpScreen(props) {
     const classes = useStyles();
     const history = useHistory();
 
@@ -84,7 +84,10 @@ function SignUpScreen() {
       };
   
       fetch('/rest/auth/register', requestOptions)
-        .then(() => history.push('/Account'))
+        .then(() => {
+          history.push('/Account');
+          props.handleLogin();
+        })
     };
   
     return (

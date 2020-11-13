@@ -2,6 +2,7 @@
     font-size: calc(6px + 2vmin);
     font-family: 'Montserrat', sans-serif;
     line-height: 2;
+    font-weight: bold;
   }
   
 .container {
@@ -17,6 +18,7 @@
 
 .right {
     text-align: right;
+    line-height: 10;
 } 
 
 .text {
