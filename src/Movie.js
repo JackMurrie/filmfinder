@@ -33,10 +33,11 @@ import Switch from '@material-ui/core/Switch';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, { useEffect, useState } from 'react';
-import { useAsync, useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
+import { useAsync, useFetch, IfFulfilled, IfPending } from 'react-async';
 import { useLocation } from 'react-router-dom';
 
 import _ from 'lodash';
+import MovieCard from './components/MovieCard';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -127,8 +128,12 @@ export default function Movie(props) {
       setWatched(true);
     };
   };
+
   const userData = useAsync({ deferFn: loadUserData });
   useEffect(userData.run, []);
+
+  const similarMoviesData = useFetch(`/rest/movies/${movieId}/similar`, requestOptions, { defer: true });
+  useEffect(similarMoviesData.run, []);
 
   const updateWishlist = useFetch('/rest/user/wishlist', requestOptions, { defer: true });
   const updateWatchlist = useFetch('/rest/user/watchedlist', requestOptions, { defer: true });
@@ -205,8 +210,8 @@ export default function Movie(props) {
       <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
       <AlertDialog alertOpen={alertOpen} handleAlertClose={handleAlertClose}/>
       <IfFulfilled state={movieData}>
-        { ({ movie, reviews }) => 
-          <div>
+        { ({ movie, reviews }) =>
+          <div>            
             <div className="title">
               <h1>{movie.name}</h1>
             </div>
@@ -238,24 +243,24 @@ export default function Movie(props) {
                 {/* Information */}
                 <Grid item xs={7} >
                   <Paper className={fixedHeightPaper}>
-                  <div className="heading">
-                    Movie Details
-                  </div>
-                  <div className="text">
-                    {movie.description}
-                  </div>
-                  <div className="heading">
-                    Directors
-                  </div>
-                  <div className="text">
-                    {movie.directors}
-                  </div>
-                  <div className="heading">
-                    Release Date
-                  </div>
-                  <div className="text">
-                    {movie.year}
-                  </div>
+                    <div className="heading">
+                      Movie Details
+                    </div>
+                    <div className="text">
+                      {movie.description}
+                    </div>
+                    <div className="heading">
+                      Directors
+                    </div>
+                    <div className="text">
+                      {movie.directors}
+                    </div>
+                    <div className="heading">
+                      Release Date
+                    </div>
+                    <div className="text">
+                      {movie.year}
+                    </div>
                     <div className="right">
                       <ReviewButton loggedIn={props.loggedIn} setAlertOpen={setAlertOpen} movieId={movieId} hasReview={hasReview} updateReview={updateReview} reloadMovieData={movieData} />  
                     </div>
@@ -265,11 +270,11 @@ export default function Movie(props) {
                 <Container component="main" maxWidth="md">
                   <Grid item xs={12}>
                     <Paper className={fixedHeightPaperReview} variant="outlined">
-                        <Grid container spacing={1}>
-                          {reviews.map(({ comment, rating, post_date, userId }) => 
-                            <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />
-                          )}
-                        </Grid>
+                      <Grid container spacing={1}>
+                        {reviews.map(({ comment, rating, post_date, userId }) => 
+                          <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />
+                        )}
+                      </Grid>
                     </Paper>
                   </Grid>
                 </Container>
@@ -279,8 +284,15 @@ export default function Movie(props) {
             <div className="title">
               <h1>Similar Movies</h1>
             </div>
-            <Container component="main" maxWidth="lg">   
-            </Container>
+            <IfFulfilled state={similarMoviesData}>
+              {({ movies }) => 
+                <div className="container">   
+                  {movies.map(({ movieId, name, year, imageUrl }) => 
+                    <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>
+                  )}
+                </div>
+              }
+            </IfFulfilled>
           </div>
         }
       </IfFulfilled>
