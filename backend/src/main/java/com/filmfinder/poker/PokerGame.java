@@ -4,62 +4,94 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.management.InstanceAlreadyExistsException;
+
+import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movie;
+import com.filmfinder.poker.frontendObjects.Players;
+import com.filmfinder.poker.frontendObjects.SelectedMovies;
+import com.filmfinder.poker.frontendObjects.SelectionProgress;
 
 import org.eclipse.jetty.websocket.api.Session;
 
 import javassist.NotFoundException;
 
 public class PokerGame {
-    private HashMap<Integer, Movie> proposed;
-    private HashMap<Integer, PokerPlayer> players;
-    private HashMap<Integer, Movie> votes;
+    private HashMap<String, PokerPlayer> players;
 
     protected PokerGame() {
     }
 
     public ArrayList<Session> getSessions() {
-        return new ArrayList<Session>();
-    }
-
-    public void addPlayer(int userId, String nickname, Session connection) {
-        players.put(userId, new PokerPlayer(userId, nickname, connection));
-    }
-
-    public String getPlayersJson() {
-        return "All players";
-    }
-
-    public void removePlayer(int userId) {
-        players.remove(userId);
-    }
-
-    public String getNickJson() {
-        for (PokerPlayer p: players.values()) {
-            //TODO: 
+        ArrayList<Session> sessions = new ArrayList<Session>();
+        for (PokerPlayer pl: players.values()) {
+            sessions.add(pl.getWebsocketConnection());
         }
-        return "hi";
+        return sessions;
     }
 
-    public void addSelect(int userId, int movieId) throws NotFoundException, SQLException {
-
-        // proposed.put();
+    public void addPlayer(String nickname, Session connection) throws InstanceAlreadyExistsException {
+        if (players.containsKey(nickname)) {
+            throw new InstanceAlreadyExistsException("Nickname already present");
+        }
+        players.put(nickname, new PokerPlayer(nickname, connection));
     }
 
-    public void removeSelect(int userId, int movieId) {
-        // proposed.remove(rk);
+    public Players getPlayers() {
+        Players pls = new Players();
+        for (PokerPlayer pl: players.values()) {
+            pls.addPlayer(pl.getNickname());
+        }
+        return pls;
+    }
+
+    public void removePlayer(String nickname) {
+        players.remove(nickname);
+    }
+
+    public SelectionProgress getSelectionProgress() {
+        SelectionProgress sp = new SelectionProgress();
+        for (PokerPlayer p: players.values()) {
+            if (p.isFinishedSelection()) {
+                sp.addDone(p.getNickname());
+            } else {
+                sp.addStillChoosing(p.getNickname());
+            }
+        }
+        return sp;
+    }
+
+    public void addSelect(String nickname, int movieId) throws NotFoundException, SQLException {
+        PokerPlayer p = players.get(nickname);
+        p.addProposed(movieId);
+    }
+
+    public void removeSelect(String nickname, int movieId) {
+        PokerPlayer p = players.get(nickname);
+        p.removeProposed(movieId);
+    }
+
+    public void finishSelect(String nickname) {
+        PokerPlayer p = players.get(nickname);
+        p.setFinishedSelection(true);
     }
 
     /**
      * 
      * @return list of selections in json format
      */
-    public String getSelectionsJson() {
-        return "selectionJson";
+    public SelectedMovies getSelectionsJson() {
+        SelectedMovies sm = new SelectedMovies();
+        for (PokerPlayer p: players.values()) {
+            for (Movie m: p.getProposed().values()) {
+                sm.addMovie(m);
+            }
+        }
+        return sm;
     }
 
-    public void addVotes(int userId, ArrayList<Integer> movieIds) {
-
+    public boolean addVote(String nickname, ArrayList<Integer> movieIds) {
+        return false;
     }
 
     public String resultJson() {

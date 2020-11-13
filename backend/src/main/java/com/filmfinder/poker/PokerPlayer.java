@@ -1,6 +1,7 @@
 package com.filmfinder.poker;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.filmfinder.movie.Movie;
@@ -10,18 +11,42 @@ import org.eclipse.jetty.websocket.api.Session;
 import javassist.NotFoundException;
 
 public class PokerPlayer {
-    private int userId;
     private String nickname;
     private HashMap<Integer, Movie> proposed = new HashMap<Integer, Movie>();
-    private boolean submittedProposal = false;
+    private boolean finishedSelection = false;
     private boolean submittedRanking = false;
     private Session websocketConnection;
+    private ArrayList<Movie> votes = new ArrayList<Movie>();
 
-
-    public PokerPlayer(int userId, String nickname, Session connection) {
-        this.userId = userId;
+    public PokerPlayer(String nickname, Session connection) {
         this.nickname = nickname;
-        this.websocketConnection = connection;
+        this.setWebsocketConnection(connection);
+    }
+
+    public ArrayList<Movie> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(ArrayList<Integer> votes) throws NotFoundException, SQLException {
+        for (Integer movieId: votes) {
+            this.votes.add(Movie.getMovie(movieId));
+        }
+    }
+
+    public boolean isFinishedSelection() {
+        return finishedSelection;
+    }
+
+    public void setFinishedSelection(boolean finishedSelection) {
+        this.finishedSelection = finishedSelection;
+    }
+
+    public Session getWebsocketConnection() {
+        return websocketConnection;
+    }
+
+    public void setWebsocketConnection(Session websocketConnection) {
+        this.websocketConnection = websocketConnection;
     }
 
     public boolean isSubmittedRanking() {
@@ -30,18 +55,6 @@ public class PokerPlayer {
 
     public void setSubmittedRanking(boolean submittedRanking) {
         this.submittedRanking = submittedRanking;
-    }
-
-    public boolean isSubmittedProposal() {
-        return submittedProposal;
-    }
-
-    public void setSubmittedProposal(boolean submittedProposal) {
-        this.submittedProposal = submittedProposal;
-    }
-
-    public int getUserId() {
-        return userId;
     }
 
     public String getNickname() {
@@ -72,11 +85,12 @@ public class PokerPlayer {
 
         PokerPlayer nn = (PokerPlayer) obj;
 
-        return this.userId==nn.getUserId();
+        return this.nickname==nn.getNickname();
     }
 
     @Override
     public int hashCode() {
-        return userId;
+        return nickname.hashCode();
     }
+
 }
