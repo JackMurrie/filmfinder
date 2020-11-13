@@ -3,7 +3,6 @@ package com.filmfinder.cache;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import com.filmfinder.Search.SearchList;
 import com.filmfinder.blacklist.Blacklist;
 import com.filmfinder.dashboard.Dashboard;
 import com.filmfinder.db.AuthDB;
@@ -24,7 +23,6 @@ public class Cache {
     private static HashMap<Integer, Blacklist> blacklists = new HashMap<Integer, Blacklist>();
     private static HashMap<Integer, Wishlist> wishlists = new HashMap<Integer, Wishlist>();
     private static HashMap<Integer, Watchlist> watchlists = new HashMap<Integer, Watchlist>();
-    private static HashMap<String, SearchList> searchs = new HashMap<String, SearchList>();
 
     // private static Cache cache = null;
 
@@ -123,12 +121,4 @@ public class Cache {
         return watchlist;
     }
 
-    public static SearchList getSearch(String query) throws NotFoundException, SQLException {
-        SearchList sl = searchs.get(query);
-        if (sl == null) {
-            sl = new SearchList(query);
-            searchs.put(query, sl);
-        }
-        return sl;
-    }
 }
