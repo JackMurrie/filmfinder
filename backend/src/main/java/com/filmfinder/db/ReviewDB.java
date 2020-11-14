@@ -205,7 +205,7 @@ public class ReviewDB {
         ArrayList<Review> list = new ArrayList<Review>();
         try {
             c = DbDataSource.getConnection();
-            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name FROM review INNER JOIN movie ON id=movie_id WHERE movie_id=?";
+            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name, date FROM review INNER JOIN movie ON id=movie_id WHERE movie_id=?";
             s = c.prepareStatement(q);
 
             s.setInt(1, movieId);
@@ -213,8 +213,7 @@ public class ReviewDB {
             rs = s.executeQuery();
             
             while (rs.next()) {
-                //TODO: implement Date
-                list.add(new Review(rs.getInt("uId"), movieId, rs.getString("comment"), rs.getFloat("rating"), new Date(10000), rs.getString("name")));
+                list.add(new Review(rs.getInt("uId"), movieId, rs.getString("comment"), rs.getFloat("rating"), rs.getDate("date"), rs.getString("name")));
             };
 
             return new Reviews(list);
