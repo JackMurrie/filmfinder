@@ -265,7 +265,7 @@ export default function Movie(props) {
                       Directors
                     </div>
                     <div className="text">
-                      {movie.directors}
+                      {[movie.directors].join(", ")}
                     </div>
                     <div className="heading">
                       Release Date

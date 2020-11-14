@@ -3,6 +3,7 @@ import MovieCard from '../components/MovieCard';
 import Footer from '../components/Footer';
 import PersonCard from './components/personCard';
 import PokerCard from './components/pokerCard';
+import VoteCard from './components/voteCard';
 
 import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
@@ -247,6 +248,19 @@ function getSteps() {
 function GetStepContent(step) {
     const classes = useStyles();
 
+    const [vote, setVote] = React.useState(1);
+
+    function updateVoteNumber(props)  {
+      console.log(props);
+      console.log(vote);
+      if (props) {
+        setVote(vote - 1);
+      }
+      else {
+        setVote(vote + 1);
+      }
+    };
+
     //GET nicknames of other players
     const names = [
         "Jack",
@@ -280,9 +294,19 @@ function GetStepContent(step) {
     </React.Fragment>
       );
     case 3:
-      return "To do";
+      return (
+        <React.Fragment>
+          <Typography component="h1" variant="h4" className={classes.headText}>
+              Vote number {vote}
+          </Typography>
+          <div className={classes.container}>
+            <VoteCard currentVote={vote} updateVoteNumber={updateVoteNumber}/>
+            <VoteCard currentVote={vote} updateVoteNumber={updateVoteNumber}/>
+          </div>
+        </React.Fragment>
+      );
     case 4:
-        return "To do";
+        return "Chosen movie card";
   }
 }
 
