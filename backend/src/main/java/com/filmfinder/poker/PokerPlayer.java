@@ -59,8 +59,11 @@ public class PokerPlayer {
         return nickname;
     }
 
-    public void addProposed(int movieId) throws NotFoundException, SQLException {
-        proposed.put(movieId, Movie.getMovie(movieId));
+    public void addProposed(ArrayList<Integer> movieIds) throws NotFoundException, SQLException {
+        for (Integer movieId: movieIds) {
+            proposed.put(movieId, Movie.getMovie(movieId));
+        }
+        setFinishedSelection(true);
     }
 
     public void removeProposed(int movieId) {

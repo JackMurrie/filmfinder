@@ -72,20 +72,20 @@ public class PokerGame {
         return sp;
     }
 
-    public void addSelect(String nickname, int movieId) throws NotFoundException, SQLException {
+    public void addSelect(String nickname, ArrayList<Integer> movieIds) throws NotFoundException, SQLException {
         PokerPlayer p = players.get(nickname);
-        p.addProposed(movieId);
+        p.addProposed(movieIds);
     }
 
-    public void removeSelect(String nickname, int movieId) {
-        PokerPlayer p = players.get(nickname);
-        p.removeProposed(movieId);
-    }
+    // public void removeSelect(String nickname, int movieId) {
+    //     PokerPlayer p = players.get(nickname);
+    //     p.removeProposed(movieId);
+    // }
 
-    public void finishSelect(String nickname) {
-        PokerPlayer p = players.get(nickname);
-        p.setFinishedSelection(true);
-    }
+    // public void finishSelect(String nickname) {
+    //     PokerPlayer p = players.get(nickname);
+    //     p.setFinishedSelection(true);
+    // }
 
     /**
      * 
