@@ -25,6 +25,7 @@ import io.jsonwebtoken.SignatureException;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import com.filmfinder.db.AuthDB;
+import com.filmfinder.db.UtilDB;
 // Note need to handle sql exceptions,
 // Need to check if email already exists
 // Need to check if email is valid
