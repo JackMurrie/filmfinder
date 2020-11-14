@@ -10,6 +10,7 @@ public class Data {
     public static final int PUSHGAME = 5;
     public static final int VOTE = 6;
     public static final int RESULTS = 7;
+    public static final int PLAYERS = 8;
 
     // private int command;
     // private int gameId;

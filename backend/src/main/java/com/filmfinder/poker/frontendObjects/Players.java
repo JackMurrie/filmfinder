@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
 
 public class Players extends frontendObject {
     @Expose
-    private int command = 9;
+    private int command = 8;
     @Expose
     private ArrayList<String> players = new ArrayList<String>();
 

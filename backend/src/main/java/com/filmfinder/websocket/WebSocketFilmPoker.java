@@ -56,7 +56,8 @@ public class WebSocketFilmPoker {
                 int gameId = data.get("gameId").getAsInt();
                 pg = PokerManager.getGame(gameId);
                 pg.addPlayer(data.get("nickname").getAsString(), session);
-                response = getBoolResponse(command, true);
+                response = pg.getPlayers().toJson();
+                
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 response = getBoolResponse(command, false);
