@@ -39,8 +39,8 @@ export default function PublicReview(props) {
               <Rating name="read-only" precision={0.5} value={props.rating} readOnly/>
             </Box>
             <div className="right">
-            <Button href={`/user/${props.user}`} color="secondary">
-                {props.user}
+            <Button href={`/user/${props.user.userId}`} color="secondary">
+                {`${props.user.first} ${props.user.last}`}
             </Button>
             <Button disabled color="secondary">
                 {props.postDate}
