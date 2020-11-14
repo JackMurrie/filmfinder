@@ -54,15 +54,15 @@ public class ResourceDashboard {
     @Path("{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAnotherUserDashboard(@PathParam("userId") int userId) {
-        
+        int observerId = 0;
         try {
-            CredentialHandler.decodeToken(token);
+            observerId = UtilDB.getUserId(CredentialHandler.decodeToken(token));
         } catch (Exception e) {
             return Response.status(400).entity("invalid token").build();
         }
         
         try {
-            Dashboard d = new Dashboard(userId, 0);
+            Dashboard d = new Dashboard(userId, 0, observerId);
             return Response.status(200).entity(d.toJson()).build();
         } catch (Exception e) {
             return Response.status(400).entity("Could not get dashboard data\n").build();

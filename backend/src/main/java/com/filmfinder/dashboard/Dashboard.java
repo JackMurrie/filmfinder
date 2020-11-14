@@ -40,4 +40,14 @@ public class Dashboard extends frontendObject {
         userInfo = User.getUser(userId);
     }
 
+	public Dashboard(int userId, int limit, int observerId) throws NotFoundException, SQLException {
+        watchlist = new Watchlist(userId);
+        wishlist = new Wishlist(userId);
+        recommendations = new Movies();
+        reviews = Reviews.getReviewsByUserId(userId);
+        blacklisted = new Blacklist(observerId);
+        recommendations = Recommender.getRecommendedMovies2(userId, limit);
+        userInfo = User.getUser(userId);
+	}
+
 }
