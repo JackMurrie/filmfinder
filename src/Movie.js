@@ -102,7 +102,7 @@ export default function Movie(props) {
   const [rating, setRating] = useState(0);
 
   const movieData = useFetch(`/rest/movies/${movieId}`, requestOptions, { defer: true });
-  useEffect(movieData.run, []);
+  useEffect(movieData.run, [movieId]);
 
   const loadUserData = async () => {
     const userRequestOptions = { 
@@ -131,10 +131,10 @@ export default function Movie(props) {
   };
 
   const userData = useAsync({ deferFn: loadUserData });
-  useEffect(userData.run, []);
+  useEffect(userData.run, [movieId]);
 
   const similarMoviesData = useFetch(`/rest/movies/${movieId}/similar`, requestOptions, { defer: true });
-  useEffect(similarMoviesData.run, []);
+  useEffect(similarMoviesData.run, [movieId]);
 
   const updateWishlist = useFetch('/rest/user/wishlist', requestOptions, { defer: true });
   const updateWatchlist = useFetch('/rest/user/watchedlist', requestOptions, { defer: true });
