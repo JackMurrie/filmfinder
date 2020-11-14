@@ -202,7 +202,7 @@ function PublicDashboard(props) {
         text={comment}
         rating={rating}
         postDate={post_date}
-        user={user.userId}
+        user={user}
         movieId={movieId}
       />;
     });
