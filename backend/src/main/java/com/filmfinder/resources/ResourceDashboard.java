@@ -169,10 +169,12 @@ public class ResourceDashboard {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addToBlacklist(UserIdTemplate data) {
 
-        int userId = data.getUserId();
+        int userToBlock = data.getUserId();
+        int userId = 0;
         try {
+            userId = UtilDB.getUserId(CredentialHandler.decodeToken(token));
             Blacklist bl = new Blacklist(userId);
-            bl.add(userId);
+            bl.add(userToBlock);
             bl.refresh();
             return Response.status(200).entity("user blacklisted").build();
         } catch (Exception e) {
@@ -185,10 +187,12 @@ public class ResourceDashboard {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response removeFromBlacklist(UserIdTemplate data) {
 
-        int userId = data.getUserId();
+        int userToUnblock = data.getUserId();
+        int userId = 0;
         try {
+            userId = UtilDB.getUserId(CredentialHandler.decodeToken(token));
             Blacklist bl = new Blacklist(userId);
-            bl.remove(userId);
+            bl.remove(userToUnblock);
             bl.refresh();
             return Response.status(200).entity("user unblacklisted").build();
         } catch (Exception e) {
