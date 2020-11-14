@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
       },
+    heading: {
+    textAlign: "center",
+    fontFamily: ["Montserrat", "sans-serif"],
+    },
 }));
 
 export default function FilmPoker() {
@@ -29,7 +33,7 @@ export default function FilmPoker() {
             <Header />
             <Container component="main" maxWidth="lg">
                 <div className={classes.paper}>
-                    <Typography component="h1" variant="h1">
+                    <Typography component="h1" variant="h1" className={classes.heading}>
                     Film Poker
                     </Typography>
                     <div className={classes.paper}> </div>
