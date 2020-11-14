@@ -39,15 +39,12 @@ public class TestPoker {
 
             System.out.println(game.getSelectionProgress());
 
-            game.addSelect("Fred", 2);
-            game.addSelect("Fred", 5);
-            game.addSelect("John", 6);
-            game.addSelect("John", 2);
-            game.finishSelect("Fred");
+            game.addSelect("Fred", votes1);
+            // game.addSelect("John", 6);
+            // game.addSelect("John", 2);
 
             System.out.println(game.getSelectionProgress());
 
-            game.finishSelect("John");
             System.out.println(game.getSelectionProgress());
 
             System.out.println(game.getSelectedMovies());
