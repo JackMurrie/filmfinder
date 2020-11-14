@@ -35,7 +35,7 @@ public class ResourceFilmpoker {
         }
         try {
             int gameId = PokerManager.instantiate();
-            String message = "{gameId: "+gameId+"}";
+            String message = "{\"gameId\": "+gameId+"}";
             return Response.status(200).entity(message).build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();
