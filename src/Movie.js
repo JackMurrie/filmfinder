@@ -288,8 +288,8 @@ export default function Movie(props) {
             <IfFulfilled state={similarMoviesData}>
               {({ movies }) => 
                 <div className="container">   
-                  {movies.map(({ movieId, name, year, imageUrl }) => 
-                    <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>
+                  {movies.map(({ movieId, name, year, imageUrl, averageRating }) => 
+                    <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating} />
                   )}
                 </div>
               }
