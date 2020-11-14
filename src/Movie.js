@@ -112,22 +112,24 @@ export default function Movie(props) {
     };
     const userDataResponse = await fetch('/rest/user/dashboard', userRequestOptions);
     
-    const { reviews, watchlist, wishlist } = await userDataResponse.json();
+    const data = await userDataResponse.json();
+    const { reviews, watchlist, wishlist } = data;
     const myReview = _.find(reviews, review => review.movieId === movieId);
     if (myReview) {
       setRating(myReview.rating);
       setHasReview(true);
+    } else {
+      setRating(0);
+      setHasReview(false);
     };
 
     const inWishlist = _.find(wishlist.movies, movie => movie.movieId === movieId);
-    if (inWishlist) {
-      setWished(true);
-    };
+    setWished(inWishlist);
 
     const inWatchlist = _.find(watchlist.movies, movie => movie.movieId === movieId);
-    if (inWatchlist) {
-      setWatched(true);
-    };
+    setWatched(inWatchlist);
+
+    return data;
   };
 
   const userData = useAsync({ deferFn: loadUserData });
