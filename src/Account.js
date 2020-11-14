@@ -93,7 +93,7 @@ export default function Account(props) {
               <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
               </div>
             <Container component="main" maxWidth="lg">
-              <Dashboard dashboardData={dashboardData} reloadDashboardData={fetchDashboardData.run}/>
+              <Dashboard handleLogout={props.handleLogout} dashboardData={dashboardData} reloadDashboardData={fetchDashboardData.run}/>
             </Container>
             <Footer />
           </React.Fragment>
@@ -179,6 +179,22 @@ function Dashboard(props) {
       });
   };
 
+  const handleDeleteAccount = (event) => {
+
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    };
+
+    fetch('/rest/auth/deactivate', requestOptions)
+      .then(response => {
+        if (response.ok) {
+          props.handleLogout();
+          history.push('/');
+        } 
+      });
+  };
+
   const { wishlist, watchlist, recommendations, reviews } = props.dashboardData;
 
   const Wishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
@@ -243,7 +259,7 @@ function Dashboard(props) {
       </TabPanel>
       <TabPanel value={value} index={4}>
         Delete Account 
-        <IconButton color="secondary" component="span">
+        <IconButton color="secondary" component="span" onClick={handleDeleteAccount}>
               <DeleteIcon />
         </IconButton>
         <Divider />

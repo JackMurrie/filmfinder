@@ -85,8 +85,8 @@ function SignUpScreen(props) {
   
       fetch('/rest/auth/register', requestOptions)
         .then(() => {
-          history.push('/Account');
           props.handleLogin();
+          history.push('/Account');
         })
     };
   
