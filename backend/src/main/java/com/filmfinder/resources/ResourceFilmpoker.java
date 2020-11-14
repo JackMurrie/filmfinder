@@ -35,10 +35,8 @@ public class ResourceFilmpoker {
         }
         try {
             int gameId = PokerManager.instantiate();
-            System.out.println("yes");
-
             String message = "{gameId: "+gameId+"}";
-            return Response.status(200).entity(Integer.toString(gameId)).build();
+            return Response.status(200).entity(message).build();
         } catch (Exception e) {
             return Response.status(400).entity(e.getMessage()).build();
         }
@@ -54,6 +52,7 @@ public class ResourceFilmpoker {
             PokerManager.endGame(gameId);
             return Response.status(200).entity("Ended successfully").build();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return Response.status(400).entity("unknown error").build();
         }
     }
