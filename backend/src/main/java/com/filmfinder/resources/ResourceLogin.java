@@ -81,7 +81,6 @@ public class ResourceLogin {
     public Response logout(@CookieParam("auth_token") Cookie cookie) {
 
         if (cookie != null) {
-
             return Response.status(200).entity("Logout successful").cookie(new NewCookie("auth_token", "", "/rest/", null, null, 0, false)).build();
         }
         return Response.status(200).entity("OK - No session").build();
@@ -140,6 +139,23 @@ public class ResourceLogin {
             return Response.status(400).entity("timeout - verification code has expired").build();
         } catch (Exception e) {
             return Response.status(400).entity("error resetting password: "+e.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("deactivate")
+    public Response deactivateUserAccount() {
+        int userId;
+        try {
+            userId = UtilDB.getUserId(CredentialHandler.decodeToken(token));
+        } catch (Exception e) {
+            return Response.status(400).entity("invalid token").build();
+        }
+        try {
+            AuthDB.deleteUser(userId);
+            return Response.status(200).entity("user account deleted").cookie(new NewCookie("auth_token", "", "/rest/", null, null, 0, false)).build();
+        } catch (Exception e) {
+            return Response.status(400).entity("there was error while deleting user account").build();
         }
     }
 }
