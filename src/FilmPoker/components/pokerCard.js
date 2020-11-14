@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
       textAlign: "center",
       fontSize: "calc(6px + 2vmin)",
       fontFamily: ['Montserrat', "sans-serif"],
+    },
+    right: {
+      textAlign: "right",
     }
 }));
 
@@ -64,12 +67,12 @@ export default function PokerCard(props) {
     return (
       <Card style={{width: 255, margin: 20}} elevation={24}>
       <CardActionArea onClick = {toggleAdded}>
-        <CardMedia style={{height: 320}} image={props.imageUrl}/>
+        <CardMedia style={{height: 370}} image={props.imageUrl}/>
         <CardContent>
         <div className="movieTitle">
                 {props.title}
           </div>
-        <div className='right'>
+        <div className={classes.right}>
             <FormControlLabel
             control={<Checkbox checked={added} 
             icon={<AddIcon className={classes.largeIcon}/>} 

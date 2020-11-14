@@ -102,7 +102,7 @@ export default function Movie(props) {
   const [rating, setRating] = useState(0);
 
   const movieData = useFetch(`/rest/movies/${movieId}`, requestOptions, { defer: true });
-  useEffect(movieData.run, []);
+  useEffect(movieData.run, [movieId]);
 
   const loadUserData = async () => {
     const userRequestOptions = { 
@@ -112,29 +112,31 @@ export default function Movie(props) {
     };
     const userDataResponse = await fetch('/rest/user/dashboard', userRequestOptions);
     
-    const { reviews, watchlist, wishlist } = await userDataResponse.json();
+    const data = await userDataResponse.json();
+    const { reviews, watchlist, wishlist } = data;
     const myReview = _.find(reviews, review => review.movieId === movieId);
     if (myReview) {
       setRating(myReview.rating);
       setHasReview(true);
+    } else {
+      setRating(0);
+      setHasReview(false);
     };
 
     const inWishlist = _.find(wishlist.movies, movie => movie.movieId === movieId);
-    if (inWishlist) {
-      setWished(true);
-    };
+    setWished(inWishlist);
 
     const inWatchlist = _.find(watchlist.movies, movie => movie.movieId === movieId);
-    if (inWatchlist) {
-      setWatched(true);
-    };
+    setWatched(inWatchlist);
+
+    return data;
   };
 
   const userData = useAsync({ deferFn: loadUserData });
-  useEffect(userData.run, []);
+  useEffect(userData.run, [movieId]);
 
   const similarMoviesData = useFetch(`/rest/movies/${movieId}/similar`, requestOptions, { defer: true });
-  useEffect(similarMoviesData.run, []);
+  useEffect(similarMoviesData.run, [movieId]);
 
   const updateWishlist = useFetch('/rest/user/wishlist', requestOptions, { defer: true });
   const updateWatchlist = useFetch('/rest/user/watchedlist', requestOptions, { defer: true });
@@ -288,8 +290,8 @@ export default function Movie(props) {
             <IfFulfilled state={similarMoviesData}>
               {({ movies }) => 
                 <div className="container">   
-                  {movies.map(({ movieId, name, year, imageUrl }) => 
-                    <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>
+                  {movies.map(({ movieId, name, year, imageUrl, averageRating }) => 
+                    <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating} />
                   )}
                 </div>
               }
@@ -314,7 +316,7 @@ function MoviePoster(props) {
         <CardContent>
           <div className='title'>
             <Box component="fieldset" mb={-1} borderColor="transparent">
-              <Rating name="read-only" precision={0.5} value={props.movieRating} readOnly/>
+              <Rating name="read-only" precision={0.1} value={props.movieRating} readOnly/>
             </Box>
             {props.movieGenreList.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
           </div>
