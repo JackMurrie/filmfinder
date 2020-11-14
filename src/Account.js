@@ -60,7 +60,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexWrap: "wrap",
     marginLeft: "10%",
-  }
+  },
+  centerText: {
+    textAlign: "center",
+    fontFamily: ["Montserrat", "sans-serif"],
+  },
 }));
   
 export default function Account(props) {
@@ -75,7 +79,7 @@ export default function Account(props) {
     body: JSON.stringify({ limit: 10 })
   };
 
-  const fetchDashboardData = useFetch('/rest/user', requestOptions, {defer: true});
+  const fetchDashboardData = useFetch('/rest/user/dashboard', requestOptions, {defer: true});
   useEffect(fetchDashboardData.run, []);
 
   return (
@@ -103,6 +107,9 @@ export default function Account(props) {
         <React.Fragment>
            <div className={classes.image}>
               <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+            </div>
+            <div className={classes.centerText}>
+              <h1>Log in to view your account </h1>
             </div>
         </React.Fragment>
       </IfRejected>
@@ -161,11 +168,11 @@ function Dashboard(props) {
     return <WatchlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
   });
 
-  const Recommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
-    return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+  const Recommendations = recommendations.movies.map(({ movieId, name, year, imageUrl, averageRating }) => {
+    return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating} />;
   });
 
-  const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, userId }) => {
+  const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, user }) => {
 
 
     return <PrivateReview 
@@ -173,7 +180,7 @@ function Dashboard(props) {
       text={comment}
       rating={rating}
       postDate={post_date}
-      user={userId}
+      user={user.userId}
       movieId={movieId}
       onChange={props.reloadDashboardData}
     />;

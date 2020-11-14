@@ -88,14 +88,16 @@ export default function Header(props) {
 
     const handleLogoutRedirect = (event) => {
       const requestOptions = {
-        method: 'POST',
+        method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       };
   
-      fetch('/rest/auth/login', requestOptions)
+      fetch('/rest/auth/logout', requestOptions)
         .then(response => {
+          if (response.ok) {
             props.handleLogout();
             history.push("/");
+          }
         });
     }; 
 
@@ -163,6 +165,9 @@ export default function Header(props) {
                       />
                     </form>
                 </div>
+                <Button href="/FilmPoker" color="primary" variant="outlined" className={classes.link}>
+                  Play FilmPoker
+                </Button>
                 {headerButtons}
                 {props.isLoggedIn && avatar}
             </Toolbar>

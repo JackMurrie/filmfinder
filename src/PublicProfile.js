@@ -1,9 +1,8 @@
 import Header from './components/Header';
 import PublicReview from './components/PublicReview'
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -20,13 +19,14 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import ThumbUp from '@material-ui/icons/ThumbUp';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import Box from '@material-ui/core/Box';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useTheme } from '@material-ui/core/styles';
+import { IfFulfilled, useAsync, useFetch } from 'react-async';
+import MovieCard from './components/MovieCard';
+import _ from 'lodash';
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -57,60 +57,96 @@ export default function PublicProfile(props) {
     const userId = parseInt(location.pathname.split('/').pop(), 10);
     const theme = useTheme();
 
-    const [state, setState] = React.useState({
-        following: false,
-      });
+    const requestOptions = {
+      method: 'GET',
+      headers: { 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json' 
+      }
+    };
+  
+    const loadUserData = async () => {
+      const userRequestOptions = { 
+        ...requestOptions,
+        method: 'GET',
+      };
+      const userDataResponse = await fetch(`/rest/user/${userId}`, userRequestOptions);
 
-    const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-        {/* Call POST to API */}
-        const data = {
-          [event.target.name]: event.target.checked
-        };
-        {console.log("POST: ", data)}
+      const data = await userDataResponse.json();
+
+      const inBlacklist = _.find(data.blacklisted.users, user => user.userId === userId);
+      if (inBlacklist) {
+        setBlacklist(true);
       };
 
+      return data;
+    };
+  
+    const userData = useAsync({ deferFn: loadUserData });
+    useEffect(userData.run, []);
+  
+    const updateBlacklist = useFetch('/rest/user/blacklist', requestOptions, { defer: true });
+
+    const [blacklist, setBlacklist] = useState(false);
+
+    const toggleBlacklist = (event) => {
+        if (blacklist) {
+        updateBlacklist.run({
+          method: 'DELETE',
+          body: JSON.stringify({ userId: userId })
+        });
+      } else {
+        updateBlacklist.run({
+          method: 'POST',
+          body: JSON.stringify({ userId: userId })
+        });
+      };
+      setBlacklist(blacklisted => !blacklisted);
+    };
+  
     return (
         <React.Fragment>
         <CssBaseline />
-            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+        <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+        <IfFulfilled state={userData}>
+          {({ userInfo, wishlist, watchlist, reviews }) =>
             <Container component="main" maxWidth="lg">
                 <Grid container spacing={3}>
                     {/* Profile Picture */}
                     <Grid item xs={4.5}>
                         <Paper className={fixedHeightPaper}>
                             <Card style={{width: 350, margin: 20}}>
-                                <CardMedia style={{height: 400}} image="https://support.plymouth.edu/kb_images/Yammer/default.jpeg"/>
+                                <CardMedia style={{height: 400}} image={userInfo.profilePicUrl}/>
                                 <CardContent>
                                 </CardContent>
                             </Card>
                             <div className="title">
-                              Public User
-                              </div>
+                              {`${userInfo.first} ${userInfo.last}`}
+                            </div>
                         </Paper>
                     </Grid>
                     {/* Bio */}
                     <Grid item xs={7} >
                         <Paper className={fixedHeightPaper}>
                             <Typography>
-                                This is some info about me and the movies I like
+                                TODO: Add user description
                             </Typography>
                             <div className={classes.flexGrow}></div>
                             <div className="right">
                                 <FormControlLabel
-                                  control={<Switch checked={state.seen} onChange={handleChange} name="following" color="primary"/>}
-                                  label="Following"
-                                 />
+                                  control={<Switch checked={blacklist} onChange={toggleBlacklist} name="blacklist" color="primary"/>}
+                                  label="Blacklist"
+                                />
                             </div>
                         </Paper>
                     </Grid>
                     <Grid item xs={12}>
-                        <TabButtons />
+                        <PublicDashboard wishlist={wishlist} watchlist={watchlist} reviews={reviews}/>
                     </Grid>
                 </Grid>
             </Container>
-
-
+          }
+        </IfFulfilled>
         </React.Fragment>
     )
 }
@@ -141,42 +177,66 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
-function TabButtons() {
+function PublicDashboard(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
   
-    const handleChange = (event, newValue) => {
+    const toggleTab = (event, newValue) => {
       setValue(newValue);
     };
+
+
+    const { wishlist, watchlist, reviews } = props;
+
+    const Wishlist = wishlist.movies.map(({ movieId, name, year, imageUrl, averageRating }) => {
+      return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating} />;
+    });
+  
+    const Watchlist = watchlist.movies.map(({ movieId, name, year, imageUrl, averageRating }) => {
+      return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating} />;
+    });
+    
+    const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, user }) => {
+      return <PublicReview 
+        title={movieName}
+        text={comment}
+        rating={rating}
+        postDate={post_date}
+        user={user}
+        movieId={movieId}
+      />;
+    });
   
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="default">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            variant="fullWidth"
-            indicatorColor="secondary"
-            textColor="secondary"
-            aria-label="Buton Tabs"
-          >
-            <Tab label="Wishlist" icon={<FavoriteIcon />}/>
-            <Tab label="Seen" icon={<VisibilityIcon />}/>
-            <Tab label="Reviews" icon={<RateReviewIcon />}/>
-            
-          </Tabs>
-        </AppBar>
-        <TabPanel value={value} index={0}>
-          Wishlist
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          Seen
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <PublicReview />
-          <PublicReview />
-          <PublicReview />
-        </TabPanel>
-      </div>
+      <AppBar position="static" color="default">
+        <Tabs
+          value={value}
+          onChange={toggleTab}
+          variant="fullWidth"
+          indicatorColor="secondary"
+          textColor="secondary"
+          aria-label="Buton Tabs"
+        >
+          <Tab label="Wishlist" icon={<FavoriteIcon />}/>
+          <Tab label="Seen" icon={<VisibilityIcon />}/>
+          <Tab label="My Reviews" icon={<RateReviewIcon />}/>
+          
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>
+        <div className="container">
+          {Wishlist}
+        </div>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <div className="container">
+          {Watchlist}
+        </div>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        {Reviews}
+      </TabPanel>
+    </div>
     );
   }

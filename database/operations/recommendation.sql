@@ -62,3 +62,5 @@ SELECT * FROM watched;
 
 SELECT * FROM user;
 SELECT * FROM review;
+
+SELECT COUNT(*) from movie;

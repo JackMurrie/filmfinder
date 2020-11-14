@@ -33,10 +33,11 @@ import Switch from '@material-ui/core/Switch';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, { useEffect, useState } from 'react';
-import { useAsync, useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
+import { useAsync, useFetch, IfFulfilled, IfPending } from 'react-async';
 import { useLocation } from 'react-router-dom';
 
 import _ from 'lodash';
+import MovieCard from './components/MovieCard';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -101,7 +102,7 @@ export default function Movie(props) {
   const [rating, setRating] = useState(0);
 
   const movieData = useFetch(`/rest/movies/${movieId}`, requestOptions, { defer: true });
-  useEffect(movieData.run, []);
+  useEffect(movieData.run, [movieId]);
 
   const loadUserData = async () => {
     const userRequestOptions = { 
@@ -109,26 +110,31 @@ export default function Movie(props) {
       method: 'POST',
       body: JSON.stringify({ limit: 10 }) 
     };
-    const userDataResponse = await fetch('/rest/user', userRequestOptions);
-    const { reviews, watchlist, wishlist } = await userDataResponse.json();
+    const userDataResponse = await fetch('/rest/user/dashboard', userRequestOptions);
+    
+    const data = await userDataResponse.json();
+    const { reviews, watchlist, wishlist } = data;
     const myReview = _.find(reviews, review => review.movieId === movieId);
     if (myReview) {
       setRating(myReview.rating);
       setHasReview(true);
+    } else {
+      setRating(0);
+      setHasReview(false);
     };
 
     const inWishlist = _.find(wishlist.movies, movie => movie.movieId === movieId);
-    if (inWishlist) {
-      setWished(true);
-    };
+    setWished(inWishlist);
 
     const inWatchlist = _.find(watchlist.movies, movie => movie.movieId === movieId);
-    if (inWatchlist) {
-      setWatched(true);
-    };
+    setWatched(inWatchlist);
   };
+
   const userData = useAsync({ deferFn: loadUserData });
-  useEffect(userData.run, []);
+  useEffect(userData.run, [movieId]);
+
+  const similarMoviesData = useFetch(`/rest/movies/${movieId}/similar`, requestOptions, { defer: true });
+  useEffect(similarMoviesData.run, [movieId]);
 
   const updateWishlist = useFetch('/rest/user/wishlist', requestOptions, { defer: true });
   const updateWatchlist = useFetch('/rest/user/watchedlist', requestOptions, { defer: true });
@@ -205,19 +211,30 @@ export default function Movie(props) {
       <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
       <AlertDialog alertOpen={alertOpen} handleAlertClose={handleAlertClose}/>
       <IfFulfilled state={movieData}>
-        { ({ movie, reviews }) => 
-          <div>
+        { ({ movie, reviews }) =>
+          <div>            
             <div className="title">
               <h1>{movie.name}</h1>
             </div>
-            <Box className="title" component="fieldset" mb={3} borderColor="transparent">
-              <Rating 
-              name="rating" 
-              precision={0.5} 
-              value={rating} 
-              size="large" 
-              onChange={changeRating}/>
-            </Box>
+            <IfPending state={userData}>
+              {() =>
+                <Box className="title" component="fieldset" mb={3} borderColor="transparent">
+                  <CircularProgress color="inherit" />
+                </Box>
+              }
+            </IfPending>
+            <IfFulfilled state={userData}>
+              {() =>
+                <Box className="title" component="fieldset" mb={3} borderColor="transparent">
+                  <Rating 
+                  name="rating" 
+                  precision={0.5} 
+                  value={rating} 
+                  size="large" 
+                  onChange={changeRating}/>
+                </Box>
+              }
+            </IfFulfilled>
             <Container component="main" maxWidth="lg">
               <Grid container spacing={3}>
                 {/* Movie Card */}
@@ -238,24 +255,24 @@ export default function Movie(props) {
                 {/* Information */}
                 <Grid item xs={7} >
                   <Paper className={fixedHeightPaper}>
-                  <div className="heading">
-                    Movie Details
-                  </div>
-                  <div className="text">
-                    {movie.description}
-                  </div>
-                  <div className="heading">
-                    Directors
-                  </div>
-                  <div className="text">
-                    {movie.directors}
-                  </div>
-                  <div className="heading">
-                    Release Date
-                  </div>
-                  <div className="text">
-                    {movie.year}
-                  </div>
+                    <div className="heading">
+                      Movie Details
+                    </div>
+                    <div className="text">
+                      {movie.description}
+                    </div>
+                    <div className="heading">
+                      Directors
+                    </div>
+                    <div className="text">
+                      {movie.directors}
+                    </div>
+                    <div className="heading">
+                      Release Date
+                    </div>
+                    <div className="text">
+                      {movie.year}
+                    </div>
                     <div className="right">
                       <ReviewButton loggedIn={props.loggedIn} setAlertOpen={setAlertOpen} movieId={movieId} hasReview={hasReview} updateReview={updateReview} reloadMovieData={movieData} />  
                     </div>
@@ -266,8 +283,8 @@ export default function Movie(props) {
                   <Grid item xs={12}>
                     <Paper className={fixedHeightPaperReview} variant="outlined">
                         <Grid container spacing={1}>
-                          {reviews.map(({ comment, rating, post_date, userId }) => 
-                            <PublicReview text={comment} rating={rating} postDate={post_date} user={userId} />
+                          {reviews.map(({ comment, rating, post_date, user }) => 
+                            <PublicReview text={comment} rating={rating} postDate={post_date} user={user} />
                           )}
                         </Grid>
                     </Paper>
@@ -279,8 +296,15 @@ export default function Movie(props) {
             <div className="title">
               <h1>Similar Movies</h1>
             </div>
-            <Container component="main" maxWidth="lg">   
-            </Container>
+            <IfFulfilled state={similarMoviesData}>
+              {({ movies }) => 
+                <div className="container">   
+                  {movies.map(({ movieId, name, year, imageUrl, averageRating }) => 
+                    <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating} />
+                  )}
+                </div>
+              }
+            </IfFulfilled>
           </div>
         }
       </IfFulfilled>
@@ -301,7 +325,7 @@ function MoviePoster(props) {
         <CardContent>
           <div className='title'>
             <Box component="fieldset" mb={-1} borderColor="transparent">
-              <Rating name="read-only" precision={0.5} value={props.movieRating} readOnly/>
+              <Rating name="read-only" precision={0.1} value={props.movieRating} readOnly/>
             </Box>
             {props.movieGenreList.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
           </div>

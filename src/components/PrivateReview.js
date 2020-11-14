@@ -76,6 +76,9 @@ export default function PrivateReview(props) {
               <IconButton color="primary" component="span" className={classes.control} onClick={deleteReview.run}>
                 <DeleteIcon />
               </IconButton>
+              <Button disabled color="secondary">
+                {props.postDate}
+            </Button>
             </CardActions>
           </Card>
         </Grid>
