@@ -128,8 +128,6 @@ export default function Movie(props) {
 
     const inWatchlist = _.find(watchlist.movies, movie => movie.movieId === movieId);
     setWatched(inWatchlist);
-
-    return data;
   };
 
   const userData = useAsync({ deferFn: loadUserData });
@@ -218,14 +216,25 @@ export default function Movie(props) {
             <div className="title">
               <h1>{movie.name}</h1>
             </div>
-            <Box className="title" component="fieldset" mb={3} borderColor="transparent">
-              <Rating 
-              name="rating" 
-              precision={0.5} 
-              value={rating} 
-              size="large" 
-              onChange={changeRating}/>
-            </Box>
+            <IfPending state={userData}>
+              {() =>
+                <Box className="title" component="fieldset" mb={3} borderColor="transparent">
+                  <CircularProgress color="inherit" />
+                </Box>
+              }
+            </IfPending>
+            <IfFulfilled state={userData}>
+              {() =>
+                <Box className="title" component="fieldset" mb={3} borderColor="transparent">
+                  <Rating 
+                  name="rating" 
+                  precision={0.5} 
+                  value={rating} 
+                  size="large" 
+                  onChange={changeRating}/>
+                </Box>
+              }
+            </IfFulfilled>
             <Container component="main" maxWidth="lg">
               <Grid container spacing={3}>
                 {/* Movie Card */}
