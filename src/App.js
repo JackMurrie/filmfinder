@@ -113,16 +113,16 @@ function App() {
                 <SearchResults loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/FilmPoker">
-                <FilmPoker />
+                <FilmPoker loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/CreateGame">
-                <CreateGame />
+                <CreateGame loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/JoinGame">
-                <JoinGame />
+                <JoinGame loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route exact path="/PlayFilmPoker/:GameID">
-                <PlayFilmPoker />
+                <PlayFilmPoker loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>  
             <Route path="/">
                 <Home loggedIn={loggedIn} darkMode={darkMode} handleLogout={handleLogout} handleThemeChange={handleThemeChange}/>
