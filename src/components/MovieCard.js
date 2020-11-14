@@ -30,7 +30,7 @@ export default function MovieCard(props) {
         <CardContent>
           <div className='title'>
             <Box component="fieldset" mb={-2} borderColor="transparent">
-              <Rating name="read-only" precision={0.5} value={4.5} readOnly size="large"/>
+              <Rating name="read-only" precision={0.1} value={props.rating} readOnly size="large"/>
             </Box>
           </div>
           <div className="movieTitle">

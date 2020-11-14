@@ -168,8 +168,8 @@ function Dashboard(props) {
     return <WatchlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
   });
 
-  const Recommendations = recommendations.movies.map(({ movieId, name, year, imageUrl }) => {
-    return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+  const Recommendations = recommendations.movies.map(({ movieId, name, year, imageUrl, averageRating }) => {
+    return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating} />;
   });
 
   const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, user }) => {

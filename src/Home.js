@@ -118,12 +118,13 @@ export default function Home({loggedIn, darkMode, handleLogout, handleThemeChang
             {data => {
               return(
                 <div className="container">
-                  {data.movies.map(({ movieId, name, year, genres, imageUrl }) => (
+                  {data.movies.map(({ movieId, name, year, genres, imageUrl, averageRating }) => (
                     <MovieCard 
                       key={movieId}
                       movieId={movieId}
                       title={name}
                       imageUrl={imageUrl}
+                      rating={averageRating}
                     />
                   ))} 
                 </div> 

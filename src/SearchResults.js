@@ -43,8 +43,8 @@ export default function SearchResults(props) {
     useEffect(state.run, [title]);
 
     const handleResults = ({ movies }) => {
-        const searchResults = movies.map(({ movieId, name, year, imageUrl }) => {
-            return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>
+        const searchResults = movies.map(({ movieId, name, year, imageUrl, averageRating }) => {
+            return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating}/>
         });
         return searchResults;
     };

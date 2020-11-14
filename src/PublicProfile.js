@@ -188,12 +188,12 @@ function PublicDashboard(props) {
 
     const { wishlist, watchlist, reviews } = props;
 
-    const Wishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
-      return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+    const Wishlist = wishlist.movies.map(({ movieId, name, year, imageUrl, averageRating }) => {
+      return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating} />;
     });
   
-    const Watchlist = watchlist.movies.map(({ movieId, name, year, imageUrl }) => {
-      return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
+    const Watchlist = watchlist.movies.map(({ movieId, name, year, imageUrl, averageRating }) => {
+      return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating} />;
     });
     
     const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, user }) => {
