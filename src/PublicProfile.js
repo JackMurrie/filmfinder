@@ -48,6 +48,11 @@ const useStyles = makeStyles((theme) => ({
       flexGrow: {
         flexGrow: 1,
       },
+      container: {
+        display: "flex",
+        flexWrap: "wrap",
+        marginLeft: "10%",
+      },
   }));
 
 export default function PublicProfile(props) {
@@ -225,12 +230,12 @@ function PublicDashboard(props) {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <div className="container">
+        <div className={classes.container}>
           {Wishlist}
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <div className="container">
+        <div className={classes.container}>
           {Watchlist}
         </div>
       </TabPanel>
