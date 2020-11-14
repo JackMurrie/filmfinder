@@ -29,6 +29,7 @@ import Container from '@material-ui/core/Container';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -153,9 +154,29 @@ function a11yProps(index) {
 function Dashboard(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const history = useHistory();
 
   const toggleTab = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const handlePassReset = (event) => {
+    const data = {
+      email: null,
+    };
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    };
+
+    fetch('/rest/auth/request_reset', requestOptions)
+      .then(response => {
+        if (response.ok) {
+          history.push('/ResetPassword', data);
+        } 
+      });
   };
 
   const { wishlist, watchlist, recommendations, reviews } = props.dashboardData;
@@ -227,7 +248,7 @@ function Dashboard(props) {
         </IconButton>
         <Divider />
         Reset Password
-        <IconButton color="primary" component="span" href="/ForgotPass"> 
+        <IconButton color="primary" component="span" onClick={handlePassReset}> 
               <LockIcon />
         </IconButton>
         <Divider />
