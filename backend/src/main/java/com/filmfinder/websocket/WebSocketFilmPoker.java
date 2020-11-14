@@ -87,18 +87,21 @@ public class WebSocketFilmPoker {
                 break;
             case Data.ADDSELECT:
                 try {
-                    pg.addSelect(pd.getNickname(), data.get("selectedMovie").getAsInt());
-                    response = getBoolResponse(command, true);
+                    JsonArray ja = data.get("selectedMovies").getAsJsonArray();
+                    ArrayList<Integer> movies = new ArrayList<Integer>();
+                    for (JsonElement je: ja) {
+                        movies.add(je.getAsInt());
+                    }
+                    if (!pg.addSelect(pd.getNickname(), movies)) {
+                        response = "{command:"+Data.USERUPDATED+", "+"nickname: " +pd.getNickname()+"}";
+                    } else {
+                        response = pg.getSelectedMovies().toJson();
+                    }
+                    sendAll = true;
+
                 } catch (Exception e) {
                     response = getBoolResponse(command, false);
                 }
-                break;
-            case Data.REMOVESELECT:
-                pg.removeSelect(pd.getNickname(), data.get("selectedMovie").getAsInt());
-                response = getBoolResponse(command, true);
-                break;
-            case Data.GETSELECTED:
-                response = pg.getSelectedMovies().toJson();
                 break;
             case Data.VOTE:
                 try {
@@ -111,28 +114,13 @@ public class WebSocketFilmPoker {
                     if (!pg.addVote(pd.getNickname(), votes)) {
                         response = getBoolResponse(command, true);
                     } else {
-                        response = "{command:"+command+", isSuccess:"+true+", isLast: " +true+"}";
+                        response = pg.getResults().toJson();
                         sendAll = true;
+                        closeSession = true;
                     }
                 } catch (Exception e) {
                     response = getBoolResponse(command, false);
                 }
-                break;
-            case Data.RESULTS:
-                try {
-                    response = pg.getResults().toJson();
-                    sendAll = true;
-                    closeSession = true;
-                } catch (Exception e) {
-                    response = getBoolResponse(command, false);
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case Data.DONESELECT:
-                pg.finishSelect(pd.getNickname());
-                response = "{command:"+command+", "+"nickname: " +pd.getNickname()+"}";
-
-                sendAll = true;
                 break;
         }
         if (sendAll) {

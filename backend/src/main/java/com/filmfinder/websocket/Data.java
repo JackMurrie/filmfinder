@@ -6,11 +6,10 @@ public class Data {
     public static final int JOINGAME = 1;
     public static final int GETNICK = 2;
     public static final int ADDSELECT = 3;
-    public static final int REMOVESELECT = 4;
-    public static final int GETSELECTED = 5;
+    public static final int USERUPDATED = 4;
+    public static final int PUSHGAME = 5;
     public static final int VOTE = 6;
     public static final int RESULTS = 7;
-    public static final int DONESELECT = 8;
 
     // private int command;
     // private int gameId;
