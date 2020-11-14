@@ -316,7 +316,7 @@ function MoviePoster(props) {
         <CardContent>
           <div className='title'>
             <Box component="fieldset" mb={-1} borderColor="transparent">
-              <Rating name="read-only" precision={0.5} value={props.movieRating} readOnly/>
+              <Rating name="read-only" precision={0.1} value={props.movieRating} readOnly/>
             </Box>
             {props.movieGenreList.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
           </div>
