@@ -34,18 +34,28 @@ export default function CreateGame(props) {
 
     const [nickname, setNickname] = React.useState('');
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        //GET rest/CreateGame -> returns GameID
 
-        //POST rest/joinGame
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+              'Accept': 'application/json',
+              'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify({config: ''})
+          };
+      
+        const response = await fetch('/rest/filmpoker/create_game', requestOptions);
+        const { gameId } = await response.json();
+
         const data = {
             nickname: nickname,
-            GameID: 1234,
+            GameID: gameId,
         };
         
-        history.push(`/PlayFilmPoker/${data.GameID}`, data);
-      }
+        history.push(`/PokerGame/Play/${data.GameID}`, data);
+    }
 
     return (
         <React.Fragment>

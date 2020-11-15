@@ -38,13 +38,12 @@ export default function JoinGame(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        //POST rest/joinGame
         const data = {
             nickname: nickname,
             GameID: GameID,
         };
-        //if response okay
-        history.push(`/PlayFilmPoker/${data.GameID}`, data);
+
+        history.push(`/PokerGame/Play/${data.GameID}`, data);
       }
 
     return (

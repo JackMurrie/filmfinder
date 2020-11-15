@@ -42,27 +42,26 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PokerCard(props) {
     const classes = useStyles();
-    const history = useHistory();
 
-    const [added, setAdded] = useState(false);
+    const [added, setAdded] = useState(props.selected);
 
-    const updateMovies = useFetch('/rest/', requestOptions, { defer: true }); // /rest/filmPoker/add remove selection
+    const movieInfo = {
+      movieId: props.movieId,
+      title: props.title,
+      imageUrl: props.imageUrl
+    }
 
     const toggleAdded = (event) => {
-        if (added) {
-          updateMovies.run({
-            method: 'DELETE',
-            body: JSON.stringify({ movieId: props.movieId})
-          });
-        } else {
-          updateMovies.run({
-            method: 'POST',
-            body: JSON.stringify({ movieId: props.movieId})
-          });
-        };
-    
-        setAdded(added => !added);
+      if (props.disableClick) {
+        return;
+      }
+
+      if (props.onChangeSelection) {
+        props.onChangeSelection(!added, movieInfo);
       };
+
+      setAdded(added => !added);
+    };
 
     return (
       <Card style={{width: 255, margin: 20}} elevation={24}>
@@ -73,11 +72,13 @@ export default function PokerCard(props) {
                 {props.title}
           </div>
         <div className={classes.right}>
+          {!props.disableClick && 
             <FormControlLabel
-            control={<Checkbox checked={added} 
-            icon={<AddIcon className={classes.largeIcon}/>} 
-            checkedIcon={<RemoveIcon className={classes.largeIcon}/>} name="movie"/>}
+              control={<Checkbox checked={added} 
+              icon={<AddIcon className={classes.largeIcon}/>} 
+              checkedIcon={<RemoveIcon className={classes.largeIcon}/>} name="movie"/>}
             />
+          }
         </div>
         </CardContent>
       </CardActionArea>

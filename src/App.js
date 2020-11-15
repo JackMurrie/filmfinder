@@ -116,16 +116,16 @@ function App() {
             <Route path="/Browse">
                 <Browse loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
-            <Route path="/FilmPoker">
+            <Route path="/PokerGame/FilmPoker">
                 <FilmPoker loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
-            <Route path="/CreateGame">
+            <Route path="/PokerGame/Create">
                 <CreateGame loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
-            <Route path="/JoinGame">
+            <Route path="/PokerGame/Join">
                 <JoinGame loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
-            <Route exact path="/PlayFilmPoker/:GameID">
+            <Route exact path="/PokerGame/Play/:GameID">
                 <PlayFilmPoker loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>  
             <Route path="/">

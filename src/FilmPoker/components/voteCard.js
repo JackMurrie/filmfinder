@@ -18,74 +18,58 @@ import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
 
 const requestOptions = {
-    method: 'GET',
-    headers: { 
-      'Accept': 'application/json',
-      'Content-Type': 'application/json' 
-    }
-  };
+  method: 'GET',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
+};
 
 const useStyles = makeStyles((theme) => ({
-    largeIcon: {
-        width: 40,
-        height: 40,
-    },
-    title: {
-      textAlign: "center",
-      fontSize: "calc(6px + 2vmin)",
-      fontFamily: ['Montserrat', "sans-serif"],
-    },
-    right: {
-      textAlign: "right",
-    }
+  largeIcon: {
+    width: 40,
+    height: 40,
+  },
+  title: {
+    textAlign: "center",
+    fontSize: "calc(6px + 2vmin)",
+    fontFamily: ['Montserrat', "sans-serif"],
+  },
+  right: {
+    textAlign: "right",
+  }
 }));
 
 export default function VoteCard(props) {
-    const classes = useStyles();
-    const history = useHistory();
+  const classes = useStyles();
 
-    const [votedFor, setVotedFor] = useState(false);
+  const [votedFor, setVotedFor] = useState(false);
 
-    const updateMovies = useFetch('/rest/', requestOptions, { defer: true }); // ws add remove vote
+  const toggleVotedFor = (event) => {
+    if (props.onVoteMovie) {
+      props.onVoteMovie(!votedFor);
+    }
 
-    const toggleVotedFor = (event) => {
-        const data = {
-            movieId: props.movieId,
-            preference: props.currentVote
-          };
+    setVotedFor(votedFor => !votedFor);
+  };
 
-        if (votedFor) {
-          updateMovies.run({
-            method: 'DELETE',
-            body: JSON.stringify(data)
-          });
-        } else {
-          updateMovies.run({
-            method: 'POST',
-            body: JSON.stringify(data)
-          });
-        };
-        setVotedFor(votedFor => !votedFor);
-        props.updateVoteNumber(votedFor);
-      };
-
-    return (
-      <Card style={{width: 255, margin: 20}} elevation={24}>
-      <CardActionArea onClick = {toggleVotedFor}>
-        <CardMedia style={{height: 370}} image={props.imageUrl}/>
+  return (
+    <Card style={{ width: 255, margin: 20 }} elevation={24}>
+      <CardActionArea onClick={toggleVotedFor}>
+        <CardMedia style={{ height: 370 }} image={props.imageUrl} />
         <CardContent>
-        <div className="movieTitle">
-                {props.title}
+          <div className="movieTitle">
+            {props.title}
           </div>
-        <div className={classes.right}>
+          <div className={classes.right}>
             <FormControlLabel
-            control={<Checkbox checked={votedFor} 
-            icon={<ClearIcon className={classes.largeIcon}/>} 
-            checkedIcon={<CheckIcon className={classes.largeIcon}/>} name="movie"/>}
+              control={<Checkbox checked={votedFor}
+              icon={<ClearIcon className={classes.largeIcon} />}
+              checkedIcon={<CheckIcon className={classes.largeIcon} />} name="movie" />}
             />
-        </div>
+          </div>
         </CardContent>
       </CardActionArea>
     </Card>
-    );
+  );
 }
