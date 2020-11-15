@@ -44,7 +44,7 @@ export default function CreateGame() {
             GameID: 1234,
         };
         
-        history.push(`/PlayFilmPoker/${data.GameID}`, data);
+        history.push(`/PokerGame/Play/${data.GameID}`, data);
       }
 
     return (

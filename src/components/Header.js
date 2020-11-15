@@ -165,7 +165,7 @@ export default function Header(props) {
                       />
                     </form>
                 </div>
-                <Button href="/FilmPoker" color="primary" variant="outlined" className={classes.link}>
+                <Button href="/PokerGame/FilmPoker" color="primary" variant="outlined" className={classes.link}>
                   Play FilmPoker
                 </Button>
                 {headerButtons}

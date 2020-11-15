@@ -112,16 +112,16 @@ function App() {
             <Route path="/SearchResults">
                 <SearchResults loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
-            <Route path="/FilmPoker">
+            <Route path="/PokerGame/FilmPoker">
                 <FilmPoker />
             </Route>
-            <Route path="/CreateGame">
+            <Route path="/PokerGame/Create">
                 <CreateGame />
             </Route>
-            <Route path="/JoinGame">
+            <Route path="/PokerGame/Join">
                 <JoinGame />
             </Route>
-            <Route exact path="/PlayFilmPoker/:GameID">
+            <Route exact path="/PokerGame/Play/:GameID">
                 <PlayFilmPoker />
             </Route>  
             <Route path="/">

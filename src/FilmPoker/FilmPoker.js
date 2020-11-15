@@ -45,7 +45,7 @@ export default function FilmPoker() {
                         color="primary"
                         className={classes.submit}
                         size="large"
-                        href="/CreateGame"
+                        href="/PokerGame/Create"
                     >
                         Create Game
                     </Button>
@@ -56,7 +56,7 @@ export default function FilmPoker() {
                         color="primary"
                         className={classes.submit}
                         size="large"
-                        href="/JoinGame"
+                        href="/PokerGame/Join"
                     >
                         Join Game
                     </Button>
