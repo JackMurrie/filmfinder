@@ -43,11 +43,21 @@ const useStyles = makeStyles((theme) => ({
 export default function PokerCard(props) {
     const classes = useStyles();
 
-    const [added, setAdded] = useState(false);
+    const [added, setAdded] = useState(props.selected);
+
+    const movieInfo = {
+      movieId: props.movieId,
+      title: props.title,
+      imageUrl: props.imageUrl
+    }
 
     const toggleAdded = (event) => {
-      if (props.onAddMovie) {
-        props.onAddMovie(!added);
+      if (props.disableClick) {
+        return;
+      }
+
+      if (props.onChangeMovieSelection) {
+        props.onChangeMovieSelection(!added, movieInfo);
       };
 
       setAdded(added => !added);
@@ -62,11 +72,13 @@ export default function PokerCard(props) {
                 {props.title}
           </div>
         <div className={classes.right}>
+          {!props.disableClick && 
             <FormControlLabel
-            control={<Checkbox checked={added} 
-            icon={<AddIcon className={classes.largeIcon}/>} 
-            checkedIcon={<RemoveIcon className={classes.largeIcon}/>} name="movie"/>}
+              control={<Checkbox checked={added} 
+              icon={<AddIcon className={classes.largeIcon}/>} 
+              checkedIcon={<RemoveIcon className={classes.largeIcon}/>} name="movie"/>}
             />
+          }
         </div>
         </CardContent>
       </CardActionArea>
