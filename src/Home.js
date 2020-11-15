@@ -71,7 +71,7 @@ export default function Home({loggedIn, darkMode, handleLogout, handleThemeChang
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ limit: 15 })
+    body: JSON.stringify({ limit: 20 })
   };
 
   const getPopularMovies = useFetch('/rest/popular', requestOptions, {defer: true});
