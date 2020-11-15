@@ -377,7 +377,7 @@ function ReviewButton(props) {
       <Button variant="outlined" color="white" onClick={openReviewDialogBox}>
         Leave a Review
       </Button>
-      <Dialog fullwidth open={open} onClose={closeReviewDialogBox} aria-labelledby="form-dialog-title">
+      <Dialog fullScreen={true} open={open} onClose={closeReviewDialogBox} aria-labelledby="form-dialog-title">
         <form onSubmit={submitReview}>
           <DialogTitle id="form-dialog-title">Review</DialogTitle>
           <DialogContent>

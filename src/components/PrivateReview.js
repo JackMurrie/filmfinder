@@ -119,7 +119,7 @@ export default function PrivateReview(props) {
         <IconButton color="primary" component="span" className={classes.control} onClick={openReviewDialogBox}>
               <EditIcon />
         </IconButton>
-        <Dialog fullwidth open={open} onClose={closeReviewDialogBox} aria-labelledby="form-dialog-title">
+        <Dialog fullScreen={true} open={open} onClose={closeReviewDialogBox} aria-labelledby="form-dialog-title">
           <form onSubmit={submitReview}>
             <DialogTitle id="form-dialog-title">Review</DialogTitle>
             <DialogContent>
@@ -133,7 +133,7 @@ export default function PrivateReview(props) {
                 margin="dense"
                 id="review"
                 label=""
-                fullWidth
+                fullWidth={true}
                 defaultValue="My old review goes here" 
                 onChange={(event) => setNewComment(event.target.value)}
               />
