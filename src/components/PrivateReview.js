@@ -51,6 +51,8 @@ const useStyles = makeStyles((theme) => ({
 export default function PrivateReview(props) {
     const classes = useStyles();
 
+    const [rating, setRating] = React.useState(props.rating);
+
     const requestOptions = {
       method: 'DELETE',
       headers: { 
@@ -66,6 +68,22 @@ export default function PrivateReview(props) {
 
     const deleteReview = useAsync({ deferFn: removeReviewAndReload });
 
+    const submitRating = (event, rating) => {
+      event.preventDefault();
+      setRating(rating);
+      const data = {
+        rating: rating,
+      };
+
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      };
+  
+      fetch(`/rest/rating/${props.movieId}`, requestOptions)
+    };
+
     return (
         <Grid item xs={12}>
             <Card style={{width: 1150, margin: 10}}>
@@ -73,7 +91,7 @@ export default function PrivateReview(props) {
                 title={<Link href={`/Movie/${props.movieId}`} className={classes.title} style={{ fontSize: '30px' }}>{props.title}</Link>}
                 action={
                   <Box component="fieldset" mb={-1} borderColor="transparent" marginTop={5}>
-                    <Rating name="read-only" precision={0.5} value={props.rating} readOnly/>
+                    <Rating name="read-only" precision={0.5} value={rating} onChange={submitRating} />
                   </Box>
                 }
               />
