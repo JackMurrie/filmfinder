@@ -2,7 +2,6 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -13,6 +12,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import CardContent from '@material-ui/core/CardContent';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { useAsync } from 'react-async';
 import { CardActions } from '@material-ui/core';
@@ -32,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
     right: {
-      textAlign: 'right',
+      marginLeft: 900,
     },
     title: {
       color: theme.palette.text.primary
@@ -75,11 +80,8 @@ export default function PrivateReview(props) {
             <CardContent>
               {props.text}
             </CardContent>
-            <CardActions className={classes.action}>
-              {/* TODO: implement an edit review functionalilty from the user dashboard */}
-              <IconButton color="primary" component="span" className={classes.control}>
-                <EditIcon />
-              </IconButton>
+            <CardActions className={classes.right}>
+              <EditReviewButton />
               <IconButton color="primary" component="span" className={classes.control} onClick={deleteReview.run}>
                 <DeleteIcon />
               </IconButton>
@@ -89,5 +91,63 @@ export default function PrivateReview(props) {
             </CardActions>
           </Card>
         </Grid>
+    );
+  }
+
+  function EditReviewButton(props) {
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+    const [newComment, setNewComment] = React.useState('');
+  
+    const openReviewDialogBox = () => {
+      setOpen(true);
+    };
+  
+    const closeReviewDialogBox = () => {
+      setOpen(false);
+    };
+  
+    const submitReview = (event) => {
+      event.preventDefault();
+
+      console.log(newComment)
+
+    };
+  
+    return (
+      <div>
+        <IconButton color="primary" component="span" className={classes.control} onClick={openReviewDialogBox}>
+              <EditIcon />
+        </IconButton>
+        <Dialog fullwidth open={open} onClose={closeReviewDialogBox} aria-labelledby="form-dialog-title">
+          <form onSubmit={submitReview}>
+            <DialogTitle id="form-dialog-title">Review</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Edit your review here...
+              </DialogContentText>
+              <TextField
+                autoFocus
+                multiline
+                rowsMax={10}
+                margin="dense"
+                id="review"
+                label=""
+                fullWidth
+                defaultValue="My old review goes here" 
+                onChange={(event) => setNewComment(event.target.value)}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={closeReviewDialogBox} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={closeReviewDialogBox} color="primary" type="submit">
+                Edit Review
+              </Button>
+            </DialogActions>
+          </form>
+        </Dialog>
+      </div>
     );
   }
