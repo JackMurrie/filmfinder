@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CreateGame() {
+export default function CreateGame(props) {
     const classes = useStyles();
     const history = useHistory();
 
@@ -60,7 +60,7 @@ export default function CreateGame() {
     return (
         <React.Fragment>
         <CssBaseline />
-            <Header />
+        <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
             <Container component="main" maxWidth="lg">
                 <div className={classes.paper}>
                     <TextField

@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function JoinGame() {
+export default function JoinGame(props) {
     const classes = useStyles();
     const history = useHistory();
 
@@ -49,7 +49,7 @@ export default function JoinGame() {
     return (
         <React.Fragment>
         <CssBaseline />
-            <Header />
+        <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
             <Container component="main" maxWidth="lg">
                 <div className={classes.paper}>
                     <TextField

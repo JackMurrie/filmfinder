@@ -24,13 +24,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function FilmPoker() {
+export default function FilmPoker(props) {
     const classes = useStyles();
 
     return (
         <React.Fragment>
         <CssBaseline />
-            <Header />
+        <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
             <Container component="main" maxWidth="lg">
                 <div className={classes.paper}>
                     <Typography component="h1" variant="h1" className={classes.heading}>

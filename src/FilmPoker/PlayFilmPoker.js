@@ -115,7 +115,7 @@ const command = {
   PLAYERS: 8
 };
 
-export default function PlayFilmPoker() {
+export default function PlayFilmPoker(props) {
   const classes = useStyles();
   const location = useLocation();
   const GameID = parseInt(location.pathname.split('/').pop(), 10);
@@ -208,7 +208,7 @@ export default function PlayFilmPoker() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Header />
+      <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
       <Container component="main" maxWidth="lg" >
         <Typography component="h1" variant="h4" className={classes.headText}>
           Hello {nickname}! Invite others to join with your code: {GameID}
