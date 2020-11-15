@@ -268,15 +268,18 @@ function MovieSelectScreen(props) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ searchString: searchBox })
+    body: JSON.stringify({ title: searchBox })
   };
 
   const fetchSearchResults = useFetch('/rest/search', requestOptions, { defer: true });
+  const fetchDashboard = useFetch('/rest/user/dashboard', requestOptions, { defer: true });
+
 
   useEffect(fetchSearchResults.run, [searchBox]);
+  useEffect(fetchDashboard.run, []);
 
-  const renderSearchResults = ({ movies }) => {
-    const searchResults = movies.map(({ movieId, name, imageUrl }) => {
+  const renderResults = (results) => {
+    const componentResults = results.map(({ movieId, name, imageUrl }) => {
       const selected = _.some(props.selectedMovies, (selectedMovie) => (selectedMovie.movieId === movieId));
       return (
         <PokerCard
@@ -290,7 +293,7 @@ function MovieSelectScreen(props) {
       );
     });
 
-    return searchResults;
+    return <Grid container spacing={3}>{componentResults}</Grid>;
   };
 
   return (
@@ -311,10 +314,24 @@ function MovieSelectScreen(props) {
         </Tabs>
       </AppBar>
       <TabPanel value={selectedTab} index={0}>
-        <PokerCard title={"A Movie"} />
+        <IfPending state={fetchDashboard}>
+          {/* {() => <CircularProgress color="inherit"/>} */}
+        </IfPending>
+        <IfFulfilled state={fetchDashboard}>
+          {({ wishlist }) => {
+            return renderResults(wishlist.movies);
+          }}
+        </IfFulfilled>
       </TabPanel>
       <TabPanel value={selectedTab} index={1}>
-        <PokerCard title={"A Movie"} />
+        <IfPending state={fetchDashboard}>
+          {/* {() => <CircularProgress color="inherit"/>} */}
+        </IfPending>
+        <IfFulfilled state={fetchDashboard}>
+          {({ watchlist }) => {
+            return renderResults(watchlist.movies);
+          }}
+        </IfFulfilled>
       </TabPanel>
       <TabPanel value={selectedTab} index={2}>
         <div className={classes.center}>
@@ -339,7 +356,7 @@ function MovieSelectScreen(props) {
           <IfRejected state={fetchSearchResults}>Error...</IfRejected>
           <IfPending state={fetchSearchResults}>
           </IfPending>
-          <IfFulfilled state={fetchSearchResults}>{renderSearchResults}</IfFulfilled>
+          <IfFulfilled state={fetchSearchResults}>{renderResults}</IfFulfilled>
         </div>
       </TabPanel>
     </div>
