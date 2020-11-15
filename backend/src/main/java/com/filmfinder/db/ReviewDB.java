@@ -1,7 +1,6 @@
 package com.filmfinder.db;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -240,7 +239,7 @@ public class ReviewDB {
         ArrayList<Review> list = new ArrayList<Review>();
         try {
             c = DbDataSource.getConnection();
-            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name, date FROM review INNER JOIN movie ON id=movie_id WHERE user_id=?";
+            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name, date FROM review INNER JOIN movie ON id=movie_id WHERE user_id=? ORDER BY date DESC";
             s = c.prepareStatement(q);
 
             s.setInt(1, userId);
