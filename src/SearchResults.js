@@ -29,7 +29,7 @@ const useStyles = makeStyles({
 export default function SearchResults(props) {
     const classes = useStyles();
     const location = useLocation();
-    const title = location.state.title;
+    const title = location.pathname.split('/').pop();
 
     const requestOptions = {
         method: 'POST',
