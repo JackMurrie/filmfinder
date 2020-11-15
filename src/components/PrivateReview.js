@@ -68,11 +68,11 @@ export default function PrivateReview(props) {
 
     const deleteReview = useAsync({ deferFn: removeReviewAndReload });
 
-    const submitRating = (event, rating) => {
+    const submitRating = (event, newRating) => {
       event.preventDefault();
-      setRating(rating);
+      
       const data = {
-        rating: rating,
+        rating: newRating,
       };
 
       const requestOptions = {
@@ -82,6 +82,8 @@ export default function PrivateReview(props) {
       };
   
       fetch(`/rest/rating/${props.movieId}`, requestOptions)
+      setRating(newRating);
+      window.location.reload();
     };
 
     return (
@@ -91,7 +93,7 @@ export default function PrivateReview(props) {
                 title={<Link href={`/Movie/${props.movieId}`} className={classes.title} style={{ fontSize: '30px' }}>{props.title}</Link>}
                 action={
                   <Box component="fieldset" mb={-1} borderColor="transparent" marginTop={5}>
-                    <Rating name="read-only" precision={0.5} value={rating} onChange={submitRating} />
+                    <Rating name="read-only" precision={0.5} value={props.rating} onChange={submitRating} />
                   </Box>
                 }
               />
