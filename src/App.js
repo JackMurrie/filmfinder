@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import './css/App.css';
 import Home from './Home';
 import Login from './Login';
@@ -20,7 +20,6 @@ import Page404 from './404';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { useHistory, withRouter } from "react-router-dom";
 
 function usePersistedState(key, defaultValue) {
     const [state, setState] = React.useState(

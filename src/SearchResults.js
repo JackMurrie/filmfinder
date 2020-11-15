@@ -1,5 +1,4 @@
 import Header from './components/Header';
-import Drawer from './components/FilterDrawer';
 import MovieCard from './components/MovieCard';
 import './css/Home.css';
 
