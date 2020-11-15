@@ -388,7 +388,9 @@ function MovieSelectScreen(props) {
           <IfRejected state={fetchSearchResults}>Error...</IfRejected>
           <IfPending state={fetchSearchResults}>
           </IfPending>
-          <IfFulfilled state={fetchSearchResults}>{renderResults}</IfFulfilled>
+          <IfFulfilled state={fetchSearchResults}>
+            {({ movies }) => (renderResults(movies))}
+          </IfFulfilled>
         </div>
       </TabPanel>
     </div>
