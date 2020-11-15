@@ -23,12 +23,19 @@ public class ResourceSearch {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response search(SearchTemplate data) throws NotFoundException, SQLException {
-        String searchString = data.getSearchString();
+        int limit = data.getLimit();
         try {
-            Movies movies = Search.getMovieIdsBySearch(searchString, 10);
-
+            Movies movies = null;
+            if (data.getTitle() != null) {
+                movies = Search.getMovieIdsBySearch(data.getTitle(), limit);
+            } else if (data.getDirector() != null) {
+                movies = Search.searchDirectors(data.getDirector(), limit);
+            } else if (data.getGenre() != null) {
+                movies = Search.searchGenre(data.getGenre(), limit);
+            }   
             return Response.status(200).entity(movies.toJson()).build();
         } catch (Exception e) { 
+            // e.printStackTrace();
             return Response.status(400).entity("bad search query").build();
         }
     }

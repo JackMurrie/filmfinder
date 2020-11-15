@@ -35,36 +35,43 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function WatchlistItem(props) {
+export default function BlacklistCard(props) {
     const classes = useStyles();
 
-    const [watched, setWatched] = useState(true);
+    const [blacklist, setBlacklist] = useState(true);
 
-    const updateWatchlist = useFetch('/rest/user/watchedlist', requestOptions, { defer: true });
-
-    const toggleWatchlist = (event) => {
-        if (watched) {
-            updateWatchlist.run({
-            method: 'DELETE',
-            body: JSON.stringify({ movieId: props.movieId})
-          });
-        } else {
-            updateWatchlist.run({
-            method: 'POST',
-            body: JSON.stringify({ movieId: props.movieId})
-          });
-        };
-    
-        setWatched(watched => !watched);
+    const requestOptions = {
+        method: 'GET',
+        headers: { 
+          'Accept': 'application/json',
+          'Content-Type': 'application/json' 
+        }
       };
+
+    const updateBlacklist = useFetch('/rest/user/blacklist', requestOptions, { defer: true });
+
+    const toggleBlacklist = (event) => {
+        if (blacklist) {
+        updateBlacklist.run({
+          method: 'DELETE',
+          body: JSON.stringify({ userId: props.userId })
+        });
+      } else {
+        updateBlacklist.run({
+          method: 'POST',
+          body: JSON.stringify({ userId: props.userId })
+        });
+      };
+      setBlacklist(blacklisted => !blacklisted);
+    };
 
     return (
       <Paper style={{width: 1150, margin: 10, height: 50}}>
             <FormControlLabel
-                control={<Switch checked={watched} onChange={toggleWatchlist} name="seen" color="primary"/>}
+                control={<Switch checked={blacklist} onChange={toggleBlacklist} name="seen" color="primary"/>}
                 className={classes.link}
             />
-            <Link href={`/Movie/${props.movieId}`} color="primary" className={classes.link} style={{ fontSize: '17px' } }> {props.title} </Link>
+            <Link href={`/Movie/${props.userId}`} color="primary" className={classes.link} style={{ fontSize: '17px' } }> {props.first} {props.last}</Link>
         </Paper>
     );
 }

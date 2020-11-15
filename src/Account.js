@@ -2,6 +2,7 @@ import Header from './components/Header';
 import MovieCard from './components/MovieCard';
 import WishlistItem from './components/WishlistItem';
 import WatchlistItem from './components/WatchlistItem';
+import BlacklistCard from './components/BlacklistCard';
 import PrivateReview from './components/PrivateReview';
 import Footer from './components/Footer';
 import './css/Account.css';
@@ -20,6 +21,7 @@ import Tab from '@material-ui/core/Tab';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import BlockIcon from '@material-ui/icons/Block';
 import ThumbUp from '@material-ui/icons/ThumbUp';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import Typography from '@material-ui/core/Typography';
@@ -29,6 +31,10 @@ import Container from '@material-ui/core/Container';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
+import { useHistory } from 'react-router-dom';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -64,6 +70,8 @@ const useStyles = makeStyles((theme) => ({
   centerText: {
     textAlign: "center",
     fontFamily: ["Montserrat", "sans-serif"],
+    color: "white",
+    lineHeight: 7,
   },
 }));
   
@@ -82,6 +90,8 @@ export default function Account(props) {
   const fetchDashboardData = useFetch('/rest/user/dashboard', requestOptions, {defer: true});
   useEffect(fetchDashboardData.run, []);
 
+  const { reviews } = fetchDashboardData;
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -90,9 +100,12 @@ export default function Account(props) {
           <React.Fragment>
             <div className={classes.image}>
               <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+              <div className={classes.centerText}>
+                <h1>Welcome {`${dashboardData.userInfo.first}`} {`${dashboardData.userInfo.last}`}</h1>
+              </div>
               </div>
             <Container component="main" maxWidth="lg">
-              <Dashboard dashboardData={dashboardData} reloadDashboardData={fetchDashboardData.run}/>
+              <Dashboard handleLogout={props.handleLogout} dashboardData={dashboardData} reloadDashboardData={fetchDashboardData.run}/>
             </Container>
             <Footer />
           </React.Fragment>
@@ -153,12 +166,56 @@ function a11yProps(index) {
 function Dashboard(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const history = useHistory();
 
   const toggleTab = (event, newValue) => {
     setValue(newValue);
   };
 
-  const { wishlist, watchlist, recommendations, reviews } = props.dashboardData;
+  const handlePassReset = (event) => {
+    const data = {
+      email: null,
+    };
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    };
+
+    fetch('/rest/auth/request_reset', requestOptions)
+      .then(response => {
+        if (response.ok) {
+          history.push('/ResetPassword', data);
+        } 
+      });
+  };
+  
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
+
+  const handleDeleteAccountConf = (event) => {
+    setAlertOpen(true);
+  };
+
+  const handleDeleteAccount = (event) => {
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    };
+
+    fetch('/rest/auth/deactivate', requestOptions)
+      .then(response => {
+        if (response.ok) {
+          props.handleLogout();
+          history.push('/');
+        } 
+      });
+  };
+
+  const { wishlist, watchlist, recommendations, reviews, blacklisted } = props.dashboardData;
 
   const Wishlist = wishlist.movies.map(({ movieId, name, year, imageUrl }) => {
     return <WishlistItem key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl}/>;
@@ -186,6 +243,9 @@ function Dashboard(props) {
     />;
   });
 
+  const Blacklist = blacklisted.users.map(({ userId, first, last }) => {
+    return <BlacklistCard key={userId} userId={userId} first={first} last={last} />;
+  });
 
   return (
     <div className={classes.root}>
@@ -198,11 +258,12 @@ function Dashboard(props) {
           textColor="secondary"
           aria-label="Buton Tabs"
         >
-          <Tab label="Wishlist" icon={<FavoriteIcon />} {...a11yProps(1)} />
-          <Tab label="Recommended" icon={<ThumbUp />} {...a11yProps(2)} />
-          <Tab label="Seen" icon={<VisibilityIcon />} {...a11yProps(3)} />
-          <Tab label="My Reviews" icon={<RateReviewIcon />} {...a11yProps(4)} />
-          <Tab label="Account Settings" icon={<PersonPinIcon />} {...a11yProps(5)} />
+          <Tab label="Wishlist" icon={<FavoriteIcon />} />
+          <Tab label="Recommended" icon={<ThumbUp />}/>
+          <Tab label="Seen" icon={<VisibilityIcon />} />
+          <Tab label="My Reviews" icon={<RateReviewIcon />} />
+          <Tab label="Blacklist" icon={<BlockIcon />} />
+          <Tab label="Account Settings" icon={<PersonPinIcon />} />
           
         </Tabs>
       </AppBar>
@@ -221,17 +282,43 @@ function Dashboard(props) {
         {Reviews}
       </TabPanel>
       <TabPanel value={value} index={4}>
+        {Blacklist}
+      </TabPanel>
+      <TabPanel value={value} index={5}>
+        <AlertDialog alertOpen={alertOpen} handleAlertClose={handleAlertClose} handleDeleteAccount={handleDeleteAccount}/>
         Delete Account 
-        <IconButton color="secondary" component="span">
+        <IconButton color="secondary" component="span" onClick={handleDeleteAccountConf}>
               <DeleteIcon />
         </IconButton>
         <Divider />
         Reset Password
-        <IconButton color="primary" component="span" href="/ForgotPass"> 
+        <IconButton color="primary" component="span" onClick={handlePassReset}> 
               <LockIcon />
         </IconButton>
         <Divider />
       </TabPanel>
+    </div>
+  );
+}
+
+function AlertDialog(props) {
+
+  return (
+    <div>
+      <Dialog
+        open={props.alertOpen}
+        onClose={props.handleAlertClose}
+      >
+        <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete your account?"}</DialogTitle>
+        <DialogActions>
+          <Button onClick={props.handleAlertClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={props.handleDeleteAccount} color="primary" autoFocus>
+            YES
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

@@ -60,7 +60,7 @@ export default function CreateGame(props) {
     return (
         <React.Fragment>
         <CssBaseline />
-        <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+            <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
             <Container component="main" maxWidth="lg">
                 <div className={classes.paper}>
                     <TextField

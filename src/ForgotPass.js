@@ -11,6 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -48,6 +49,32 @@ export default function ForgotPass(props) {
 
 function ForgotPassScreen() {
   const classes = useStyles();
+  const history = useHistory();
+
+  const [email, setEmail] = React.useState('');
+  const [wrong_credentials, setWrongCredentials] = React.useState(false);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = {
+      email: email,
+    };
+    
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    };
+
+    fetch('/rest/auth/request_reset', requestOptions)
+      .then(response => {
+        if (response.ok) {
+          history.push('/ResetPassword', data);
+        } else {
+          setWrongCredentials(true);
+        }
+      });
+  }
 
   return (
 
@@ -71,14 +98,20 @@ function ForgotPassScreen() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={event => setEmail(event.target.value)}
           />
+          { wrong_credentials &&
+            <Typography variant="subtitle2" color="secondary">
+              Sorry, that is not a valid email. Try again?
+            </Typography>
+          }
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            href="/verification"
+            onClick={handleSubmit}
           >
             Send Code
           </Button>

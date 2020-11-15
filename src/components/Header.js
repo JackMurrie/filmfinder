@@ -83,7 +83,7 @@ export default function Header(props) {
       const data = {
         title: search,
       };
-      history.push("/SearchResults", data);
+      history.push(`/SearchResults/${search}`, data);
     }; 
 
     const handleLogoutRedirect = (event) => {

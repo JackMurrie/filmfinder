@@ -61,6 +61,7 @@ function SignUpScreen(props) {
     const classes = useStyles();
     const history = useHistory();
 
+    const [wrong_credentials, setWrongCredentials] = React.useState(false);
     const [state, setState] = React.useState({
       email: '',
       password: '',
@@ -84,10 +85,14 @@ function SignUpScreen(props) {
       };
   
       fetch('/rest/auth/register', requestOptions)
-        .then(() => {
-          history.push('/Account');
-          props.handleLogin();
-        })
+        .then((response) => {
+          if (response.ok) {
+            props.handleLogin()
+            history.push('/Account');
+          } else {
+            setWrongCredentials(true);
+          }
+        });
     };
   
     return (
@@ -151,6 +156,11 @@ function SignUpScreen(props) {
                   />
                 </Grid>
               </Grid>
+                { wrong_credentials &&
+                  <Typography variant="subtitle2" color="secondary">
+                    Sorry, that is an invalid email. Try again?
+                  </Typography>
+                }
               <Button
                 type="submit"
                 fullWidth

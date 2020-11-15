@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
     link: {
         margin: theme.spacing(1, 1.5),
-        color: "white",
+        color: theme.palette.text.primary,
     },
     largeIcon: {
         width: 30,
@@ -60,7 +60,7 @@ export default function WishlistItem(props) {
       };
 
     return (
-      <Paper style={{width: 1150, margin: 10, height: 60, backgroundColor: "DarkGrey"}}>
+      <Paper style={{width: 1150, margin: 10, height: 60}}>
             <FormControlLabel
                 control={<Checkbox checked={wished} 
                 onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} 

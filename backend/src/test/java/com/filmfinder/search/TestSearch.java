@@ -1,5 +1,7 @@
 package com.filmfinder.search;
 
+import static org.junit.Assert.assertTrue;
+
 import java.sql.SQLException;
 
 import com.filmfinder.Search.Search;
@@ -22,6 +24,20 @@ public class TestSearch {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testGenreDirectors() {
+        Movies ms;
+        try {
+            // ms = Search.searchDirectors("Quentin Tarantino", 10);
+            // System.out.println(ms);
+            ms = Search.searchGenre("Romance", 10);
+            System.out.println();
+            System.out.println(ms);
+        } catch (Exception e) {
+            assertTrue(false);
         }
     }
 }

@@ -3,6 +3,7 @@ package com.filmfinder.Search;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.filmfinder.db.SearchDB;
 import com.filmfinder.movie.Movie;
 import com.filmfinder.movie.Movies;
 import com.filmfinder.util.UrlConnector;
@@ -36,5 +37,23 @@ public class Search {
         }
 
         return new Movies(movies);
+    }
+
+    public static Movies searchDirectors(String director, int limit) throws NotFoundException, SQLException {
+        ArrayList<Integer> movieIds = SearchDB.searchDirector(director, limit);
+        Movies movies = new Movies();
+        for (Integer id: movieIds) {
+            movies.add(Movie.getMovie(id));
+        }
+        return movies;
+    }
+
+    public static Movies searchGenre(String genre, int limit) throws NotFoundException, SQLException {
+        ArrayList<Integer> movieIds = SearchDB.searchGenre(genre, limit);
+        Movies movies = new Movies();
+        for (Integer id: movieIds) {
+            movies.add(Movie.getMovie(id));
+        }
+        return movies;
     }
 }

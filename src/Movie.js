@@ -1,5 +1,6 @@
 import Header from './components/Header';
 import PublicReview from './components/PublicReview'
+import MovieCard from './components/MovieCard';
 import './css/Movie.css';
 
 import Button from '@material-ui/core/Button';
@@ -35,9 +36,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import React, { useEffect, useState } from 'react';
 import { useAsync, useFetch, IfFulfilled, IfPending } from 'react-async';
 import { useLocation } from 'react-router-dom';
+import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 
 import _ from 'lodash';
-import MovieCard from './components/MovieCard';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -73,6 +74,10 @@ const useStyles = makeStyles((theme) => ({
     width: 40,
     height: 40,
   },
+  center: {
+    textAlign: "center",
+    fontFamily: ["Montserrat", "sans-serif"],
+},
 }));
 
 const requestOptions = {
@@ -205,6 +210,27 @@ export default function Movie(props) {
     }
   };
 
+  const handleResults = ({ movies }) => {
+    if (movies[0] === undefined) {
+        return (
+            <Container component="main" maxWidth="lg">
+            <div className={classes.center}>
+                <h2>No results found</h2>
+                <SentimentVeryDissatisfiedIcon />
+            </div>
+            </Container>
+        );
+    }
+    else {
+        const searchResults = movies.map(({ movieId, name, year, imageUrl, averageRating }) => {
+            return (
+                <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating}/>
+            );
+        });
+        return searchResults;
+    }
+};
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -292,19 +318,17 @@ export default function Movie(props) {
                 </Container>
               </Grid>
             </Container>
-
+            {/* Similar Movies */}
             <div className="title">
               <h1>Similar Movies</h1>
             </div>
-            <IfFulfilled state={similarMoviesData}>
-              {({ movies }) => 
-                <div className="container">   
-                  {movies.map(({ movieId, name, year, imageUrl, averageRating }) => 
-                    <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating} />
-                  )}
-                </div>
-              }
-            </IfFulfilled>
+            <Container component="main" maxWidth="lg">
+            <div className="container">
+              <IfFulfilled state={similarMoviesData}>
+                {handleResults}
+              </IfFulfilled>
+              </div>
+            </Container>
           </div>
         }
       </IfFulfilled>
@@ -377,7 +401,7 @@ function ReviewButton(props) {
       <Button variant="outlined" color="white" onClick={openReviewDialogBox}>
         Leave a Review
       </Button>
-      <Dialog fullwidth open={open} onClose={closeReviewDialogBox} aria-labelledby="form-dialog-title">
+      <Dialog fullScreen={true} open={open} onClose={closeReviewDialogBox} aria-labelledby="form-dialog-title">
         <form onSubmit={submitReview}>
           <DialogTitle id="form-dialog-title">Review</DialogTitle>
           <DialogContent>
