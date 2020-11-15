@@ -25,8 +25,8 @@ import InputBase from '@material-ui/core/InputBase';
 const useStyles = makeStyles((theme) => ({
     list: {
         width: 250,
-        backgroundColor: "#455166",
-        color: "white",
+        backgroundColor: theme.palette.backgroundColor,
+        color: theme.palette.text,
     },
     fullList: {
         width: 'auto',
@@ -95,6 +95,7 @@ export default function Drawer(props) {
               <ListItemIcon>{<TheatersIcon style={{fill: "white"}}/>}</ListItemIcon>
               <ListItemText primary={"Genre"} />
             </ListItem>
+            <Divider />
             <FormControl component="fieldset">
                 <RadioGroup  column onChange={handleRadioGenre}>
                     {genres.map((genre) => (
@@ -111,7 +112,6 @@ export default function Drawer(props) {
                 </RadioGroup >
             </FormControl>
         </List>
-        <Divider />
       </div>
     );
   
