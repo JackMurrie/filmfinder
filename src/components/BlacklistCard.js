@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     },
     link: {
       margin: theme.spacing(1, 1.5),
-      color: "white",
+      color: theme.palette.text.primary,
     },
     largeIcon: {
         width: 40,
@@ -66,7 +66,7 @@ export default function BlacklistCard(props) {
     };
 
     return (
-      <Paper style={{width: 1150, margin: 10, height: 50, backgroundColor: "DarkGrey"}}>
+      <Paper style={{width: 1150, margin: 10, height: 50}}>
             <FormControlLabel
                 control={<Switch checked={blacklist} onChange={toggleBlacklist} name="seen" color="primary"/>}
                 className={classes.link}
