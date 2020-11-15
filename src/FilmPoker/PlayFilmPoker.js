@@ -103,12 +103,79 @@ const useStyles = makeStyles((theme) => ({
       },
 }));
 
+const command = {
+  JOIN_GAME: 1,
+  GET_NICK: 2,
+  ADD_SELECT: 3,
+  USER_UPDATED: 4,
+  PUSH_GAME: 5,
+  VOTE: 6,
+  RESULTS: 7,
+  PLAYERS: 8
+};
+
 export default function PlayFilmPoker() {
     const classes = useStyles();
     const location = useLocation();
     const GameID = parseInt(location.pathname.split('/').pop(), 10);
     const nickname = location.state.nickname;
 
+  const [players, setPlayers] = useState([nickname]);
+  const [selectedMovies, setSelectedMovies] = useState([]);
+
+  const connect = () => {
+    const ws = new WebSocket("ws://localhost:8080/filmpoker");
+
+    ws.onopen = () => {
+      const joinGame = {
+        command: command.JOIN_GAME,
+        nickname: nickname,
+        gameId: GameID
+      };
+  
+      ws.send(JSON.stringify(joinGame));
+    };
+
+    ws.onmessage = (messageEvent) => { onGameMessage(ws, messageEvent); };
+
+    return () => {
+      ws.close({ reason: "Clean up" });
+    };
+  };
+  useEffect(connect, []);
+
+  const onGameMessage = (ws, message) => {
+    const data = JSON.parse(message.data);
+    switch (data.command) {
+      case (command.JOIN_GAME):
+        break;
+
+      case (command.GET_NICK):
+        break;
+
+      case (command.ADD_SELECT):
+        break;
+
+      case (command.USER_UPDATED):
+        break;
+
+      case (command.PUSH_GAME):
+        break;
+
+      case (command.VOTE):
+        break;
+
+      case (command.RESULTS):
+        break;
+
+      case (command.PLAYERS):
+        setPlayers(data.players);
+        break;
+
+      default:
+        break;
+    }
+  }
     return (
         <React.Fragment>
         <CssBaseline />
