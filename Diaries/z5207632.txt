@@ -22,4 +22,4 @@ Fixed routing to account for copying and pasting addresses instead of clicks.
 
 Week 9
 Created dark mode feature, tons of tweaks to UI, alert popups when not logged in, local storage state for dark mode and logged in, Finished Poker UI.
-Connected delete account, forgot/reset pass. Added and connected blacklisting, finished edit rev ui.
+Connected delete account, forgot/reset pass and edit reviews. Added and connected blacklisting, finished edit rev ui. Created browsing UI and connected it. Create and connect UI for loading more movies. Fixed error handling for sign up.
