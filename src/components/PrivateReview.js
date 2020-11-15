@@ -11,6 +11,8 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import CardContent from '@material-ui/core/CardContent';
+import Rating from '@material-ui/lab/Rating';
+import Box from '@material-ui/core/Box';
 
 import { useAsync } from 'react-async';
 import { CardActions } from '@material-ui/core';
@@ -64,6 +66,11 @@ export default function PrivateReview(props) {
             <Card style={{width: 1150, margin: 10}}>
               <CardHeader
                 title={<Link href={`/Movie/${props.movieId}`} className={classes.title} style={{ fontSize: '30px' }}>{props.title}</Link>}
+                action={
+                  <Box component="fieldset" mb={-1} borderColor="transparent" marginTop={5}>
+                    <Rating name="read-only" precision={0.5} value={props.rating} readOnly/>
+                  </Box>
+                }
               />
             <CardContent>
               {props.text}
