@@ -292,10 +292,11 @@ export default function Movie(props) {
                 </Container>
               </Grid>
             </Container>
-
+            {/* Similar Movies */}
             <div className="title">
               <h1>Similar Movies</h1>
             </div>
+            <Container component="main" maxWidth="lg">
             <IfFulfilled state={similarMoviesData}>
               {({ movies }) => 
                 <div className="container">   
@@ -305,6 +306,7 @@ export default function Movie(props) {
                 </div>
               }
             </IfFulfilled>
+            </Container>
           </div>
         }
       </IfFulfilled>
