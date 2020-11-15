@@ -31,6 +31,7 @@ import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { SentimentSatisfied } from '@material-ui/icons';
+import _ from 'lodash';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -177,8 +178,14 @@ export default function PlayFilmPoker() {
     }
   }
 
-  const updateSelectedMovies = (movie) => {
-    setSelectedMovies((selectedMovies) => ([...selectedMovies, movie]));
+  const updateSelectedMovies = (addRemoveFlag, selectedMovie) => {
+    if (addRemoveFlag) {
+      setSelectedMovies((selectedMovies) => ([...selectedMovies, selectedMovie]));
+    } else {
+      const newSelectedMovies = [...selectedMovies]; 
+      _.remove(newSelectedMovies, (movie) => (movie.movieId === selectedMovie.movieId));
+      setSelectedMovies(newSelectedMovies);
+    }
   }
 
   const componentScreens = {
@@ -190,7 +197,7 @@ export default function PlayFilmPoker() {
       "View Results"
     ],
     screens: [
-    <MovieSelectScreen onAddMovie={updateSelectedMovies}/>,
+    <MovieSelectScreen onChangeMovieSelection={updateSelectedMovies} selectedMovies={selectedMovies}/>,
     <ConfirmSelectionScreen selectedMovies={selectedMovies}/>,
     <WaitPlayersScreen players={players}/>,
     <VotingScreen />,
@@ -269,15 +276,18 @@ function MovieSelectScreen(props) {
   useEffect(fetchSearchResults.run, [searchBox]);
 
   const renderSearchResults = ({ movies }) => {
-    const searchResults = movies.map(({ movieId, name, year, imageUrl }) => {
-      return <PokerCard
+    const searchResults = movies.map(({ movieId, name, imageUrl }) => {
+      const selected = _.some(props.selectedMovies, (selectedMovie) => (selectedMovie.movieId === movieId));
+      return (
+        <PokerCard
         key={movieId}
         movieId={movieId}
         title={name}
-        yearReleased={year}
         imageUrl={imageUrl}
-        onAddMovie={props.onAddMovie}
-      />
+        onChangeMovieSelection={props.onChangeMovieSelection}
+        selected={selected}
+        />
+      );
     });
 
     return searchResults;
@@ -339,7 +349,13 @@ function MovieSelectScreen(props) {
 function ConfirmSelectionScreen(props) {
   return (
     <React.Fragment>
-      
+      <Grid container spacing={3} >
+        {
+          props.selectedMovies.map(({ movieId, title, imageUrl }) =>
+            <PokerCard key={movieId} movieId={movieId} title={title} imageUrl={imageUrl} disableClick/>
+          )
+        }
+      </Grid>
     </React.Fragment>
   );
 };
@@ -390,7 +406,7 @@ function ScreenNavigator(props) {
   return (
     <div className={classes.root}>
       <div>
-        <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+        <Button disabled={activeStep === 0 || activeStep > 1} onClick={handleBack} className={classes.button}>
           Back
         </Button>
         {
@@ -418,7 +434,7 @@ function ScreenNavigator(props) {
           {screens[activeStep]}
         </Typography>
         <div>
-          <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+          <Button disabled={activeStep === 0 || activeStep > 1} onClick={handleBack} className={classes.button}>
             Back
           </Button>
           {
