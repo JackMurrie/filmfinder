@@ -169,11 +169,17 @@ export default function PlayFilmPoker(props) {
         break;
 
       case (command.USER_UPDATED):
-
+        const updatedPlayers = players.map((player) => {
+          if (player.nickname === data.nickname) {
+            return { ...player, ready: true };
+          } else {
+            return player;
+          };
+        });
+        setPlayers(updatedPlayers);
         break;
 
       case (command.PUSH_GAME):
-        
         const allPlayersReady = players.map((player) => ({ ...player, ready: true }));
         setPlayers(allPlayersReady);
         break;
@@ -185,16 +191,13 @@ export default function PlayFilmPoker(props) {
         break;
 
       case (command.PLAYERS):
-        const newPlayers = data.players.map((playerName) => {
-          const ready = playerName === nickname ? true : false;
-          const newPlayer = {
-            nickname: playerName,
-            ready: ready
-          };
-          return newPlayer;
-        });
-
-        setPlayers(newPlayers);
+        const compareName = (x, y) => (x === y.nickname);
+        const newPlayerNames = _.differenceWith(data.players, players, compareName);
+        const newPlayers = newPlayerNames.map((newPlayerName) => ({
+          nickname: newPlayerName,
+          ready: false
+        }));
+        setPlayers((players) => [...players, ...newPlayers]);
         break;
 
       default:
