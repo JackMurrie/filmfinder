@@ -48,16 +48,20 @@ put the finishing touches on the login and signup functionality, link it
 completely with the backend.
 
 Week 7:
-Didn't do much work this week besides testing and debugging. 
+Didn't do much work this week. 
 
 Week 8:
 We had our progressive demo, on Wednesday, so I spent Monday and Tuesday fixing
 a lot of bugs with the backend endpoints so I could link and integrate them
 successfully for the front-end. Tying in with that, my role since Week 5 has
 been to write all the front-end logic to make and receive request/responses from
-the backend. The particular backend endpoints I worked on this week were the
-movie details page, the user dashboard, the review component of th emovie
-details page, and the ratings component.
+the backend, as well as refactor and hook up the event handlers for components. 
+as necessary. The particular front-end logic I worked on this week were the movie
+details page, the user dashboard, the review component of the movie details page, 
+and the ratings component, debugging some issues associated with those, writing 
+and hooking up event handlers for the components, and fetching the associated 
+data asynchronously from the backend.
+
 
 Week 9:
 This is pretty much our last week before assignment and report is due. My role
@@ -70,10 +74,25 @@ assignment, as well as explained to Hikari my thoughts on a general design for
 this feature and the need for WebSockets as it provides a full duplex
 connection that we can use for this FilmPoker feature.
 
+On the night before/morning of the submission deadline, I finished up hooking up
+all the event handling logic for our novel feature FilmPoker. This includes
+parsing the WebSocket protocol that I designed co-operatively with Kristian and
+Hikari, and I also did a considerable refactor of the React components that had
+been drafted by Jack while he did the drafting and implementation of the UI
+layout and design (he has done a great job with the layout, while I was working 
+mostly on event handling logic) to centralize the WebSocket communication in a
+parent component, and break out the child components by the screen for ease of
+use.
+
 Appendix:
 As additional evidence of my work, throughout this project I've been using a
 timetracker called Toggl to track the number of hours I've been spending on this
-project. as of writing (14th of November), I've spent 95 hours over the last 9
-weeks on this project. I've uploaded a copy of the report to google drive at the
-following link: 
-https://drive.google.com/file/d/1u1w6OxzW8QP8wRdgZ9pVPLjBjVZQZ61p/view?usp=sharing
+project. as of writing (16th of November), I've spent 113 hours over the last 9
+weeks on this project including meetings, time to write the project proposal and
+lab time. So I suppose that amounts to about 12 hours a week on average, which I
+think is a fair enough effort.
+
+I've uploaded a copy of this timetracking report in PDF format to google drive 
+at the following link:
+
+https://drive.google.com/file/d/1Amb508nLHLY3W8DfOs7sS6THds_iiqE5/view?usp=sharing
