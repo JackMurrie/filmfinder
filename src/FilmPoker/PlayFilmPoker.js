@@ -121,7 +121,7 @@ export default function PlayFilmPoker(props) {
   const GameID = parseInt(location.pathname.split('/').pop(), 10);
   const nickname = location.state.nickname;
 
-  const [players, setPlayers] = useState([nickname]);
+  const [players, setPlayers] = useState([]);
   const [selectedMovies, setSelectedMovies] = useState([]);
   const [connection, setConnection] = useState(null);
 
@@ -134,23 +134,30 @@ export default function PlayFilmPoker(props) {
         nickname: nickname,
         gameId: GameID
       };
-  
+
       ws.send(JSON.stringify(joinGame));
     };
 
-    ws.onmessage = (messageEvent) => { onGameMessage(ws, messageEvent); };
+    ws.onmessage = onGameMessage;
 
     setConnection(ws);
-    
+
     return () => {
-      connection.close({ reason: "Clean up" });
-      setConnection(null);
+      ws.close({ reason: "Clean up" });
     };
   };
   useEffect(connect, []);
 
-  const onGameMessage = (ws, message) => {
-    const data = JSON.parse(message.data);
+  const updateMessageHandler = () => {
+    setConnection((connection) => {
+      connection.onmessage = onGameMessage;
+      return connection;
+    });
+  }
+  useEffect(updateMessageHandler, [players]);
+
+  const onGameMessage = (messageEvent) => {
+    const data = JSON.parse(messageEvent.data);
     switch (data.command) {
       case (command.JOIN_GAME):
         break;
@@ -162,9 +169,13 @@ export default function PlayFilmPoker(props) {
         break;
 
       case (command.USER_UPDATED):
+
         break;
 
       case (command.PUSH_GAME):
+        
+        const allPlayersReady = players.map((player) => ({ ...player, ready: true }));
+        setPlayers(allPlayersReady);
         break;
 
       case (command.VOTE):
@@ -174,7 +185,16 @@ export default function PlayFilmPoker(props) {
         break;
 
       case (command.PLAYERS):
-        setPlayers(data.players);
+        const newPlayers = data.players.map((playerName) => {
+          const ready = playerName === nickname ? true : false;
+          const newPlayer = {
+            nickname: playerName,
+            ready: ready
+          };
+          return newPlayer;
+        });
+
+        setPlayers(newPlayers);
         break;
 
       default:
@@ -186,7 +206,7 @@ export default function PlayFilmPoker(props) {
     if (addRemoveFlag) {
       setSelectedMovies((selectedMovies) => ([...selectedMovies, selectedMovie]));
     } else {
-      const newSelectedMovies = [...selectedMovies]; 
+      const newSelectedMovies = [...selectedMovies];
       _.remove(newSelectedMovies, (movie) => (movie.movieId === selectedMovie.movieId));
       setSelectedMovies(newSelectedMovies);
     }
@@ -203,16 +223,16 @@ export default function PlayFilmPoker(props) {
 
   const componentScreens = {
     screenLabels: [
-      "Choose Movies", 
-      "Confirm Movies", 
-      "Wait for other Players", 
-      "Vote", 
+      "Choose Movies",
+      "Confirm Movies",
+      "Wait for other Players",
+      "Vote",
       "View Results"
     ],
     screens: [
-      <MovieSelectScreen onChangeMovieSelection={updateSelectedMovies} selectedMovies={selectedMovies}/>,
-      <ConfirmSelectionScreen selectedMovies={selectedMovies} onNextScreen={sendSelectedMovies}/>,
-      <WaitPlayersScreen players={players}/>,
+      <MovieSelectScreen onChangeMovieSelection={updateSelectedMovies} selectedMovies={selectedMovies} />,
+      <ConfirmSelectionScreen selectedMovies={selectedMovies} onNextScreen={sendSelectedMovies} />,
+      <WaitPlayersScreen players={players} />,
       <VotingScreen />,
       <ResultsScreen />
     ]
@@ -221,7 +241,7 @@ export default function PlayFilmPoker(props) {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout}/>
+      <Header isLoggedIn={props.loggedIn} handleLogout={props.handleLogout} />
       <Container component="main" maxWidth="lg" >
         <Typography component="h1" variant="h4" className={classes.headText}>
           Hello {nickname}! Invite others to join with your code: {GameID}
@@ -295,12 +315,12 @@ function MovieSelectScreen(props) {
       const selected = _.some(props.selectedMovies, (selectedMovie) => (selectedMovie.movieId === movieId));
       return (
         <PokerCard
-        key={movieId}
-        movieId={movieId}
-        title={name}
-        imageUrl={imageUrl}
-        onChangeMovieSelection={props.onChangeMovieSelection}
-        selected={selected}
+          key={movieId}
+          movieId={movieId}
+          title={name}
+          imageUrl={imageUrl}
+          onChangeMovieSelection={props.onChangeMovieSelection}
+          selected={selected}
         />
       );
     });
@@ -381,7 +401,7 @@ function ConfirmSelectionScreen(props) {
       <Grid container spacing={3} >
         {
           props.selectedMovies.map(({ movieId, title, imageUrl }) =>
-            <PokerCard key={movieId} movieId={movieId} title={title} imageUrl={imageUrl} disableClick/>
+            <PokerCard key={movieId} movieId={movieId} title={title} imageUrl={imageUrl} disableClick />
           )
         }
       </Grid>
@@ -392,8 +412,8 @@ function ConfirmSelectionScreen(props) {
 function WaitPlayersScreen(props) {
   return (
     <Grid container spacing={3} >
-      {props.players.map((name) => (
-        <PersonCard key={name} name={name} />
+      {props.players.map(({ nickname, ready }) => (
+        <PersonCard key={nickname} name={nickname} ready={ready} />
       ))}
     </Grid>
   );
@@ -423,7 +443,7 @@ function ScreenNavigator(props) {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const { screenLabels, screens } = props.componentScreens;
-  
+
   const handleNext = () => {
     if (screens[activeStep].props.onNextScreen) {
       screens[activeStep].props.onNextScreen();
@@ -446,7 +466,7 @@ function ScreenNavigator(props) {
             <Button variant="contained" color="primary" className={classes.button} href="/">
               Finish
             </Button>
-          :
+            :
             <Button variant="contained" color="primary" onClick={handleNext} className={classes.button}>
               Next
             </Button>
@@ -472,7 +492,7 @@ function ScreenNavigator(props) {
               <Button variant="contained" color="primary" className={classes.button} href="/">
                 Finish
               </Button>
-            :
+              :
               <Button variant="contained" color="primary" onClick={handleNext} className={classes.button}>
                 Next
               </Button>
