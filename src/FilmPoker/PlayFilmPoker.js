@@ -124,6 +124,9 @@ export default function PlayFilmPoker(props) {
   const [players, setPlayers] = useState([]);
   const [selectedMovies, setSelectedMovies] = useState([]);
   const [connection, setConnection] = useState(null);
+  const [movieGamePool, setMovieGamePool] = useState([]);
+  const [votedMovies, setVotedMovies] = useState([]);
+  const [movieResults, setMovieResults] = useState([]);
 
   const connect = () => {
     const ws = new WebSocket("ws://localhost:8080/filmpoker");
@@ -143,13 +146,22 @@ export default function PlayFilmPoker(props) {
     setConnection(ws);
 
     return () => {
-      ws.close({ reason: "Clean up" });
+      ws.close();
     };
   };
   useEffect(connect, []);
 
   const onGameMessage = (messageEvent) => {
-    const data = JSON.parse(messageEvent.data);
+    let data;
+    try {
+      data = JSON.parse(messageEvent.data);
+    } catch (err) {
+      console.log(err);
+      console.log(messageEvent.data);
+      // Redirect to something went wrong page here...
+      return;
+    };
+
     switch (data.command) {
       case (command.JOIN_GAME):
         break;
@@ -177,12 +189,17 @@ export default function PlayFilmPoker(props) {
         setPlayers((players) => {
           return players.map((player) => ({ ...player, ready: true }));
         });
+        setMovieGamePool(data.selectedMovies);
         break;
 
       case (command.VOTE):
         break;
 
       case (command.RESULTS):
+        setMovieResults({
+          orderedMovies: data.orderedMovies,
+          points: data.points
+        });
         break;
 
       case (command.PLAYERS):
@@ -203,14 +220,15 @@ export default function PlayFilmPoker(props) {
   }
 
   const updateSelectedMovies = (addRemoveFlag, selectedMovie) => {
-    if (addRemoveFlag) {
-      setSelectedMovies((selectedMovies) => ([...selectedMovies, selectedMovie]));
-    } else {
-      const newSelectedMovies = [...selectedMovies];
-      _.remove(newSelectedMovies, (movie) => (movie.movieId === selectedMovie.movieId));
-      setSelectedMovies(newSelectedMovies);
-    }
-  }
+    setSelectedMovies((selectedMovies) => {
+      if (addRemoveFlag) {
+        return [...selectedMovies, selectedMovie];
+      } else {
+        const newSelectedMovies = [...selectedMovies];
+        return _.remove(newSelectedMovies, (movie) => (movie.movieId === selectedMovie.movieId));
+      };
+    });
+  };
 
   const sendSelectedMovies = () => {
     const addSelect = {
@@ -219,6 +237,29 @@ export default function PlayFilmPoker(props) {
     };
 
     connection.send(JSON.stringify(addSelect));
+  };
+
+  const updateVotedMovies = (addRemoveFlag, votedMovie) => {
+    setVotedMovies((votedMovies) => {
+      if (addRemoveFlag) {
+        return [...votedMovies, votedMovie];
+      } else {
+        const newVotedMovies = [...votedMovies];
+        return _.remove(newVotedMovies, (movie) => (movie.movieId === votedMovie.movieId));
+      };
+    });
+  };
+
+  const sendVotedMovies = () => {
+    const addVote = {
+      command: command.VOTE,
+      votes: votedMovies.map(({ movieId }) => ({
+        movieId: movieId,
+        preference: 1
+      }))
+    };
+
+    connection.send(JSON.stringify(addVote));
   };
 
   const componentScreens = {
@@ -233,8 +274,13 @@ export default function PlayFilmPoker(props) {
       <MovieSelectScreen onChangeMovieSelection={updateSelectedMovies} selectedMovies={selectedMovies} />,
       <ConfirmSelectionScreen selectedMovies={selectedMovies} onNextScreen={sendSelectedMovies} />,
       <WaitPlayersScreen players={players} />,
-      <VotingScreen />,
-      <ResultsScreen />
+      <VotingScreen 
+        moviesToVote={movieGamePool} 
+        votedMovies={votedMovies} 
+        onChangeMovieVote={updateVotedMovies}
+        onNextScreen={sendVotedMovies}
+      />,
+      <ResultsScreen movieResults={movieResults} />
     ]
   };
 
@@ -319,7 +365,7 @@ function MovieSelectScreen(props) {
           movieId={movieId}
           title={name}
           imageUrl={imageUrl}
-          onChangeMovieSelection={props.onChangeMovieSelection}
+          onChangeSelection={props.onChangeMovieSelection}
           selected={selected}
         />
       );
@@ -423,6 +469,23 @@ function WaitPlayersScreen(props) {
 
 function VotingScreen(props) {
   const classes = useStyles();
+  const renderResults = (results) => {
+    const componentResults = results.map(({ movieId, name, imageUrl }) => {
+      const selected = _.some(props.votedMovies, (votedMovie) => (votedMovie.movieId === movieId));
+      return (
+        <PokerCard
+          key={movieId}
+          movieId={movieId}
+          title={name}
+          imageUrl={imageUrl}
+          onChangeSelection={props.onChangeMovieVote}
+          selected={selected}
+        />
+      );
+    });
+
+    return <Grid container spacing={3}>{componentResults}</Grid>;
+  };
 
   return (
     <React.Fragment>
@@ -430,14 +493,43 @@ function VotingScreen(props) {
         Vote Now!
       </Typography>
       <div className={classes.container}>
-        <VoteCard onVoteMovie={props.onVoteMovie} />
+        {renderResults(props.moviesToVote)}
       </div>
     </React.Fragment>
   );
 };
 
 function ResultsScreen(props) {
-  return <div></div>;
+  const classes = useStyles();
+  // props.movieResults has format:
+  // { 
+  //   orderedMovies: [movieInfo...],
+  //   points: [int]
+  // }
+  const { points, orderedMovies } = props.movieResults;
+  console.log(points);
+  console.log(orderedMovies);
+  return (
+    <div>
+      { _.zipWith(points, orderedMovies, ((score, movie) => (
+          <React.Fragment>
+            <Typography component="h1" variant="h4" className={classes.headText}>
+              {score}
+            </Typography>
+            <div className={classes.container}>
+              <PokerCard
+                key={movie.movieId}
+                movieId={movie.movieId}
+                title={movie.name}
+                imageUrl={movie.imageUrl}
+                disableClick
+              />
+            </div>
+          </React.Fragment>
+        )))
+      }
+    </div>
+  );
 };
 
 function ScreenNavigator(props) {

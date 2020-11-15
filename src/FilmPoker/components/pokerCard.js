@@ -56,8 +56,8 @@ export default function PokerCard(props) {
         return;
       }
 
-      if (props.onChangeMovieSelection) {
-        props.onChangeMovieSelection(!added, movieInfo);
+      if (props.onChangeSelection) {
+        props.onChangeSelection(!added, movieInfo);
       };
 
       setAdded(added => !added);
