@@ -38,6 +38,8 @@ public class WebSocketFilmPoker {
             int gameId = pd.getGameId();
             PokerGame pg = PokerManager.getGame(gameId);
             pg.removePlayer(pd.getNickname());
+            String response = pg.getPlayers().toJson();
+            sendAll(pg.getSessions(), response);
             System.out.println(session.getRemoteAddress().getHostString() + " closed and user removed from the game!");
         } catch (Exception e) {
             System.out.println(session.getRemoteAddress().getHostString() + " failed to remove user from the game!");
@@ -65,13 +67,13 @@ public class WebSocketFilmPoker {
                 pg = PokerManager.getGame(gameId);
                 pg.addPlayer(data.get("nickname").getAsString(), session);
                 response = pg.getPlayers().toJson();
-                
+                sendAll(pg.getSessions(), response);
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 response = getBoolResponse(command, false);
+                session.getRemote().sendString(response);
             }
-            
-            session.getRemote().sendString(response);
             return;
         }
 
