@@ -58,7 +58,6 @@ export default function Drawer(props) {
         'Romance',
         'SciFI',
         'Thriller',
-        'other',
       ];
 
     const [genre, setGenre] = React.useState("Action");
