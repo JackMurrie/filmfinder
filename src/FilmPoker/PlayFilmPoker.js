@@ -102,6 +102,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     alignItems: 'center',
   },
+  resultAlign: {
+    marginLeft: 470,
+  },
 }));
 
 const command = {
@@ -516,7 +519,7 @@ function ResultsScreen(props) {
             <Typography component="h1" variant="h4" className={classes.headText}>
               {score}
             </Typography>
-            <div className={classes.container}>
+            <div className={classes.resultAlign}>
               <PokerCard
                 key={movie.movieId}
                 movieId={movie.movieId}
