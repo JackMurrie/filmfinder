@@ -92,7 +92,7 @@ export default function Drawer(props) {
         <Divider />
         <List>
             <ListItem>
-              <ListItemIcon>{<TheatersIcon style={{fill: "white"}}/>}</ListItemIcon>
+              <ListItemIcon>{<TheatersIcon style={{fill: "secondary"}}/>}</ListItemIcon>
               <ListItemText primary={"Genre"} />
             </ListItem>
             <Divider />
