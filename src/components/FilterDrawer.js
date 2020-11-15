@@ -101,7 +101,7 @@ export default function Drawer(props) {
           title: props.title,
           filters: checked,
         };
-        history.push("/SearchResults", data);
+        history.push(`/SearchResults/${props.title}`, data);
       }
       setState({ ...state, [anchor]: open });
     };
