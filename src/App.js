@@ -109,7 +109,7 @@ function App() {
             <Route exact path="/user/:userId">
                 <PublicProfile loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
-            <Route path="/SearchResults">
+            <Route exact path="/SearchResults/:keyword">
                 <SearchResults loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/FilmPoker">

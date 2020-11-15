@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 
 const useStyles = makeStyles({
     right: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
     center: {
         textAlign: "center",
         fontFamily: ["Montserrat", "sans-serif"],
-      },
+    },
     background: {
         backgroundColor: "	#282828",
       },
@@ -28,7 +29,7 @@ const useStyles = makeStyles({
 export default function SearchResults(props) {
     const classes = useStyles();
     const location = useLocation();
-    const title = location.state.title;
+    const title = location.pathname.split('/').pop();
 
     const requestOptions = {
         method: 'POST',
@@ -43,10 +44,22 @@ export default function SearchResults(props) {
     useEffect(state.run, [title]);
 
     const handleResults = ({ movies }) => {
-        const searchResults = movies.map(({ movieId, name, year, imageUrl, averageRating }) => {
-            return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating}/>
-        });
-        return searchResults;
+        if (movies[0] === undefined) {
+            return (
+                <Container component="main" maxWidth="lg">
+                <div className={classes.center}>
+                    <h2>No results found</h2>
+                    <SentimentVeryDissatisfiedIcon />
+                </div>
+                </Container>
+            );
+        }
+        else {
+            const searchResults = movies.map(({ movieId, name, year, imageUrl, averageRating }) => {
+                return <MovieCard key={movieId} movieId={movieId} title={name} yearReleased={year} imageUrl={imageUrl} rating={averageRating}/>
+            });
+            return searchResults;
+        }
     };
 
     return (
