@@ -406,8 +406,8 @@ function MovieSelectScreen(props) {
           {/* {() => <CircularProgress color="inherit"/>} */}
         </IfPending>
         <IfFulfilled state={fetchDashboard}>
-          {({ watchlist }) => {
-            return renderResults(watchlist.movies);
+          {({ recommendations }) => {
+            return renderResults(recommendations.movies);
           }}
         </IfFulfilled>
       </TabPanel>
