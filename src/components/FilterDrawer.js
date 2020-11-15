@@ -49,15 +49,23 @@ export default function Drawer(props) {
     const genres = [
         'Action',
         'Adventure',
+        'Animation',
         'Comedy',
         'Crime',
         'Documentary',
         'Drama',
+        'Family',
         'Fantasy',
+        'History',
         'Horror',
+        'Music',
+        'Mystery',
         'Romance',
-        'SciFI',
+        'Science Fiction',
         'Thriller',
+        'TV Movie',
+        'War',
+        'Western'
       ];
 
     const [genre, setGenre] = React.useState("Action");
