@@ -33,8 +33,16 @@ public class WebSocketFilmPoker {
  
     @OnWebSocketClose
     public void onClose(Session session, int status, String reason) {
-        System.out.println(session.getRemoteAddress().getHostString() + " closed!");
-    }
+        try {
+            PlayerData pd = PokerManager.getPlayerData(session);
+            int gameId = pd.getGameId();
+            PokerGame pg = PokerManager.getGame(gameId);
+            pg.removePlayer(pd.getNickname());
+            System.out.println(session.getRemoteAddress().getHostString() + " closed and user removed from the game!");
+        } catch (Exception e) {
+            System.out.println(session.getRemoteAddress().getHostString() + " failed to remove user from the game!");
+        }
+}
 
     @OnWebSocketMessage
     public void onText(Session session, String message) throws IOException {
