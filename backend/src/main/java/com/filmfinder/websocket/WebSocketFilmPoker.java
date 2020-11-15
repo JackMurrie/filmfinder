@@ -104,7 +104,7 @@ public class WebSocketFilmPoker {
                         movies.add(je.getAsInt());
                     }
                     if (!pg.addSelect(pd.getNickname(), movies)) {
-                        response = "{command:"+Data.USERUPDATED+", "+"nickname: " +pd.getNickname()+"}";
+                        response = "{\"command\":"+Data.USERUPDATED+", "+"\"nickname\": \"" +pd.getNickname()+"\"}";
                     } else {
                         response = pg.getSelectedMovies().toJson();
                     }
