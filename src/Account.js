@@ -32,6 +32,9 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 import { useHistory } from 'react-router-dom';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -187,9 +190,17 @@ function Dashboard(props) {
         } 
       });
   };
+  
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
+
+  const handleDeleteAccountConf = (event) => {
+    setAlertOpen(true);
+  };
 
   const handleDeleteAccount = (event) => {
-
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -274,8 +285,9 @@ function Dashboard(props) {
         {Blacklist}
       </TabPanel>
       <TabPanel value={value} index={5}>
+        <AlertDialog alertOpen={alertOpen} handleAlertClose={handleAlertClose} handleDeleteAccount={handleDeleteAccount}/>
         Delete Account 
-        <IconButton color="secondary" component="span" onClick={handleDeleteAccount}>
+        <IconButton color="secondary" component="span" onClick={handleDeleteAccountConf}>
               <DeleteIcon />
         </IconButton>
         <Divider />
@@ -285,6 +297,28 @@ function Dashboard(props) {
         </IconButton>
         <Divider />
       </TabPanel>
+    </div>
+  );
+}
+
+function AlertDialog(props) {
+
+  return (
+    <div>
+      <Dialog
+        open={props.alertOpen}
+        onClose={props.handleAlertClose}
+      >
+        <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete your account?"}</DialogTitle>
+        <DialogActions>
+          <Button onClick={props.handleAlertClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={props.handleDeleteAccount} color="primary" autoFocus>
+            YES
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
