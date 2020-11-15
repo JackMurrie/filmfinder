@@ -3,10 +3,8 @@ package com.filmfinder.search;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import com.filmfinder.Search.Search;
-import com.filmfinder.db.SearchDB;
 import com.filmfinder.movie.Movies;
 
 import org.junit.Test;

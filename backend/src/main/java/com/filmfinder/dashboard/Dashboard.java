@@ -1,10 +1,8 @@
 package com.filmfinder.dashboard;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import com.filmfinder.blacklist.Blacklist;
-import com.filmfinder.db.ReviewDB;
 import com.filmfinder.frontendObject.frontendObject;
 import com.filmfinder.movie.Movies;
 import com.filmfinder.movieLists.Watchlist;
