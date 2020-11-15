@@ -123,6 +123,7 @@ export default function PlayFilmPoker(props) {
 
   const [players, setPlayers] = useState([nickname]);
   const [selectedMovies, setSelectedMovies] = useState([]);
+  const [connection, setConnection] = useState(null);
 
   const connect = () => {
     const ws = new WebSocket("ws://localhost:8080/filmpoker");
@@ -139,8 +140,11 @@ export default function PlayFilmPoker(props) {
 
     ws.onmessage = (messageEvent) => { onGameMessage(ws, messageEvent); };
 
+    setConnection(ws);
+    
     return () => {
-      ws.close({ reason: "Clean up" });
+      connection.close({ reason: "Clean up" });
+      setConnection(null);
     };
   };
   useEffect(connect, []);
@@ -188,6 +192,15 @@ export default function PlayFilmPoker(props) {
     }
   }
 
+  const sendSelectedMovies = () => {
+    const addSelect = {
+      command: command.ADD_SELECT,
+      selectedMovies: selectedMovies.map(({ movieId }) => (movieId))
+    };
+
+    connection.send(JSON.stringify(addSelect));
+  };
+
   const componentScreens = {
     screenLabels: [
       "Choose Movies", 
@@ -197,11 +210,11 @@ export default function PlayFilmPoker(props) {
       "View Results"
     ],
     screens: [
-    <MovieSelectScreen onChangeMovieSelection={updateSelectedMovies} selectedMovies={selectedMovies}/>,
-    <ConfirmSelectionScreen selectedMovies={selectedMovies}/>,
-    <WaitPlayersScreen players={players}/>,
-    <VotingScreen />,
-    <ResultsScreen />
+      <MovieSelectScreen onChangeMovieSelection={updateSelectedMovies} selectedMovies={selectedMovies}/>,
+      <ConfirmSelectionScreen selectedMovies={selectedMovies} onNextScreen={sendSelectedMovies}/>,
+      <WaitPlayersScreen players={players}/>,
+      <VotingScreen />,
+      <ResultsScreen />
     ]
   };
 
@@ -273,7 +286,6 @@ function MovieSelectScreen(props) {
 
   const fetchSearchResults = useFetch('/rest/search', requestOptions, { defer: true });
   const fetchDashboard = useFetch('/rest/user/dashboard', requestOptions, { defer: true });
-
 
   useEffect(fetchSearchResults.run, [searchBox]);
   useEffect(fetchDashboard.run, []);
@@ -381,7 +393,7 @@ function WaitPlayersScreen(props) {
   return (
     <Grid container spacing={3} >
       {props.players.map((name) => (
-        <PersonCard name={name} />
+        <PersonCard key={name} name={name} />
       ))}
     </Grid>
   );
@@ -411,8 +423,11 @@ function ScreenNavigator(props) {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const { screenLabels, screens } = props.componentScreens;
-
+  
   const handleNext = () => {
+    if (screens[activeStep].props.onNextScreen) {
+      screens[activeStep].props.onNextScreen();
+    };
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -447,9 +462,7 @@ function ScreenNavigator(props) {
         })}
       </Stepper>
       <div>
-        <Typography component={'span'} className={classes.instructions}>
-          {screens[activeStep]}
-        </Typography>
+        {screens[activeStep]}
         <div>
           <Button disabled={activeStep === 0 || activeStep > 1} onClick={handleBack} className={classes.button}>
             Back
