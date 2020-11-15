@@ -8,7 +8,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import GradeIcon from '@material-ui/icons/Grade';
+import MovieIcon from '@material-ui/icons/Movie';
 import ListItemText from '@material-ui/core/ListItemText';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import TheatersIcon from '@material-ui/icons/Theaters';
@@ -17,8 +17,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import Rating from '@material-ui/lab/Rating';
 import { useHistory } from "react-router-dom";
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import InputBase from '@material-ui/core/InputBase';
 
 const useStyles = makeStyles((theme) => ({
     list: {
@@ -31,18 +33,15 @@ const useStyles = makeStyles((theme) => ({
     },
     text: {
       color: theme.palette.text,
-    }
-}));
-
-const WhiteCheckbox = withStyles({
-    root: {
-      color: "white",
-      '&$checked': {
-        color: "white",
-      },
     },
-    checked: {},
-  })((props) => <Checkbox color="default" {...props} />);
+    resize:{
+      fontSize:15,
+    },
+    textField: {
+        width: 200,
+        margin: 20,
+    },
+}));
 
 export default function Drawer(props) {
     const classes = useStyles();
@@ -61,33 +60,15 @@ export default function Drawer(props) {
         'Thriller',
         'other',
       ];
-    
-    const [checked, setChecked] = React.useState({
-        Action: false,
-        Adventure: false,
-        Comedy: false,
-        Crime: false,
-        Documentary: false,
-        Drama: false,
-        Fantasy: false,
-        Horror: false,
-        Romance: false,
-        SciFi: false,
-        Thriller: false,
-        other: false,
-        Not_Seen: false,
-        Not_Wishlist: false,
-        five_stars: false,
-        four_stars: false,
-        three_stars: false,
-        two_stars: false,
-        one_stars: false,
-    });
 
-    const handleChange = (event) => {
-        setChecked({ ...checked, [event.target.name]: event.target.checked });
+    const [genre, setGenre] = React.useState("Action");
+
+    const handleRadioGenre = (event) => {
+        setGenre(event.target.checked);
+        props.handleGenre(event);
     };
 
+    // Drawer States
     const [state, setState] = React.useState({
         right: false,
     });
@@ -97,11 +78,7 @@ export default function Drawer(props) {
         return;
       }
       if (state.right === true) {
-        const data = {
-          title: props.title,
-          filters: checked,
-        };
-        history.push(`/SearchResults/${props.title}`, data);
+        history.push(`/Browse`);
       }
       setState({ ...state, [anchor]: open });
     };
@@ -112,31 +89,7 @@ export default function Drawer(props) {
           [classes.fullList]: anchor === 'top' || anchor === 'bottom',
         })}
         role="presentation"
-        onKeyDown={toggleDrawer(anchor, false)}
       >
-        <List>
-            <ListItem button key={"Unseen"}>
-              <ListItemIcon>{<VisibilityOffIcon style={{fill: "white"}}/>}</ListItemIcon>
-              <ListItemText primary={"Unseen"} />
-              <WhiteCheckbox
-                    checked={checked.Not_Seen}
-                    onChange={handleChange}
-                    name={"Not_Seen"}
-                    />
-            </ListItem>
-        </List>
-        <Divider />
-        <List>
-            <ListItem button key={"Not_Wishlist"}>
-              <ListItemIcon>{<FavoriteBorderIcon style={{fill: "white"}}/>}</ListItemIcon>
-              <ListItemText primary={"Not in Wishlist"} />
-              <WhiteCheckbox
-                    checked={checked.Not_Wishlist}
-                    onChange={handleChange}
-                    name={"Not_Wishlist"}
-                    />
-            </ListItem>
-        </List>
         <Divider />
         <List>
             <ListItem>
@@ -144,76 +97,19 @@ export default function Drawer(props) {
               <ListItemText primary={"Genre"} />
             </ListItem>
             <FormControl component="fieldset">
-                <FormGroup column>
+                <RadioGroup  column onChange={handleRadioGenre}>
                     {genres.map((genre) => (
                         <FormControlLabel
                         value={genre}
-                        control={<WhiteCheckbox
-                            checked={checked.[genre]}
-                            onChange={handleChange}
+                        control={<Radio
                             name={genre}
+                            color="white"
                             />}
                         label={genre}
                         labelPlacement="start"
                         />
                     ))}
-                </FormGroup>
-            </FormControl>
-        </List>
-        <Divider />
-        <List>
-            <ListItem>
-              <ListItemIcon>{<GradeIcon style={{fill: "white"}}/>}</ListItemIcon>
-              <ListItemText primary={"Rating"} />
-            </ListItem>
-            <FormControl component="fieldset">
-                <FormGroup column>
-                        <FormControlLabel
-                        control={<WhiteCheckbox
-                            checked={checked.five_stars}
-                            onChange={handleChange}
-                            name={"five_stars"}
-                            />}
-                        label={<Rating value={5} readOnly size="small" className={classes.ratingColor}/>}
-                        labelPlacement="start"
-                        />
-                        <FormControlLabel
-                        control={<WhiteCheckbox
-                            checked={checked.four_stars}
-                            onChange={handleChange}
-                            name={"four_stars"}
-                            />}
-                        label={<Rating value={4} readOnly size="small" className={classes.ratingColor}/>}
-                        labelPlacement="start"
-                        />
-                        <FormControlLabel
-                        control={<WhiteCheckbox
-                            checked={checked.three_stars}
-                            onChange={handleChange}
-                            name={"three_stars"}
-                            />}
-                        label={<Rating value={3} readOnly size="small" className={classes.ratingColor}/>}
-                        labelPlacement="start"
-                        />
-                        <FormControlLabel
-                        control={<WhiteCheckbox
-                            checked={checked.two_stars}
-                            onChange={handleChange}
-                            name={"two_stars"}
-                            />}
-                        label={<Rating value={2} readOnly size="small" className={classes.ratingColor}/>}
-                        labelPlacement="start"
-                        />
-                        <FormControlLabel
-                        control={<WhiteCheckbox
-                            checked={checked.one_stars}
-                            onChange={handleChange}
-                            name={"one_stars"}
-                            />}
-                        label={<Rating value={1} readOnly size="small" className={classes.ratingColor}/>}
-                        labelPlacement="start"
-                        />
-                </FormGroup>
+                </RadioGroup >
             </FormControl>
         </List>
         <Divider />
@@ -222,7 +118,7 @@ export default function Drawer(props) {
   
     return (
           <React.Fragment key={'right'}>
-            <Button className={classes.text} onClick={toggleDrawer('right', true)}>{'Filter'} </Button>
+            <Button variant="outlined" className={classes.text} onClick={toggleDrawer('right', true)}>{'Select Genre'}</Button>
             <SwipeableDrawer
               anchor={'right'}
               open={state['right']}

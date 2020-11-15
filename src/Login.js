@@ -125,10 +125,6 @@ function LoginScreen(props) {
             autoComplete="current-password"
             onChange={event => setPassword(event.target.value)}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
           { wrong_credentials &&
             <Typography variant="subtitle2" color="secondary">
               Sorry, those credentials didn't work. Try again?

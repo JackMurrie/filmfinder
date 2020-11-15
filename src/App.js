@@ -12,6 +12,7 @@ import NewPassConf from './NewPassConf';
 import Account from './Account';
 import PublicProfile from './PublicProfile';
 import SearchResults from './SearchResults';
+import Browse from './Browse';
 import FilmPoker from './FilmPoker/FilmPoker';
 import CreateGame from './FilmPoker/CreateGame';
 import JoinGame from './FilmPoker/JoinGame';
@@ -111,6 +112,9 @@ function App() {
             </Route>
             <Route exact path="/SearchResults/:keyword">
                 <SearchResults loggedIn={loggedIn} handleLogout={handleLogout}/>
+            </Route>
+            <Route path="/Browse">
+                <Browse loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/FilmPoker">
                 <FilmPoker loggedIn={loggedIn} handleLogout={handleLogout}/>

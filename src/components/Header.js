@@ -155,7 +155,7 @@ export default function Header(props) {
                     <form onSubmit={handleSearch}>
                       <InputBase
                         id="search"
-                        placeholder="Search…"
+                        placeholder="Search Title"
                         onChange={(event) => setSearch(event.target.value)}
                         classes={{
                           root: classes.inputRoot,
@@ -165,6 +165,9 @@ export default function Header(props) {
                       />
                     </form>
                 </div>
+                <Button href="/Browse" color="primary" className={classes.link}>
+                  Browse
+                </Button>
                 <Button href="/FilmPoker" color="primary" variant="outlined" className={classes.link}>
                   Play FilmPoker
                 </Button>
