@@ -84,7 +84,7 @@ export default function Account(props) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ limit: 10 })
+    body: JSON.stringify({ limit: 12 })
   };
 
   const fetchDashboardData = useFetch('/rest/user/dashboard', requestOptions, {defer: true});

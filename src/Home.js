@@ -99,7 +99,7 @@ export default function Home({loggedIn, darkMode, handleLogout, handleThemeChang
               labelPlacement="bottom"
               />
             <div className={classes.space2}>
-              <IconButton aria-label="account" onClick={handleClick}>
+              <IconButton  onClick={handleClick}>
                 <ArrowDropDownIcon className={classes.largeIcon} style={{fill: "pink"}}/>
               </IconButton>
             </div>

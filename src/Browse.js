@@ -12,9 +12,9 @@ import { useFetch, IfFulfilled, IfPending, IfRejected } from 'react-async';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
-import InputBase from '@material-ui/core/InputBase';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 const useStyles = makeStyles((theme) => ({
     right: {
@@ -31,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1, 1.5),
         color: `${theme.palette.text.primary}`,
     },
+    largeIcon: {
+        width: 70,
+        height: 70,
+    },
 }));
 
 export default function Browse(props) {
@@ -38,6 +42,12 @@ export default function Browse(props) {
     const location = useLocation();
     const [genre, setGenre] = React.useState(null);
     const [director, setDirector] = React.useState("");
+
+    const [limit, setLimit] = React.useState(12);
+    const handleClick = (event) => {
+        event.preventDefault();
+        setLimit(limit + 12);
+    }; 
 
     const handleGenre = React.useCallback( 
         event => {
@@ -60,11 +70,11 @@ export default function Browse(props) {
             'Accept': 'application/json',
             'Content-Type': 'application/json' 
         },
-        body: JSON.stringify({title: null, genre: genre, director: director, limit: 12})
+        body: JSON.stringify({title: null, genre: genre, director: director, limit: limit})
     };
     const state = useFetch('/rest/search', requestOptions);
 
-    useEffect(state.run, [director, genre]);
+    useEffect(state.run, [director, genre, limit]);
 
     const handleResults = ({ movies }) => {
         if (movies[0] === undefined) {
@@ -120,6 +130,9 @@ export default function Browse(props) {
                     </IfPending>
                     <IfFulfilled state={state}>{handleResults}</IfFulfilled>
                     </div>
+                    <IconButton aria-label="account" onClick={handleClick}>
+                        <ArrowDropDownIcon className={classes.largeIcon} style={{fill: "pink"}}/>
+                    </IconButton>
                 </div>
             </Container>
         </React.Fragment>
