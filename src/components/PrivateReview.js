@@ -81,7 +81,7 @@ export default function PrivateReview(props) {
               {props.text}
             </CardContent>
             <CardActions className={classes.right}>
-              <EditReviewButton />
+              <EditReviewButton movieId={props.movieId} oldReview={props.text}/>
               <IconButton color="primary" component="span" className={classes.control} onClick={deleteReview.run}>
                 <DeleteIcon />
               </IconButton>
@@ -110,8 +110,20 @@ export default function PrivateReview(props) {
     const submitReview = (event) => {
       event.preventDefault();
 
-      console.log(newComment)
+      const data = {
+        comment: newComment,
+      };
 
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      };
+  
+      fetch(`/rest/review/${props.movieId}`, requestOptions)
+        .then(response => {
+          window.location.reload();
+        });
     };
   
     return (
@@ -134,7 +146,7 @@ export default function PrivateReview(props) {
                 id="review"
                 label=""
                 fullWidth={true}
-                defaultValue="My old review goes here" 
+                defaultValue={props.oldReview}
                 onChange={(event) => setNewComment(event.target.value)}
               />
             </DialogContent>
