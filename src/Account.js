@@ -90,8 +90,6 @@ export default function Account(props) {
   const fetchDashboardData = useFetch('/rest/user/dashboard', requestOptions, {defer: true});
   useEffect(fetchDashboardData.run, []);
 
-  const { reviews } = fetchDashboardData;
-
   return (
     <React.Fragment>
       <CssBaseline />
