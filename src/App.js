@@ -6,7 +6,6 @@ import SignUp from './SignUp';
 import AccountConf from './AccountConf';
 import Movie from './Movie';
 import ForgotPass from './ForgotPass';
-import Verification from './verification';
 import ResetPassword from './ResetPassword';
 import NewPassConf from './NewPassConf';
 import Account from './Account';
@@ -17,6 +16,7 @@ import FilmPoker from './FilmPoker/FilmPoker';
 import CreateGame from './FilmPoker/CreateGame';
 import JoinGame from './FilmPoker/JoinGame';
 import PlayFilmPoker from './FilmPoker/PlayFilmPoker';
+import Page404 from './404';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -95,9 +95,6 @@ function App() {
             <Route path="/ForgotPass">
                 <ForgotPass loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
-            <Route path="/verification">
-                <Verification loggedIn={loggedIn} handleLogout={handleLogout}/>
-            </Route>
             <Route path="/ResetPassword">
                 <ResetPassword loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
@@ -128,6 +125,9 @@ function App() {
             <Route exact path="/PokerGame/Play/:GameID">
                 <PlayFilmPoker loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>  
+            <Route path="/404">
+                <Page404 loggedIn={loggedIn} handleLogout={handleLogout}/>
+            </Route>
             <Route path="/">
                 <Home loggedIn={loggedIn} darkMode={darkMode} handleLogout={handleLogout} handleThemeChange={handleThemeChange}/>
             </Route>
