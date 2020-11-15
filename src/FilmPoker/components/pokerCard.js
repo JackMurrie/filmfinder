@@ -42,27 +42,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PokerCard(props) {
     const classes = useStyles();
-    const history = useHistory();
 
     const [added, setAdded] = useState(false);
 
-    const updateMovies = useFetch('/rest/', requestOptions, { defer: true }); // /rest/filmPoker/add remove selection
-
     const toggleAdded = (event) => {
-        if (added) {
-          updateMovies.run({
-            method: 'DELETE',
-            body: JSON.stringify({ movieId: props.movieId})
-          });
-        } else {
-          updateMovies.run({
-            method: 'POST',
-            body: JSON.stringify({ movieId: props.movieId})
-          });
-        };
-    
-        setAdded(added => !added);
+      if (props.onAddMovie) {
+        props.onAddMovie(!added);
       };
+
+      setAdded(added => !added);
+    };
 
     return (
       <Card style={{width: 255, margin: 20}} elevation={24}>
