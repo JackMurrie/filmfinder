@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -92,6 +93,11 @@ export default function CreateGame(props) {
                     >
                         Create Game
                     </Button>
+                    { !props.loggedIn &&
+                        <Typography variant="subtitle2" color="secondary">
+                        Sorry, you must be logged in to do this
+                        </Typography>
+                    }
                     </div>
                 </div>
                 </Container>
