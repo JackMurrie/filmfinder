@@ -154,13 +154,6 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
-function a11yProps(index) {
-  return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
-  };
-}
-
 function Dashboard(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
