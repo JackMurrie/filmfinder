@@ -7,7 +7,7 @@ import PrivateReview from './components/PrivateReview';
 import Footer from './components/Footer';
 import './css/Account.css';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -77,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
   
 export default function Account(props) {
   const classes = useStyles();
+  const [tabSelected, setTabSelected] = useState(0);
 
   const requestOptions = {
     method: 'POST',
@@ -103,7 +104,13 @@ export default function Account(props) {
               </div>
               </div>
             <Container component="main" maxWidth="lg">
-              <Dashboard handleLogout={props.handleLogout} dashboardData={dashboardData} reloadDashboardData={fetchDashboardData.run}/>
+              <Dashboard 
+                handleLogout={props.handleLogout} 
+                dashboardData={dashboardData} 
+                reloadDashboardData={fetchDashboardData.run}
+                tabSelected={tabSelected}
+                updateTabSelected={setTabSelected}
+              />
             </Container>
             <Footer />
           </React.Fragment>
@@ -154,20 +161,13 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
-function a11yProps(index) {
-  return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
-  };
-}
-
 function Dashboard(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+
   const history = useHistory();
 
   const toggleTab = (event, newValue) => {
-    setValue(newValue);
+    props.updateTabSelected(newValue);
   };
 
   const handlePassReset = (event) => {
@@ -228,9 +228,8 @@ function Dashboard(props) {
   });
 
   const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, user }) => {
-
-
     return <PrivateReview 
+      key={movieId}
       title={movieName}
       text={comment}
       rating={rating}
@@ -249,7 +248,7 @@ function Dashboard(props) {
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Tabs
-          value={value}
+          value={props.tabSelected}
           onChange={toggleTab}
           variant="fullWidth"
           indicatorColor="secondary"
@@ -265,24 +264,24 @@ function Dashboard(props) {
           
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
+      <TabPanel value={props.tabSelected} index={0}>
         {Wishlist}
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <TabPanel value={props.tabSelected} index={1}>
         <div className={classes.container}>
           {Recommendations}
         </div>
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel value={props.tabSelected} index={2}>
         {Watchlist}
       </TabPanel>
-      <TabPanel value={value} index={3}>
+      <TabPanel value={props.tabSelected} index={3}>
         {Reviews}
       </TabPanel>
-      <TabPanel value={value} index={4}>
+      <TabPanel value={props.tabSelected} index={4}>
         {Blacklist}
       </TabPanel>
-      <TabPanel value={value} index={5}>
+      <TabPanel value={props.tabSelected} index={5}>
         <AlertDialog alertOpen={alertOpen} handleAlertClose={handleAlertClose} handleDeleteAccount={handleDeleteAccount}/>
         Delete Account 
         <IconButton color="secondary" component="span" onClick={handleDeleteAccountConf}>

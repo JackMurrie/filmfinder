@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import './css/App.css';
 import Home from './Home';
 import Login from './Login';
@@ -6,7 +6,6 @@ import SignUp from './SignUp';
 import AccountConf from './AccountConf';
 import Movie from './Movie';
 import ForgotPass from './ForgotPass';
-import Verification from './verification';
 import ResetPassword from './ResetPassword';
 import NewPassConf from './NewPassConf';
 import Account from './Account';
@@ -17,10 +16,10 @@ import FilmPoker from './FilmPoker/FilmPoker';
 import CreateGame from './FilmPoker/CreateGame';
 import JoinGame from './FilmPoker/JoinGame';
 import PlayFilmPoker from './FilmPoker/PlayFilmPoker';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import Page404 from './404';
+import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { useHistory, withRouter } from "react-router-dom";
 
 function usePersistedState(key, defaultValue) {
     const [state, setState] = React.useState(
@@ -48,6 +47,26 @@ function App() {
         },
         [loggedIn]
     );
+
+    const checkLoginCookie = (event) => {
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ limit: 12 })
+        };
+    
+        fetch('/rest/user/dashboard', requestOptions)
+          .then(response => {
+            if (!response.ok) {
+                setLoggedIn(false);
+                console.log("cookie exp");
+            } 
+          });
+      }
 
     const [darkMode, setDarkMode] = usePersistedState(2, useMediaQuery('(prefers-color-scheme: dark)'));
 
@@ -79,6 +98,7 @@ function App() {
   return (
     <Router>
         <ThemeProvider theme={theme}>
+        {checkLoginCookie()}
         <Switch>
             <Route path="/Login">
                 <Login handleLogin={handleLogin}/>
@@ -94,9 +114,6 @@ function App() {
             </Route>
             <Route path="/ForgotPass">
                 <ForgotPass loggedIn={loggedIn} handleLogout={handleLogout}/>
-            </Route>
-            <Route path="/verification">
-                <Verification loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
             <Route path="/ResetPassword">
                 <ResetPassword loggedIn={loggedIn} handleLogout={handleLogout}/>
@@ -128,9 +145,13 @@ function App() {
             <Route exact path="/PokerGame/Play/:GameID">
                 <PlayFilmPoker loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>  
-            <Route path="/">
+            <Route path="/404">
+                <Page404 loggedIn={loggedIn} handleLogout={handleLogout}/>
+            </Route>
+            <Route exact path="/">
                 <Home loggedIn={loggedIn} darkMode={darkMode} handleLogout={handleLogout} handleThemeChange={handleThemeChange}/>
             </Route>
+            <Redirect to='/404' />
         </Switch>
         </ThemeProvider>
     </Router>
