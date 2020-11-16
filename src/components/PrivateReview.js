@@ -48,42 +48,51 @@ const useStyles = makeStyles((theme) => ({
   })
 );
 
+const updateHeaders = {
+  method: 'PUT',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
+};
+
+const deleteHeaders = {
+  method: 'DELETE',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
+};
+
+
 export default function PrivateReview(props) {
     const classes = useStyles();
-
-    const [rating, setRating] = React.useState(props.rating);
-
-    const requestOptions = {
-      method: 'DELETE',
-      headers: { 
-        'Accept': 'application/json',
-      }
-    };
     
     const removeReviewAndReload = async () => {
-      await fetch(`/rest/review/${props.movieId}`, requestOptions);
-
+      await fetch(`/rest/review/${props.movieId}`, deleteHeaders);
       props.onChange();
     };
 
-    const deleteReview = useAsync({ deferFn: removeReviewAndReload });
-
-    const submitRating = (event, newRating) => {
+    const updateRating = async (event, newRating) => {
       event.preventDefault();
       
       const data = {
         rating: newRating,
       };
-
-      const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      };
   
-      fetch(`/rest/rating/${props.movieId}`, requestOptions)
-      setRating(newRating);
-      window.location.reload();
+      await fetch(`/rest/rating/${props.movieId}`, {...updateHeaders, body: JSON.stringify(data)});
+      props.onChange();
+    };
+
+    const updateReview = async (event, newComment) => {
+      event.preventDefault();
+
+      const data = {
+        comment: newComment,
+      };
+
+      await fetch(`/rest/review/${props.movieId}`, {...updateHeaders, body: JSON.stringify(data)});
+      props.onChange();
     };
 
     return (
@@ -93,7 +102,7 @@ export default function PrivateReview(props) {
                 title={<Link href={`/Movie/${props.movieId}`} className={classes.title} style={{ fontSize: '30px' }}>{props.title}</Link>}
                 action={
                   <Box component="fieldset" mb={-1} borderColor="transparent" marginTop={5}>
-                    <Rating name="read-only" precision={0.5} value={props.rating} onChange={submitRating} />
+                    <Rating name="read-only" precision={0.5} value={props.rating} onChange={updateRating} />
                   </Box>
                 }
               />
@@ -101,8 +110,8 @@ export default function PrivateReview(props) {
               {props.text}
             </CardContent>
             <CardActions className={classes.right}>
-              <EditReviewButton movieId={props.movieId} oldReview={props.text}/>
-              <IconButton color="primary" component="span" className={classes.control} onClick={deleteReview.run}>
+              <EditReviewButton movieId={props.movieId} oldReview={props.text} onSubmit={updateReview}/>
+              <IconButton color="primary" component="span" className={classes.control} onClick={removeReviewAndReload}>
                 <DeleteIcon />
               </IconButton>
               <Button disabled color="secondary">
@@ -127,32 +136,13 @@ export default function PrivateReview(props) {
       setOpen(false);
     };
   
-    const submitReview = (event) => {
-      event.preventDefault();
-
-      const data = {
-        comment: newComment,
-      };
-
-      const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      };
-  
-      fetch(`/rest/review/${props.movieId}`, requestOptions)
-        .then(response => {
-          window.location.reload();
-        });
-    };
-  
     return (
       <div>
         <IconButton color="primary" component="span" className={classes.control} onClick={openReviewDialogBox}>
               <EditIcon />
         </IconButton>
         <Dialog fullScreen={true} open={open} onClose={closeReviewDialogBox} aria-labelledby="form-dialog-title">
-          <form onSubmit={submitReview}>
+          <form onSubmit={(event) => { props.onSubmit(event, newComment); }}>
             <DialogTitle id="form-dialog-title">Review</DialogTitle>
             <DialogContent>
               <DialogContentText>
