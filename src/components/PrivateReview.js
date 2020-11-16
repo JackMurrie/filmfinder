@@ -19,7 +19,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { useAsync } from 'react-async';
+import { useAsync, useFetch } from 'react-async';
 import { CardActions } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -79,7 +79,6 @@ export default function PrivateReview(props) {
       const data = {
         rating: newRating,
       };
-  
       await fetch(`/rest/rating/${props.movieId}`, {...updateHeaders, body: JSON.stringify(data)});
       props.onChange();
     };
@@ -102,7 +101,7 @@ export default function PrivateReview(props) {
                 title={<Link href={`/Movie/${props.movieId}`} className={classes.title} style={{ fontSize: '30px' }}>{props.title}</Link>}
                 action={
                   <Box component="fieldset" mb={-1} borderColor="transparent" marginTop={5}>
-                    <Rating name="read-only" precision={0.5} value={props.rating} onChange={updateRating} />
+                    <Rating name="read-only" precision={0.5} value={props.rating} />
                   </Box>
                 }
               />

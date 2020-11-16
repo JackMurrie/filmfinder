@@ -229,6 +229,7 @@ function Dashboard(props) {
 
   const Reviews = reviews.map(({ movieName, movieId, comment, rating, post_date, user }) => {
     return <PrivateReview 
+      key={movieId}
       title={movieName}
       text={comment}
       rating={rating}
