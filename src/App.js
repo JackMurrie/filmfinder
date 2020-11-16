@@ -48,6 +48,26 @@ function App() {
         [loggedIn]
     );
 
+    const checkLoginCookie = (event) => {
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ limit: 12 })
+        };
+    
+        fetch('/rest/user/dashboard', requestOptions)
+          .then(response => {
+            if (!response.ok) {
+                setLoggedIn(false);
+                console.log("cookie exp");
+            } 
+          });
+      }
+
     const [darkMode, setDarkMode] = usePersistedState(2, useMediaQuery('(prefers-color-scheme: dark)'));
 
     const theme = React.useMemo(
@@ -78,6 +98,7 @@ function App() {
   return (
     <Router>
         <ThemeProvider theme={theme}>
+        {checkLoginCookie()}
         <Switch>
             <Route path="/Login">
                 <Login handleLogin={handleLogin}/>
