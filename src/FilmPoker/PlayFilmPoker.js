@@ -12,7 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import Async from 'react-async';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
@@ -122,7 +122,15 @@ export default function PlayFilmPoker(props) {
   const classes = useStyles();
   const location = useLocation();
   const GameID = parseInt(location.pathname.split('/').pop(), 10);
-  const nickname = location.state.nickname;
+  const history = useHistory();
+  var nickname = "";
+
+  if (location.state === undefined) {
+      history.push("/404");
+  }
+  else {
+    nickname = location.state.nickname;
+  }
 
   const [players, setPlayers] = useState([]);
   const [selectedMovies, setSelectedMovies] = useState([]);

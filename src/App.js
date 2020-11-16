@@ -17,7 +17,7 @@ import CreateGame from './FilmPoker/CreateGame';
 import JoinGame from './FilmPoker/JoinGame';
 import PlayFilmPoker from './FilmPoker/PlayFilmPoker';
 import Page404 from './404';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
@@ -148,9 +148,10 @@ function App() {
             <Route path="/404">
                 <Page404 loggedIn={loggedIn} handleLogout={handleLogout}/>
             </Route>
-            <Route path="/">
+            <Route exact path="/">
                 <Home loggedIn={loggedIn} darkMode={darkMode} handleLogout={handleLogout} handleThemeChange={handleThemeChange}/>
             </Route>
+            <Redirect to='/404' />
         </Switch>
         </ThemeProvider>
     </Router>
