@@ -134,7 +134,7 @@ export default function PublicProfile(props) {
                     <Grid item xs={7} >
                         <Paper className={fixedHeightPaper}>
                             <Typography>
-                                TODO: Add user description
+                                User information
                             </Typography>
                             <div className={classes.flexGrow}></div>
                             <div className="right">
