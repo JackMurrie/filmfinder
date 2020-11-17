@@ -208,6 +208,7 @@ export default function Movie(props) {
     else {
       setAlertOpen(true);
     }
+    window.location.reload();
   };
 
   const handleResults = ({ movies }) => {
@@ -394,6 +395,7 @@ function ReviewButton(props) {
     else {
       props.setAlertOpen(true);
     }
+    window.location.reload();
   };
 
   return (
