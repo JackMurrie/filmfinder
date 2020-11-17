@@ -36,6 +36,8 @@ import { useHistory } from 'react-router-dom';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import { Translate } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -79,11 +81,21 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     marginRight: 15,
   },
+  largeIcon: {
+    width: 70,
+    height: 70,
+  },
 }));
   
 export default function Account(props) {
   const classes = useStyles();
   const [tabSelected, setTabSelected] = useState(0);
+
+  const [limit, setLimit] = React.useState(12);
+  const handleClick = (event) => {
+      event.preventDefault();
+      setLimit(limit + 12);
+  }; 
 
   const requestOptions = {
     method: 'POST',
@@ -91,11 +103,11 @@ export default function Account(props) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ limit: 12 })
+    body: JSON.stringify({ limit: limit })
   };
 
   const fetchDashboardData = useFetch('/rest/user/dashboard', requestOptions, {defer: true});
-  useEffect(fetchDashboardData.run, []);
+  useEffect(fetchDashboardData.run, [limit]);
 
   return (
     <React.Fragment>
@@ -116,6 +128,7 @@ export default function Account(props) {
                 reloadDashboardData={fetchDashboardData.run}
                 tabSelected={tabSelected}
                 updateTabSelected={setTabSelected}
+                handleClick={handleClick}
               />
             </Container>
             <Footer />
@@ -281,6 +294,9 @@ function Dashboard(props) {
         <div className={classes.container}>
           {Recommendations}
         </div>
+        <IconButton aria-label="account" onClick={props.handleClick}>
+              <ArrowDropDownIcon className={classes.largeIcon} style={{fill: "pink"}}/>
+        </IconButton>
       </TabPanel>
       <TabPanel value={props.tabSelected} index={2}>
         {Watchlist}

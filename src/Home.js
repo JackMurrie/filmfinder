@@ -65,17 +65,23 @@ const useStyles = makeStyles((theme) => ({
 export default function Home({loggedIn, darkMode, handleLogout, handleThemeChange}) {
   const classes = useStyles();
 
+  const [limit, setLimit] = React.useState(20);
+  const handleMoreMovies = (event) => {
+      event.preventDefault();
+      setLimit(limit + 12);
+  }; 
+
   const requestOptions = {
     method: 'POST',
     headers: { 
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ limit: 20 })
+    body: JSON.stringify({ limit: limit })
   };
 
   const getPopularMovies = useFetch('/rest/popular', requestOptions, {defer: true});
-  React.useEffect(getPopularMovies.run, []);
+  React.useEffect(getPopularMovies.run, [limit]);
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -134,6 +140,9 @@ export default function Home({loggedIn, darkMode, handleLogout, handleThemeChang
           <IfRejected state={getPopularMovies}>
             Something went wrong.
           </IfRejected>
+          <IconButton aria-label="account" onClick={handleMoreMovies}>
+              <ArrowDropDownIcon className={classes.largeIcon} style={{fill: "pink"}}/>
+          </IconButton>
       </Container>
       <Footer />
     </React.Fragment>
