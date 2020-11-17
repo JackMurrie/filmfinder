@@ -204,7 +204,7 @@ public class ReviewDB {
         ArrayList<Review> list = new ArrayList<Review>();
         try {
             c = DbDataSource.getConnection();
-            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name, date FROM review INNER JOIN movie ON id=movie_id WHERE movie_id=?";
+            String q = "SELECT review.rating, review comment, user_id uId, movie_id mId, name, date FROM review INNER JOIN movie ON id=movie_id WHERE movie_id=? ORDER BY date DESC";
             s = c.prepareStatement(q);
 
             s.setInt(1, movieId);
