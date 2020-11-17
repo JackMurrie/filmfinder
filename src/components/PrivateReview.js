@@ -100,7 +100,7 @@ export default function PrivateReview(props) {
                 title={<Link href={`/Movie/${props.movieId}`} className={classes.title} style={{ fontSize: '30px' }}>{props.title}</Link>}
                 action={
                   <Box component="fieldset" mb={-1} borderColor="transparent" marginTop={5}>
-                    <Rating name="read-only" readOnly precision={0.5} value={props.rating} />
+                    <Rating name={`${props.movieId}`} readOnly precision={0.5} value={props.rating} onChange={updateRating}/>
                   </Box>
                 }
               />
