@@ -61,9 +61,11 @@ public class Results extends frontendObject {
         orderedMovies = new ArrayList<Movie>();
         points = new ArrayList<Integer>();
         Map<Integer, Integer> sorted = sortByValue(votes);
+        int i = 1;
         for (Integer key: sorted.keySet()) {
             orderedMovies.add(Movie.getMovie(key));
-            points.add(votes.get(key));
+            points.add(i);
+            i++;
         }
     }
 
