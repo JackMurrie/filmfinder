@@ -267,7 +267,7 @@ export default function Movie(props) {
                 {/* Movie Card */}
                 <Grid item>
                   <Paper className={fixedHeightPaper}>
-                    <MoviePoster movieGenreList={movie.genres} movieImageUrl={movie.imageUrl} movieRating={movie.averageRating} />
+                    <MoviePoster movieId={movie.movieId} movieGenreList={movie.genres} movieImageUrl={movie.imageUrl} movieRating={movie.averageRating} />
                     <div className="title">
                       <FormControlLabel
                         control={<Checkbox checked={wished} onChange={toggleWishlist} icon={<FavoriteBorder className={classes.largeIcon}/>} checkedIcon={<Favorite className={classes.largeIcon}/>} name="wishlist" />}
@@ -350,7 +350,7 @@ function MoviePoster(props) {
         <CardContent>
           <div className='title'>
             <Box component="fieldset" mb={-1} borderColor="transparent">
-              <Rating name="read-only" precision={0.1} value={props.movieRating} readOnly/>
+              <Rating name={`${props.movieId}`} precision={0.1} value={props.movieRating} readOnly/>
             </Box>
             {props.movieGenreList.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
           </div>
