@@ -105,9 +105,10 @@ export default function Movie(props) {
   const [wished, setWished] = useState(false);
   const [hasReview, setHasReview] = useState(false);
   const [rating, setRating] = useState(0);
+  const [reviewUpdated, setReviewUpdated] = useState(0);
 
   const movieData = useFetch(`/rest/movies/${movieId}`, requestOptions, { defer: true });
-  useEffect(movieData.run, [movieId, rating]);
+  useEffect(movieData.run, [movieId, rating, reviewUpdated]);
 
   const loadUserData = async () => {
     const userRequestOptions = { 
@@ -300,7 +301,15 @@ export default function Movie(props) {
                       {movie.year}
                     </div>
                     <div className="right">
-                      <ReviewButton loggedIn={props.loggedIn} setAlertOpen={setAlertOpen} movieId={movieId} hasReview={hasReview} updateReview={updateReview} reloadMovieData={movieData} />  
+                      <ReviewButton 
+                        loggedIn={props.loggedIn}
+                        setAlertOpen={setAlertOpen}
+                        movieId={movieId}
+                        hasReview={hasReview}
+                        updateReview={updateReview}
+                        reloadMovieData={movieData}
+                        reviewUpdated={setReviewUpdated}
+                      />  
                     </div>
                   </Paper>
                 </Grid>
@@ -389,7 +398,8 @@ function ReviewButton(props) {
           })
         });
       };
-      props.reloadMovieData.run();
+
+      props.reviewUpdated((counter) => counter + 1);
     }
     else {
       props.setAlertOpen(true);
