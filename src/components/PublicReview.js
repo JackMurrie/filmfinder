@@ -36,7 +36,7 @@ export default function PublicReview(props) {
               {props.text}
             </div>
             <Box component="fieldset" mb={-1} borderColor="transparent" marginTop={5}>
-              <Rating name={`${props.movieId}`} precision={0.5} value={props.rating} readOnly/>
+              <Rating name={`${props.user.userId}`} precision={0.5} value={props.rating} readOnly/>
             </Box>
             <div className="right">
             <Button href={`/movie/${props.movieId}`} color="primary">

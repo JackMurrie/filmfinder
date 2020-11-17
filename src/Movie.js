@@ -107,7 +107,7 @@ export default function Movie(props) {
   const [rating, setRating] = useState(0);
 
   const movieData = useFetch(`/rest/movies/${movieId}`, requestOptions, { defer: true });
-  useEffect(movieData.run, [movieId]);
+  useEffect(movieData.run, [movieId, rating]);
 
   const loadUserData = async () => {
     const userRequestOptions = { 
@@ -208,7 +208,6 @@ export default function Movie(props) {
     else {
       setAlertOpen(true);
     }
-    window.location.reload();
   };
 
   const handleResults = ({ movies }) => {
@@ -254,7 +253,7 @@ export default function Movie(props) {
               {() =>
                 <Box className="title" component="fieldset" mb={3} borderColor="transparent">
                   <Rating 
-                  name="rating" 
+                  name="user-rating-special" 
                   precision={0.5} 
                   value={rating} 
                   size="large" 
@@ -350,7 +349,7 @@ function MoviePoster(props) {
         <CardContent>
           <div className='title'>
             <Box component="fieldset" mb={-1} borderColor="transparent">
-              <Rating name={`${props.movieId}`} precision={0.1} value={props.movieRating} readOnly/>
+              <Rating name="movie-poster-special" precision={0.1} value={props.movieRating} readOnly/>
             </Box>
             {props.movieGenreList.map(genre => <Chip label={genre} style={{margin: 5}}/>)}
           </div>
@@ -395,7 +394,6 @@ function ReviewButton(props) {
     else {
       props.setAlertOpen(true);
     }
-    window.location.reload();
   };
 
   return (
