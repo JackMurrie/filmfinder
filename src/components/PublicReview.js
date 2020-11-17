@@ -40,9 +40,9 @@ export default function PublicReview(props) {
             </Box>
             <div className="right">
             <Button href={`/movie/${props.movieId}`} color="primary">
-                Title: {`${props.title}`}
+                {`${props.title}`}
             </Button>
-            <Button href={`/user/${props.user.userId}`} color="secondary">
+            <Button href={`/user/${props.user.userId}`} color="secondary" disabled={!props.loggedIn}>
                 {`${props.user.first} ${props.user.last}`}
             </Button>
             <Button disabled color="secondary">
