@@ -24,6 +24,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import BlockIcon from '@material-ui/icons/Block';
 import ThumbUp from '@material-ui/icons/ThumbUp';
 import RateReviewIcon from '@material-ui/icons/RateReview';
+import PublicIcon from '@material-ui/icons/Public';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
@@ -72,6 +73,11 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: ["Montserrat", "sans-serif"],
     color: "white",
     lineHeight: 7,
+  },
+  text: {
+    fontSize: "calc(5px + 1vmin)",
+    color: theme.palette.text.primary,
+    marginRight: 15,
   },
 }));
   
@@ -198,6 +204,10 @@ function Dashboard(props) {
     setAlertOpen(true);
   };
 
+  const handleAccount = (event) => {
+    history.push(`/user/${props.dashboardData.userInfo.userId}`);
+  };
+
   const handleDeleteAccount = (event) => {
     const requestOptions = {
       method: 'GET',
@@ -283,14 +293,20 @@ function Dashboard(props) {
       </TabPanel>
       <TabPanel value={props.tabSelected} index={5}>
         <AlertDialog alertOpen={alertOpen} handleAlertClose={handleAlertClose} handleDeleteAccount={handleDeleteAccount}/>
-        Delete Account 
         <IconButton color="secondary" component="span" onClick={handleDeleteAccountConf}>
+              <div className={classes.text}>Delete Account</div>
               <DeleteIcon />
         </IconButton>
         <Divider />
-        Reset Password
         <IconButton color="primary" component="span" onClick={handlePassReset}> 
+             <div className={classes.text}>Reset Password</div>
               <LockIcon />
+        </IconButton>
+        <Divider />
+        
+        <IconButton color="secondary" component="span" onClick={handleAccount}> 
+              <div className={classes.text}>View Public Profile</div>
+              <PublicIcon />
         </IconButton>
         <Divider />
       </TabPanel>
