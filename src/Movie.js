@@ -310,8 +310,8 @@ export default function Movie(props) {
                   <Grid item xs={12}>
                     <Paper className={fixedHeightPaperReview} variant="outlined">
                         <Grid container spacing={1}>
-                          {reviews.map(({ comment, rating, post_date, user, movieName }) => 
-                            <PublicReview text={comment} rating={rating} postDate={post_date} user={user} title={movieName}/>
+                          {reviews.map(({ comment, rating, post_date, user, movieName, movieId }) => 
+                            <PublicReview text={comment} rating={rating} postDate={post_date} user={user} title={movieName} movieId={movieId}/>
                           )}
                         </Grid>
                     </Paper>
