@@ -71,7 +71,7 @@ export default function BlacklistCard(props) {
                 control={<Switch checked={blacklist} onChange={toggleBlacklist} name="seen" color="primary"/>}
                 className={classes.link}
             />
-            <Link href={`/Movie/${props.userId}`} color="primary" className={classes.link} style={{ fontSize: '17px' } }> {props.first} {props.last}</Link>
+            <Link href={`/User/${props.userId}`} color="primary" className={classes.link} style={{ fontSize: '17px' } }> {props.first} {props.last}</Link>
         </Paper>
     );
 }

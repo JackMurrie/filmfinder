@@ -60,7 +60,6 @@ const deleteHeaders = {
   method: 'DELETE',
   headers: {
     'Accept': 'application/json',
-    'Content-Type': 'application/json'
   }
 };
 
