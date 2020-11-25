@@ -1,0 +1,33 @@
+Work Diary
+
+Week 1
+Decomposed the project brief to draft user stories.
+
+Week 2
+Worked with Hikari on finalising user stories, assigning priorities and uploading to Jira.
+
+Week 3
+Complied project proposal for presentation as well as writing section for novel features.
+
+Week 4
+First sprint:
+- Found database to use (TMDb)
+- Setup mysql schema for backend
+- Started writing sql queries for backend
+- Setup aws mysql RDS
+- Setup aws S3 for image hosting
+
+Week 5-8
+Implemented backend db functions for:
+- Reviews
+- Blacklist
+- Wishlist
+- Watchlist
+- Similar movies
+
+- Modified Recommendation system from Hai to take into account watched movies and blacklist
+
+Week 9
+- Implemented Caching algorithm
+- Film poker data structure
+

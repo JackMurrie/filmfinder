@@ -1,10 +1,35 @@
 Work Diary
 
-Week 1
+Week 1 (14-20 Sept 2020)
 Grouped formed. I was assigned to be the scrum master. We've decided to use Teams as the main platform for communication. I made Jira and Teams group. We decided to have userstories ready by next meeting.
 
-Week 2
+Week 2 (21-27 Sept 2020)
 Quoc-An joined our team. Everyone had done their userstories, and we've decided to base mostly from Kristian's userstories proposal. Kristian and I finalised userstories and all were uploaded to Jira. Next meeting we will decide on user story points and aim to get proposal drafts done.
 
-Week 3
+Week 3 (28 Sept - 4 Oct 2020)
 Most of Front-end flowchart was completed by Jack and Quoc-An. We've decided on userstory points. I will be adding screenshots of Jira back-logs and we will be assigning first set of tasks for the first sprint.
+
+Week 4 (5 - 11 Oct 2020)
+I had spent this week researching into Dropwizard Java web development library/framework, although this went down in vein since I figured that this level of quality and security offered by Dropwizard is overkill and induces unnecessary complications.
+
+Week 5 (12 - 18 Oct 2020)
+Had demonstration A. Retrospective completed. Jack's frontend skeleton implementation was well done and backend needs implementation so that it can be connected with frontend.
+I created a very bare bone basic backend web using Jetty and Jersey, which are both simple and easier to follow than Dropwiard. Kristian had setup database through AWS, and basic database call was tested. Kristian had found MovieDB API to be used to populate our web service.
+
+Week 6 (19 - 25 Oct 2020)
+JWT tokenisation and authorisation/authetication feature was added. Corresponding database calls were implemented by Kristian.
+Cookie login was implemented to hold tokens, so that frontend code doesn't have to hold valid token. Review endpoints were implemented such that it can be added/edited/deleted for a movie.
+
+Week 7 (26 Oct - 1 Nov 2020)
+I implemented Wishlist and watchedlist, dashboard and movie endpoints. Kristian had created Java class to hide the implementation of database to make the endpoint connection easier. Separated review comments and ratings required separate endpoints, thus was I was in charge of the endpoint implementations.
+
+Week 8 (2 - 8 Nov 2020)
+Had demonstration B.
+Some errors with Cookie when connecting with frontend, including expiry and cookie defined path, but I discussed this with Quoc and was fixed. Some adjustments to the endpoint paths, as well as Blacklist and other users added.
+
+Jack had made improvements according to the feedback from Demo B for frontend. Web contents look much less skeleton/ basic structure. Kristian had modified/re-written recommendation algorithm of Hai's original code. 
+
+Week 9 (9 - 15 Nov 2020)
+I implemented reset password request feature. Endpoints for recommendation page, and similar movies page were also implemented. 
+
+Jack had started working on FilmPoker feature on frontend.

@@ -1,13 +1,98 @@
-Week 1:
-Was still looking for a group. Tried joining with Zechun in Hong Kong, and Alan's group in another lab, but there weren't enough people and our group was disbanded.
+Week 1: Was still looking for a group. Tried joining with Zechun in Hong Kong,
+and Alan's group in another lab, but there weren't enough people and our group
+was disbanded.
 
-Week 2:
-Was able to join a group in another lab w15A-lol_i_dunno. Paperwork still in progress. At our lab meeting, me and Jack were assigned to work in developing the Front-end together, while Hikari, Kristian, and Hai will work on the back-end components.  
+Week 2: Was able to join a group in another lab w15A-lol_i_dunno. Paperwork
+still in progress. At our lab meeting, me and Jack were assigned to work in
+developing the Front-end together, while Hikari, Kristian, and Hai will work on
+the back-end components.  
 
-I started development of the storyboards and interface designs for the UI and Flow Diagram component of the report. I've done the basic interfaces for the site home, account creation and login, and forgot password sections. I'm continuing to work on the interface for the core functionality of the Film Finder, i.e. personalised recommendations and watchlist tracking, which I've decided to encapsulate in a 'user dashboard' page. This work will probably continue into the next week, as I try to finish the wireframes in time for our Sunday Week 3 deadline submission of the Project Proposal.
+I started development of the storyboards and interface designs for the UI and
+Flow Diagram component of the report. I've done the basic interfaces for the
+site home, account creation and login, and forgot password sections. I'm
+continuing to work on the interface for the core functionality of the Film
+Finder, i.e. personalised recommendations and watchlist tracking, which I've
+decided to encapsulate in a 'user dashboard' page. This work will probably
+continue into the next week, as I try to finish the wireframes in time for our
+Sunday Week 3 deadline submission of the Project Proposal.
 
-I also started coding some drafts of the site home page with plain old HTML, CSS before we really dig into the front-end frameworks like React. Also did some basic stuff like setting up plug-ins like emmet and visual studio code while I'm working in Windows.
+I also started coding some drafts of the site home page with plain old HTML, CSS
+before we really dig into the front-end frameworks like React. Also did some
+basic stuff like setting up plug-ins like emmet and visual studio code while I'm
+working in Windows.
 
 Week 3:
-The paperwork has come through for my transfer to the W15A lab.
+The paperwork has come through for my transfer to the W15A lab. This week was
+mainly working on the project proposal, finishing the UI designs for the website
+and the novelty features, and writing associated report stuff.
 
+Week 4 (1st Sprint):
+This week was effectively a no-op for me, Jack did some great work implementing
+the UI and front-end in preparation for our Week 5 demo. 
+
+Week 5 (2nd Sprint):
+We presented our project demo at the beginning of this sprint. For this sprint,
+I was working on integrating the front-end and back-end. I had to fix up a few
+dependency issues to get the backend to build in the correct Java environment.
+Jack did some great work building on his UI implementation from week 4 to flesh
+out a few details of the design. 
+
+Week 6:
+I worked with Hai to flesh out some of the API endpoints that we need for
+backend and front-end for everything to work. Spent a lot of time figuring out
+how the backend works to aid in integrating everything. Kept running into issues
+with Cross Origin Request permissions (CORS), took a long time to debug that.
+
+Final thing before the end of this sprint, I worked with Jack and Hikari to
+put the finishing touches on the login and signup functionality, link it
+completely with the backend.
+
+Week 7:
+Didn't do much work this week. 
+
+Week 8:
+We had our progressive demo, on Wednesday, so I spent Monday and Tuesday fixing
+a lot of bugs with the backend endpoints so I could link and integrate them
+successfully for the front-end. Tying in with that, my role since Week 5 has
+been to write all the front-end logic to make and receive request/responses from
+the backend, as well as refactor and hook up the event handlers for components. 
+as necessary. The particular front-end logic I worked on this week were the movie
+details page, the user dashboard, the review component of the movie details page, 
+and the ratings component, debugging some issues associated with those, writing 
+and hooking up event handlers for the components, and fetching the associated 
+data asynchronously from the backend.
+
+
+Week 9:
+This is pretty much our last week before assignment and report is due. My role
+for this week was to merge all the remaining feature branches, including
+profiles, recommendations, review, blacklist, and similar-movies. In performing
+the merge, I also wrote the front-end logic that will fetch all the resources
+from the endpoints that backend have defined. I also helped develop the protocol
+that we are going to use over WebSockets for the FilmPoker feature of our
+assignment, as well as explained to Hikari my thoughts on a general design for
+this feature and the need for WebSockets as it provides a full duplex
+connection that we can use for this FilmPoker feature.
+
+On the night before/morning of the submission deadline, I finished up hooking up
+all the event handling logic for our novel feature FilmPoker. This includes
+parsing the WebSocket protocol that I designed co-operatively with Kristian and
+Hikari, and I also did a considerable refactor of the React components that had
+been drafted by Jack while he did the drafting and implementation of the UI
+layout and design (he has done a great job with the layout, while I was working 
+mostly on event handling logic) to centralize the WebSocket communication in a
+parent component, and break out the child components by the screen for ease of
+use.
+
+Appendix:
+As additional evidence of my work, throughout this project I've been using a
+timetracker called Toggl to track the number of hours I've been spending on this
+project. as of writing (16th of November), I've spent 113 hours over the last 9
+weeks on this project including meetings, time to write the project proposal and
+lab time. So I suppose that amounts to about 12 hours a week on average, which I
+think is a fair enough effort.
+
+I've uploaded a copy of this timetracking report in PDF format to google drive 
+at the following link:
+
+https://drive.google.com/file/d/1Amb508nLHLY3W8DfOs7sS6THds_iiqE5/view?usp=sharing

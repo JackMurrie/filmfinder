@@ -1,0 +1,23 @@
+{
+    "__meta__": {
+        "about": "HTTPie session file",
+        "help": "https://httpie.org/doc#sessions",
+        "httpie": "2.3.0"
+    },
+    "auth": {
+        "password": null,
+        "type": null,
+        "username": null
+    },
+    "cookies": {
+        "auth_token": {
+            "expires": 1604489667,
+            "path": "/rest/",
+            "secure": false,
+            "value": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZmlsbWZpbmRlci5jb20uYXUvIiwic3ViIjoiYXNkZiIsImV4cCI6MTYwNDQ4Nzg2Nywic2NvcGUiOiJ1c2VyIn0.zep434uyUy-2aBEwyOTMNYQ97sf1MfkhnudaT5yr32M"
+        }
+    },
+    "headers": {
+        "Accept": "application/json, */*;q=0.5"
+    }
+}
