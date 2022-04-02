@@ -4,14 +4,14 @@ module.exports = function(app) {
   app.use(
     '/rest',
     createProxyMiddleware({
-      target: 'http://localhost:8080',
+      target: 'http://backend:8080',
       changeOrigin: true,
     })
   );
   app.use(
     '/filmpoker',
     createProxyMiddleware({
-      target: 'ws://localhost:8080/filmpoker',
+      target: 'ws://backend:8080/filmpoker',
     })
   )
 };

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    stdin_open: true
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'

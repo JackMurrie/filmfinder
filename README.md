@@ -1,16 +1,14 @@
 # capstone-project-comp3900-w15a-lol_i_dunno
 capstone-project-comp3900-w15a-lol_i_dunno created by GitHub Classroom
 
-# Backend setup v1.0
-
-Change logs:
-- Nothing yet.
----
-
 ## Dependencies
 
 - Java (OpenJDK Runtime Environment) 11 or newer.
 - Maven
+- Node.js > 13
+- npm
+
+# Backend
 
 ## How to Build
 Run following command in the ```backend``` directory:
@@ -73,24 +71,6 @@ to path ```http://localhost:8080/rest/auth/register```
 curl -H "Content-Type: application/json" -d '{"email":"user@gmail.com","password":"12345","firstName":"John","lastName":"Doe"}' http://localhost:8080/rest/auth/register
 ```
 
-### Using Postman
-
-Download Postman API Platform from https://www.postman.com/downloads/
-
-1. Run the backend server.
-2. Open the Postman application.
-
-To POST:
-1. Select POST from the bar menu to the left of the URL.
-2. Enter the path URL e.g. http://localhost:8080/rest/auth/register
-3. Go to 'Body' tab.
-4. Change 'none' to raw.
-5. Change 'Text' to 'JSON'.
-6. Enter data in JSON format. e.g. {"email":"user@gmail.com", "password":"12345"}
-7. Click 'Send'.
-8. In 'Response', same expected outputs as using curl command should appear. e.g. "Login unsuccessful"
-9. In the terminal running the server should have their respective outputs. See Example expected outputs sections for more info.
-
 ### Example expected outputs
 
 Example 1:
@@ -126,38 +106,58 @@ Register unsuccessful
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Installation and Setup Instructions
+## Start Dev Containers
 
-Installation:
-You will need `node` and `npm` installed globally on your machine.  
+Run following command in the `backend` directory:
 
- Visit https://www.npmjs.com/get-npm and click “Download Node.js and npm”. 
+```
+docker build -t filmfinder-backend .
+```
 
-Run:<br />
-`npm ci`<br />
+```
+docker run \
+    -it \
+    --rm \
+    --network filmfinder --network-alias backend \
+    -v "$(pwd):/app" \
+    -p 8080:8080 \
+    filmfinder-backend
+```
 
-To Start Server:
+Run following command in the `root` directory:
 
-`npm start`  
+```
+docker build -t filmfinder .
+```
 
-To Visit App:
+```
+docker run \
+    -it \
+    --rm \
+    --network filmfinder \
+    -w /app \
+    -v "$(pwd):/app" \
+    -p 3000:3000 \
+    -e CHOKIDAR_USEPOLLING=true \
+    filmfinder
+```
 
-`localhost:3000/`  
+Visit 'localhost:3000`
 
-Build app for production: 
+### Alternatively 
 
-`npm run build`
+Run both containers with docker compose from the `root` directory:
 
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+docker-compose up -d
+```
 
-The build is minified and the filenames include the hashes.<br />
+To see the frontend and backend services logs run 
+```
+docker-compose logs -f
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-
-## Dependencies 
-
-/node_modules
-
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+To tear down the services run 
+```
+docker-compose down
+```
